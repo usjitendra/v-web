@@ -13,7 +13,11 @@ module.exports = {
         // sectiondiv: "#d8e8e8ff",
         sectiondiv: "#d8e8e8b0",
         sectiondivgradient: "linear-gradient(135deg, #e6f2f2 0%, #d8e8e8 100%)",
+          border: "hsl(var(--border))",
+        background: "hsl(var(--background))",
+        foreground: "hsl(var(--foreground))",
       },
+      
       fontFamily: {
         sans: ["Poppins", "sans-serif"],
       },
