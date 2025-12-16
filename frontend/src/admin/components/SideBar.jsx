@@ -39,6 +39,8 @@ import {
 } from "react-icons/lia";
 import { SiPurescript } from "react-icons/si";
 
+import logo from '../../assets/logo.jpg';
+
 const menuItems = [
   {
     icon: <LuLayoutDashboard />,
@@ -292,10 +294,10 @@ const Sidebar = ({ sidebarCollapsed, toggleSidebar }) => {
       <div className="w-64 md:w-56  xl:w-64 min-h-full bg-white px-4 py-6 ">
         <div className="flex items-center space-x-2 mb-8 md:mb-4 xl:mb-8 ml-5">
           <img
-            src="/admin/admin-logo.png"
+            src={logo}
             alt="Admin Logo"
             loading="lazy"
-            className="size-8 md:size-6 xl:size-8 "
+            className="w-10 h-10 object-cover" 
           />
           <span className="font-semibold text-lg md:text-sm xl:text-lg">
             {getPanelName()}
