@@ -304,7 +304,7 @@ const Sidebar = ({ sidebarCollapsed, toggleSidebar }) => {
           </span>
         </div>
 
-        <ul className="space-y-1">
+        <ul className="space-y-1">2
           {filteredMenuItems.map((item, index) => {
             const filteredSubItems = item.subItems
               ? item.subItems.filter((subItem) =>
