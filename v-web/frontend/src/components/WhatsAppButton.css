@@ -1,0 +1,48 @@
+.whatsapp-section-button-container {
+  display: flex;
+  justify-content: center;
+  margin: 30px 0;
+  padding: 0 15px;
+}
+
+.whatsapp-section-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  background-color: #25d366;
+  color: white;
+  padding: 14px 28px;
+  border-radius: 50px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 16px;
+  box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
+  transition: all 0.3s ease;
+  border: none;
+  cursor: pointer;
+}
+
+.whatsapp-section-button:hover {
+  background-color: #128c7e;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(37, 211, 102, 0.4);
+  color: white;
+  text-decoration: none;
+}
+
+.whatsapp-section-icon {
+  font-size: 24px;
+}
+
+/* For smaller screens */
+@media (max-width: 768px) {
+  .whatsapp-section-button {
+    padding: 12px 22px;
+    font-size: 15px;
+  }
+  
+  .whatsapp-section-icon {
+    font-size: 22px;
+  }
+}

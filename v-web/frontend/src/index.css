@@ -1,0 +1,43 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root{
+  --accent: #F4A261;
+  --primary: #008080;
+}
+
+html { scroll-behavior: smooth }
+
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* subtle gradient background for hero */
+.hero-gradient{
+  background: linear-gradient(135deg, rgba(0,128,128,0.06), rgba(244,162,97,0.03));
+}
+
+.input-float{
+  position: relative;
+}
+
+.input-float label{
+  position: absolute;
+  left: 14px;
+  top: 10px;
+  color: #94a3b8;
+  font-size: 0.9rem;
+  transition: all .18s ease;
+  pointer-events: none;
+}
+
+.input-float input:focus + label,
+.input-float input:not(:placeholder-shown) + label{
+  transform: translateY(-18px) scale(.9);
+  color: var(--primary);
+}
+
+.card-img-zoom{ transition: transform .5s ease }
+.card:hover .card-img-zoom{ transform: scale(1.06) }

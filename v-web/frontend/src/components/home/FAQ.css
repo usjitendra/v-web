@@ -1,0 +1,101 @@
+.faq-section {
+  font-family: 'Inter', sans-serif;
+  position: relative;
+}
+
+/* Animation for decorative elements */
+@keyframes float {
+  0%, 100% {
+    transform: translate(-50%, -50%) scale(1);
+  }
+  50% {
+    transform: translate(-40%, -60%) scale(1.05);
+  }
+}
+
+.faq-section > div:first-child {
+  animation: float 15s ease-in-out infinite;
+}
+
+.faq-section > div:nth-child(2) {
+  animation: float 18s ease-in-out infinite;
+  animation-delay: 2s;
+}
+
+/* FAQ item hover effect */
+.faq-item {
+  transition: all 0.3s ease;
+}
+
+.faq-item:hover {
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+  border-color: #3b82f6 !important;
+}
+
+/* Smooth accordion expansion */
+.accordion-content {
+  overflow: hidden;
+}
+
+/* Button hover effects */
+.faq-button {
+  transition: all 0.3s ease;
+}
+
+.faq-button:hover {
+  background-color: #f8fafc;
+}
+
+/* Focus styles for accessibility */
+.faq-button:focus {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+/* CTA section styling */
+.cta-section {
+  background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .faq-section {
+    padding: 3rem 1rem;
+  }
+  
+  .faq-button {
+    padding: 1rem;
+  }
+  
+  .faq-question {
+    font-size: 1rem;
+    padding-right: 1.5rem;
+  }
+}
+
+/* Custom selection color */
+::selection {
+  background-color: rgba(37, 99, 235, 0.2);
+}
+
+/* Scroll behavior */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Animation for the question icon */
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.faq-icon {
+  animation: pulse 4s ease-in-out infinite;
+}

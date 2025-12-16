@@ -1,0 +1,32 @@
+{
+    "version": 2,
+    "builds": [
+        {
+            "src": "package.json",
+            "use": "@vercel/static-build",
+            "config": {
+                "distDir": "dist"
+            }
+        }
+    ],
+    "routes": [
+        {
+            "src": "/assets/(.*)",
+            "dest": "/assets/$1"
+        },
+        {
+            "src": "/uploads/(.*)",
+            "dest": "/uploads/$1"
+        },
+         {
+      "src": "/videos/(.*)",
+      "dest": "/videos/$1"
+    },
+        {
+            "src": "/(.*)",
+            "dest": "/index.html"
+        }
+    ],
+    "framework": "vite",
+    "outputDirectory": "dist"
+}
