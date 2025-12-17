@@ -22,6 +22,8 @@ import AdminTreatment from "./components/admin/AdminTreatment";
 import AdminBlogManagement from "./components/admin/AdminBlog";
 import MainContent from "./admin/MainContent";
 
+import DoctorTable from "./admin/Doctor/DoctoreList";
+
 /* ===== PUBLIC IMPORTS ===== */
 import Header from "./components/Header";
 import Footer from "./components/Footer";
@@ -49,6 +51,8 @@ import PatientDashboard from "./pages/PatientDashboard";
 
 /* ===== REACT ROUTER ===== */
 import { Outlet } from "react-router-dom";
+import LanguageSetting from "./admin/adminSetting/LanguageSetting";
+import { Toaster } from "react-hot-toast";
 
 /* ===== LAYOUTS ===== */
 const PublicLayout = () => (
@@ -71,6 +75,18 @@ const AdminLayout = () => (
 export default function App() {
   return (
     <Routes>
+
+      <Toaster
+        position="top-right"
+        reverseOrder={false}
+        toastOptions={{
+          duration: 3000,
+          style: {
+            fontFamily: "Poppins",
+            fontSize: "14px",
+          },
+        }}
+      />
       {/* ================= PUBLIC ROUTES (WITH HEADER & FOOTER) ================= */}
       <Route element={<PublicLayout />}>
         <Route path="/" element={<Home />} />
@@ -91,31 +107,29 @@ export default function App() {
       </Route>
 
       {/* ================= ADMIN ROUTES (NO HEADER / FOOTER) ================= */}
-      <Route element={<AdminLayout />}>
-        <Route path="/admin" element={<AdminDashboard />} />
-        <Route path="/admin/dashboard" element={<AdminDashboard />} />
-        <Route path="/admin/hospitals" element={<AdminHospitals />} />
-        <Route path="/admin/hospital-details" element={<AdminHospitalDetails />} />
-        <Route path="/admin/hospital-treatment" element={<AdminHospitalTreatment />} />
-        <Route path="/admin/treatments" element={<AdminTreatment />} />
-        <Route path="/admin/doctors" element={<AdminDoctors />} />
-        <Route path="/admin/doctor-treatment" element={<AdminDoctorTreatment />} />
-        <Route path="/admin/faqs" element={<AdminFaqs />} />
-        <Route path="/admin/patient-opinions" element={<AdminPatientOpinions />} />
-        <Route path="/admin/procedures" element={<AdminProcedures />} />
-        <Route path="/admin/bookings" element={<Bookings />} />
-        <Route path="/admin/about" element={<AboutUs />} />
-        <Route path="/admin/user" element={<User />} />
-        <Route path="/admin/lang" element={<Languages />} />
-        <Route path="/admin/head" element={<Headings />} />
-        <Route path="/admin/patients" element={<PatientManagement />} />
-        <Route path="/admin/patients/add" element={<AddPatient />} />
-        <Route
-          path="/admin/patients/:patientId/dashboard"
-          element={<PatientDashboard />}
-        />
-        <Route path="/admin/blogs" element={<AdminBlogManagement />} />
+      <Route path="/admin" element={<AdminDashboard />}>
+        {/* <Route index element={<index/>} /> */}
+        {/* <Route path="dashboard" element={<AdminDashboard/>} /> */}
+        <Route path="hospitals" element={<DoctorTable />} />
+        <Route path="hospital/language-setting" element={<LanguageSetting />} />
+        <Route path="hospital-treatment" element={<AdminHospitalTreatment />} />
+        <Route path="treatments" element={<AdminTreatment />} />
+        <Route path="doctors" element={<AdminDoctors />} />
+        <Route path="doctor-treatment" element={<AdminDoctorTreatment />} />
+        <Route path="faqs" element={<AdminFaqs />} />
+        <Route path="patient-opinions" element={<AdminPatientOpinions />} />
+        <Route path="procedures" element={<AdminProcedures />} />
+        <Route path="bookings" element={<Bookings />} />
+        <Route path="about" element={<AboutUs />} />
+        <Route path="user" element={<User />} />
+        <Route path="lang" element={<Languages />} />
+        <Route path="head" element={<Headings />} />
+        <Route path="patients" element={<PatientManagement />} />
+        <Route path="patients/add" element={<AddPatient />} />
+        <Route path="patients/:patientId/dashboard" element={<PatientDashboard />} />
+        <Route path="blogs" element={<AdminBlogManagement />} />
       </Route>
+
 
       {/* ================= PATIENT ROUTES ================= */}
       <Route path="/patient/login" element={<PatientLogin />} />

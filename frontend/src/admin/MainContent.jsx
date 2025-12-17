@@ -5,6 +5,7 @@ import OrderStatusCards from "./components/OrderStatusCards";
 // import ProductInsights from "./ProductInstant";
 // import LowStockProduct from "./Dashbaord/LowStockProduct";
 import SalesReport from "./Dashbaord/SalesReport";
+import DoctorTable from "./Doctor/DoctoreList";
 
 const MainContent = () => {
   // 🔹 Static Dashboard Data
@@ -101,6 +102,7 @@ const MainContent = () => {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 lg:gap-3 xl:gap-5 md:gap-10 mt-8 mb-6">
         {/* <SalesReport sales={data.monthlySalesReport} />
         <LowStockProduct stock={data.lowStock} /> */}
+        <DoctorTable/>
       </div>
     </>
   );
