@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Table, Tag, Space, Button, Switch, Rate, Avatar } from 'antd';
 import { EditOutlined, DeleteOutlined, UserOutlined } from '@ant-design/icons';
+import AdminDashboard from '../Index';
 
 const DoctorTable = () => {
   const [doctors, setDoctors] = useState([
@@ -183,7 +184,8 @@ const DoctorTable = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50 p-8">
+
+    <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto">
         <div className="bg-white rounded-lg shadow-lg p-6">
           <div className="mb-6">
@@ -204,6 +206,7 @@ const DoctorTable = () => {
         </div>
       </div>
     </div>
+
   );
 };
 

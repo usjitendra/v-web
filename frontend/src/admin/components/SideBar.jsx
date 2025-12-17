@@ -169,7 +169,7 @@ const menuItems = [
       {
         icon: <PiShieldChevron />,
         label: "Doctor List",
-        link: "/admin/doctors/list",
+        link: "/admin/hospitals",
         permission: "doctor.create",
       },
       {
