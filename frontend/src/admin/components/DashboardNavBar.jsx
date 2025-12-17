@@ -3,8 +3,21 @@ import { RiMenu2Fill } from "react-icons/ri";
 import { GoDotFill } from "react-icons/go";
 import { FaUserLarge } from "react-icons/fa6";
 import { Link } from "react-router-dom";
+import { useState, useRef, useEffect } from "react";
 
 const DashboardHeader = ({ toggleSidebar }) => {
+  const [open, setOpen] = useState(false);
+  const dropdownRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+        setOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [])
   return (
     <div className="flex sticky top-0 z-20 justify-between items-center px-4 py-3 md:px-6 md:py-4 bg-lightBlue rounded-md">
       {/* Sidebar Toggle */}
@@ -58,14 +71,16 @@ const DashboardHeader = ({ toggleSidebar }) => {
         </div>
 
         {/* Profile Dropdown (Static UI) */}
-        <div className="relative">
-          <button className="bg-Lime rounded-full p-2 relative flex items-center">
+        <div className="relative" ref={dropdownRef}>
+          <button className="bg-Lime rounded-full p-2 relative flex items-center"
+            onClick={() => setOpen((prev) => !prev)}
+          >
             <GoDotFill className="absolute top-0 right-0 text-emerald-500 size-3 animate-ping" />
             <FaUserLarge className="w-4 h-4" />
           </button>
 
           {/* Always visible dropdown (static) */}
-          <div className="absolute right-0 mt-2 w-32 bg-white rounded-sm shadow-xl py-0 z-50">
+          {open && <div className="absolute right-0 mt-2 w-32 bg-white rounded-sm shadow-xl py-0 z-50">
             <Link
               to="/admin/my-profile"
               className="block px-4 py-2 text-xs text-gray-700 hover:bg-gray-100"
@@ -76,7 +91,7 @@ const DashboardHeader = ({ toggleSidebar }) => {
             <button className="w-full text-left px-4 py-2 text-xs text-gray-700 hover:bg-red-100">
               Sign Out
             </button>
-          </div>
+          </div>}
         </div>
       </div>
     </div>

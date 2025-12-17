@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const system_key = "your_system_key_here";
+const system_key = "key_from_env_or_config";
 const URL = "https://api.yourdomain.com";
 
 const axiosInstance = axios.create({
