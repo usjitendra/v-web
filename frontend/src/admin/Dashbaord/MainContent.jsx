@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import DashboardStats from "./DashboardStats";
-import OrderStatusCards from "./OrderStatusCards";
+import OrderStatusCards from "../components/OrderStatusCards";
 import RecentOrdersTable from "./RecentOrdersTable";
-import ProductInsights from "./ProductInsights";
+// import ProductInsights from "./ProductInsights";
 import LowStockProduct from "./LowStockProduct";
 import SalesReport from "./SalesReport";
 import { fetchDashboardCount } from "../../../api/Admin/DashboardApi";

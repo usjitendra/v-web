@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Outlet } from "react-router-dom";
-import Sidebar from "./Sidebar";
-import DashboardHeader from "./AdminNavbar";
-import WindowHeader from "./WindowHeader";
+import Sidebar from "./components/SideBar";
+import DashboardHeader from "./components/DashboardNavBar";
+import WindowHeader from "./components/WindowHeader";
 
 const AdminDashboard = () => {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(true);
