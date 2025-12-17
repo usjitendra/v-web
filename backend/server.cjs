@@ -71,6 +71,7 @@ const connectDB = async () => {
     }
   }
 };
+app.use("/api", require("./route/main.routes"));
 
 // Explicitly load routes
 try {
