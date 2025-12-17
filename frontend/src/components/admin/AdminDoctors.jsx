@@ -432,18 +432,18 @@ const DoctorManagement = () => {
     };
 
     // Initial fetch
-    useEffect(() => {
-        const token = localStorage.getItem('adminToken');
-        if (!token) {
-            navigate('/admin');
-        } else {
-            fetchDoctors();
-            fetchHospitals();
-            fetchLanguages();
-        }
-    }, [navigate]);
+    // useEffect(() => {
+    //     const token = localStorage.getItem('adminToken');
+    //     if (!token) {
+    //         navigate('/admin');
+    //     } else {
+    //         fetchDoctors();
+    //         fetchHospitals();
+    //         fetchLanguages();
+    //     }
+    // }, [navigate]);
 
-    if (loading) return <div className="p-6">Loading...</div>;
+    // if (loading) return <div className="p-6">Loading...</div>;
 
     return (
         <div className="container mx-auto p-6 bg-gray-100 min-h-screen">

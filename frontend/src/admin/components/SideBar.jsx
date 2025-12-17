@@ -1,43 +1,21 @@
 import React, { useState, useEffect } from "react";
 import {
-  FiBox,
-  FiUsers,
-  FiTag,
-  FiGift,
-  FiMessageCircle,
-  FiSettings,
-  FiBarChart2,
   FiChevronDown,
   FiChevronUp,
 } from "react-icons/fi";
 import {
   IoChevronForward,
-  IoColorPaletteOutline,
-  IoDiamondOutline,
-  IoDocumentAttachOutline,
-  IoFileTrayStackedOutline,
+
 } from "react-icons/io5";
 import { Link, useLocation } from "react-router-dom";
-// import useAuth from "../../../Hooks/useAuth";
-import { HiOutlineShoppingBag, HiOutlineShoppingCart } from "react-icons/hi";
+
+
 import {
   LuLayoutDashboard,
-  LuPanelsRightBottom,
-  LuUsersRound,
+
 } from "react-icons/lu";
-import { CiDiscount1 } from "react-icons/ci";
-import { IoMdInformationCircleOutline } from "react-icons/io";
-import { PiLockKeyOpen, PiShieldChevron } from "react-icons/pi";
-import { GiBigDiamondRing } from "react-icons/gi";
-import { TfiLink } from "react-icons/tfi";
-import { BsBarChartLine, BsBox } from "react-icons/bs";
-import { MdCurrencyExchange } from "react-icons/md";
-import {
-  LiaBoxesSolid,
-  LiaGiftSolid,
-  LiaShippingFastSolid,
-} from "react-icons/lia";
-import { SiPurescript } from "react-icons/si";
+import { PiLockKeyOpen, PiShieldChevron, PiUserPlus } from "react-icons/pi";
+
 
 import logo from '../../assets/logo.jpg';
 
@@ -185,26 +163,20 @@ const menuItems = [
         </g>
       </svg>
     ),
-    label: "RBAC",
+    label: "Doctor",
     permission: "rbac",
     subItems: [
       {
         icon: <PiShieldChevron />,
-        label: "Roles",
-        link: "/admin/rbac/roles",
-        permission: "roles",
+        label: "Doctor List",
+        link: "/admin/doctors/list",
+        permission: "doctor.create",
       },
       {
-        icon: <PiLockKeyOpen />,
-        label: "Permissions",
-        link: "/admin/rbac/permissions",
-        permission: "permissions",
-      },
-      {
-        icon: <LuUsersRound />,
-        label: "Staff",
-        link: "/admin/rbac/staff",
-        permission: "staff",
+        icon: <PiUserPlus />,
+        label: "Add Doctor",
+        link: "/admin/doctors/create",
+        permission: "doctor.create",
       },
     ],
   },
@@ -215,7 +187,7 @@ const Sidebar = ({ sidebarCollapsed, toggleSidebar }) => {
   const currentPath = location.pathname;
   const [openDropdown, setOpenDropdown] = useState(null);
   // const { isAdmin } = useAuth();
-  
+
 
   const getUserObject = () => {
     return typeof isAdmin === "object" ? isAdmin : null;
@@ -297,7 +269,7 @@ const Sidebar = ({ sidebarCollapsed, toggleSidebar }) => {
             src={logo}
             alt="Admin Logo"
             loading="lazy"
-            className="w-10 h-10 object-cover" 
+            className="w-10 h-10 object-cover"
           />
           <span className="font-semibold text-lg md:text-sm xl:text-lg">
             {getPanelName()}
@@ -308,8 +280,8 @@ const Sidebar = ({ sidebarCollapsed, toggleSidebar }) => {
           {filteredMenuItems.map((item, index) => {
             const filteredSubItems = item.subItems
               ? item.subItems.filter((subItem) =>
-                  hasPermission(subItem.permission)
-                )
+                hasPermission(subItem.permission)
+              )
               : null;
 
             if (item.subItems && filteredSubItems.length === 0) {
@@ -322,11 +294,10 @@ const Sidebar = ({ sidebarCollapsed, toggleSidebar }) => {
                   <>
                     <button
                       onClick={() => toggleDropdown(index)}
-                      className={`flex items-center justify-between w-full px-4 py-2 rounded-full text-sm md:text-xs xl:text-sm font-medium transition-colors ${
-                        isActive(item.link, filteredSubItems)
-                          ? "bg-red-500 text-white"
-                          : "text-gray-700 hover:bg-gray-100"
-                      }`}
+                      className={`flex items-center justify-between w-full px-4 py-2 rounded-full text-sm md:text-xs xl:text-sm font-medium transition-colors ${isActive(item.link, filteredSubItems)
+                        ? "bg-red-500 text-white"
+                        : "text-gray-700 hover:bg-gray-100"
+                        }`}
                     >
                       <div className="flex items-center space-x-3">
                         {item.icon}
@@ -342,9 +313,8 @@ const Sidebar = ({ sidebarCollapsed, toggleSidebar }) => {
                     </button>
 
                     <div
-                      className={`overflow-hidden transition-all duration-500 ease-in-out ${
-                        openDropdown === index ? "max-h-full" : "max-h-0"
-                      }`}
+                      className={`overflow-hidden transition-all duration-500 ease-in-out ${openDropdown === index ? "max-h-full" : "max-h-0"
+                        }`}
                     >
                       <ul className="ml-4 mt-1 space-y-1">
                         {filteredSubItems.map((subItem, subIndex) => (
@@ -352,11 +322,10 @@ const Sidebar = ({ sidebarCollapsed, toggleSidebar }) => {
                             <Link
                               to={subItem.link}
                               onClick={handleLinkClick}
-                              className={`flex items-center px-4 py-2 rounded-full text-sm md:text-xs xl:text-sm font-medium transition-colors ${
-                                currentPath === subItem.link
-                                  ? "bg-gray-200 text-black"
-                                  : "text-gray-600 hover:bg-gray-100"
-                              }`}
+                              className={`flex items-center px-4 py-2 rounded-full text-sm md:text-xs xl:text-sm font-medium transition-colors ${currentPath === subItem.link
+                                ? "bg-gray-200 text-black"
+                                : "text-gray-600 hover:bg-gray-100"
+                                }`}
                             >
                               <div className="flex items-center space-x-2">
                                 {subItem.icon}
@@ -374,11 +343,10 @@ const Sidebar = ({ sidebarCollapsed, toggleSidebar }) => {
                   <Link
                     to={item.link}
                     onClick={handleLinkClick}
-                    className={`flex items-center justify-between px-4 py-2 rounded-full text-sm md:text-xs xl:text-sm font-medium transition-colors ${
-                      currentPath === item.link
-                        ? "bg-[#06e861] text-white"
-                        : "text-gray-700 hover:bg-gray-100"
-                    }`}
+                    className={`flex items-center justify-between px-4 py-2 rounded-full text-sm md:text-xs xl:text-sm font-medium transition-colors ${currentPath === item.link
+                      ? "bg-[#06e861] text-white"
+                      : "text-gray-700 hover:bg-gray-100"
+                      }`}
                   >
                     <div className="flex items-center space-x-3">
                       {item.icon}

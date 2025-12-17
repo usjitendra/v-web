@@ -27,6 +27,7 @@
     "migrate:all": "npm run migrate:hospitals && npm run migrate:hospital-details && npm run migrate:doctors && npm run migrate:patient && npm run migrate:treatment && npm run migrate:procedures && npm run migrate:patient-opinions && npm run migrate:faqs && npm run migrate:assistance  && npm run migrate:create-admin && npm run migrate:bookings && npm run migrate:about && npm run migrate:language"
   },
   "dependencies": {
+    "antd": "^6.1.1",
     "axios": "^1.13.2",
     "bcryptjs": "^3.0.2",
     "cors": "^2.8.5",
