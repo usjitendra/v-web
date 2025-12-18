@@ -107,9 +107,8 @@ export default function App() {
       </Route>
 
       {/* ================= ADMIN ROUTES (NO HEADER / FOOTER) ================= */}
-      <Route path="/admin" element={<AdminDashboard />}>
-        {/* <Route index element={<index/>} /> */}
-        {/* <Route path="dashboard" element={<AdminDashboard/>} /> */}
+      {/* <Route path="/admin" element={<AdminDashboard />}>
+        
         <Route path="hospitals" element={<DoctorTable />} />
         <Route path="hospital/language-setting" element={<LanguageSetting />} />
         <Route path="hospital-treatment" element={<AdminHospitalTreatment />} />
@@ -128,7 +127,7 @@ export default function App() {
         <Route path="patients/add" element={<AddPatient />} />
         <Route path="patients/:patientId/dashboard" element={<PatientDashboard />} />
         <Route path="blogs" element={<AdminBlogManagement />} />
-      </Route>
+      </Route> */}
 
 
       {/* ================= PATIENT ROUTES ================= */}
