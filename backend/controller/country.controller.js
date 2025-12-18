@@ -1,11 +1,19 @@
 const CountryModel = require('../model/country.model');
-const { tryCatchFn } = require('../utils/tryCatch.utils');
-const responseHandler = require('../utils/responseHandler.utils');
+const { tryCatchFn } = require('../Utils/tryCatch.utils');
+const responseHandler = require('../Utils/responseHandler.utils');
 
+
+const capitalizeFirst = (str = "") => {
+  return str
+    .toLowerCase()
+    .trim()
+    .replace(/\b\w/g, char => char.toUpperCase());
+};
 class CountryController {
   // Add Country
   addContry = tryCatchFn(async (req, res) => {
-    const { country_name, code, is_active } = req.body;
+    let { country_name, code, is_active } = req.body;
+    console.log("AA GAYA")
     if (!country_name || !code) {
       return responseHandler.errorResponse(res, 400, "Country name and code are required");
     }
@@ -15,7 +23,7 @@ class CountryController {
     if (existingCountry) {
       return responseHandler.errorResponse(res, 409, "Country already exists");
     }
-
+    country_name = capitalizeFirst(country_name);
     const newCountry = await CountryModel.create({
       country_name,
       code,
@@ -96,3 +104,5 @@ class CountryController {
     return responseHandler.successResponse(res, 200, "Country deleted successfully");
   })
 }
+
+module.exports = new CountryController();

@@ -71,7 +71,7 @@ const connectDB = async () => {
     }
   }
 };
-app.use("/api", require("./route/main.routes"));
+app.use("/api/v1", require("./route/main.routes"));
 
 // Explicitly load routes
 try {
@@ -231,7 +231,7 @@ app.use('/uploads', express.static(path.join(__dirname, 'Uploads')));
 app.get('/', (req, res) => {
   const dbStatus = mongoose.connection.readyState;
   res.json({
-    status: 'Healthcare Database API',
+    status: 'Server is running',
     dbStatus: dbStatus === 1 ? 'Connected' : 'Disconnected',
     environment: NODE_ENV
   });

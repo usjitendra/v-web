@@ -3,7 +3,7 @@ const schema = mongoose.Schema;
 const { ObjectId } = mongoose.Schema.Types;
 
 
-const CountryShema = new Schema(
+const CountryShema = new schema(
   {
     country_name: { type: String, required: true, },
     icon: { type: String },

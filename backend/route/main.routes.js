@@ -1,9 +1,9 @@
 const express = require("express");
-const mainRoutes = express(); // define our app using express
+const mainRoute = express.Router(); // ✅ Router use karo
 
+mainRoute.use("/country", require("./country.route"));
+mainRoute.use("/language", require("./language.route"));
+mainRoute.use("/dropdown", require("./dropdown.route"));
+// mainRoute.use("/category", require("./category.route"));
 
-mainRoutes.use("/language", require("./language.route"));
-
-
-
-express.exports = mainRoutes;
+module.exports = mainRoute; 
