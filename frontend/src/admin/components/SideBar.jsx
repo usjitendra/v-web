@@ -193,7 +193,7 @@ const Sidebar = ({ sidebarCollapsed, toggleSidebar }) => {
                     <button
                       onClick={() => toggleDropdown(index)}
                       className={`flex items-center justify-between w-full px-4 py-2 rounded-full text-sm md:text-xs xl:text-sm font-medium transition-colors ${isActive(item.link, filteredSubItems)
-                        ? "bg-red-500 text-white"
+                        ? "bg-[#06e861] text-white"
                         : "text-gray-700 hover:bg-gray-100"
                         }`}
                     >
