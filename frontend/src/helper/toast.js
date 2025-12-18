@@ -13,7 +13,7 @@ export const showSuccess = (message) =>
       secondary: "#16a34a",
     },
   });
-
+console.log("Toast message:", message);
 /* Error */
 export const showError = (message) =>
   toast.error(message, {
