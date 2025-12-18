@@ -7,7 +7,7 @@ class LanguageController {
   // Add Language
   addLanguage = tryCatchFn(async (req, res) => {
     const { countryID, language_name, icon, is_active } = req.body;
-
+    console.log(req.body);
     if (!language_name) {
       return responseHandler.errorResponse(
         res,
