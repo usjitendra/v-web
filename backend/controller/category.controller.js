@@ -75,6 +75,9 @@ class CategoryController {
 
   // update Category
   updateCategory = tryCatchFn(async (req, res) => {
+
+    console.log("update category is");
+    
     const { id } = req.params;
     const {
       category_name,
@@ -84,6 +87,10 @@ class CategoryController {
       order,
       is_active
     } = req.body;
+
+
+    console.log("req.body is",req.body);
+    
 
     // Find category
     const category = await CategoryModel.findById(id);
