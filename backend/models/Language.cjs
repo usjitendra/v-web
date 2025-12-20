@@ -43,4 +43,4 @@ languageSchema.pre('save', async function (next) {
     next();
 });
 
-module.exports = mongoose.model('Language', languageSchema);
+module.exports = mongoose.model('Language1', languageSchema);

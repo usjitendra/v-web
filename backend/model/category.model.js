@@ -1,24 +1,27 @@
 const mongoose = require("mongoose");
+const { ObjectId } = mongoose.Schema.Types;
 
 const CategorySchema = new mongoose.Schema(
   {
     category_name: {
       type: String,
-      required: true,
+      default: "",
       trim: true
     },
 
     slug: {
       type: String,
-      required: true,
+      default: "",
+      trim: true,
       lowercase: true,
-      unique: true
     },
 
     icon: String,
-    image: String,
     description: String,
-
+    image: {
+      publicURL: String,
+      privateURL: String
+    },
     order: {
       type: Number,
       default: 0
@@ -35,12 +38,12 @@ const CategorySchema = new mongoose.Schema(
     },
 
     created_by: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: ObjectId,
       ref: "User"
     },
 
     updated_by: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: ObjectId,
       ref: "User"
     }
   },

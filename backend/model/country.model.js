@@ -5,8 +5,10 @@ const { ObjectId } = mongoose.Schema.Types;
 
 const CountryShema = new schema(
   {
-    country_name: { type: String, required: true, },
-    icon: { type: String },
+    country_name: { type: String, default: null },
+    icon: { type: String, default: null },
+    url: { type: String, default: null },
+    code: { type: String, default: null },
     is_active: { type: Boolean, default: true },
     is_deleted: { type: Boolean, default: false },
   },

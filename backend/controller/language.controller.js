@@ -6,19 +6,20 @@ class LanguageController {
 
   // Add Language
   addLanguage = tryCatchFn(async (req, res) => {
-    const { countryID, language_name, icon, is_active } = req.body;
+    const { language_name, code, icon, is_active } = req.body;
     console.log(req.body);
-    if (!language_name) {
+    if (!language_name || !code) {
       return responseHandler.errorResponse(
         res,
         400,
-        "Language name is required"
+        "Language Code  is required"
       );
     }
 
     // Name duplicate check
     const existingLanguage = await LanguageModel.findOne({
       language_name: { $regex: `^${language_name}$`, $options: "i" },
+      is_deleted: false,
     });
 
     if (existingLanguage) {
@@ -30,7 +31,7 @@ class LanguageController {
     }
 
     const newLanguage = await LanguageModel.create({
-      countryID,
+      code,
       language_name,
       icon,
       is_active,
@@ -48,7 +49,7 @@ class LanguageController {
 
     const { page = 1, limit = 10, name } = req.query;
     const filter = {
-      is_Deleted: false
+      is_deleted: false
     };
 
     if (name) {
@@ -61,7 +62,7 @@ class LanguageController {
       .skip(skip)
       .limit(parseInt(limit));
 
-    const total = await LanguageModel.ountDocuments(file)
+    const total = await LanguageModel.countDocuments({ is_deleted: false });
     return responseHandler.successResponse(
       res,
       200,
@@ -95,7 +96,7 @@ class LanguageController {
   //  Update Language
   updateLanguage = tryCatchFn(async (req, res) => {
     const { id } = req.params;
-    const { language_name, icon, is_active } = req.body;
+    const { language_name, code, icon, is_active } = req.body;
 
     const language = await LanguageModel.findById(id);
 
@@ -125,6 +126,7 @@ class LanguageController {
 
     language.language_name = language_name ?? language.language_name;
     language.icon = icon ?? language.icon;
+    language.code = code ?? language.code;
     language.is_active = is_active ?? language.is_active;
 
     await language.save();
@@ -140,8 +142,11 @@ class LanguageController {
   // Delete Language
   deleteLanguage = tryCatchFn(async (req, res) => {
     const { id } = req.params;
-
-    const language = await LanguageModel.findById(id);
+    const language = await LanguageModel.findByIdAndUpdate(
+      id,
+      { is_deleted: true },
+      { new: true }
+    );
 
     if (!language) {
       return responseHandler.errorResponse(
@@ -151,15 +156,13 @@ class LanguageController {
       );
     }
 
-    language.is_Deleted = true;
-    await language.save();
-
     return responseHandler.successResponse(
       res,
       200,
       "Language deleted successfully"
     );
   });
+
 }
 
 module.exports = new LanguageController();

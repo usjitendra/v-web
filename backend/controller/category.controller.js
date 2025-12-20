@@ -2,13 +2,13 @@ const slugify = require("slugify");
 const CategoryModel = require("../model/category.model");
 const { tryCatchFn } = require("../Utils/tryCatch.utils");
 const responseHandler = require("../Utils/responseHandler.utils");
-const slugify = require("slugify");
+const { uploadToCloudinary, deleteFromCloudinary } = require("../Utils/cloudinaryUpload");
+const { console } = require("inspector");
 
 class CategoryController {
   //  add Category
   addCategory = tryCatchFn(async (req, res) => {
-    const { category_name, icon, image, description, order, is_active } = req.body;
-
+    const { category_name, icon, image, order, description, is_active } = req.body;
     //  Validation
     if (!category_name) {
       return responseHandler.errorResponse(
@@ -26,22 +26,38 @@ class CategoryController {
     });
 
     //  Duplicate check (including soft-deleted)
-    const exists = await CategoryModel.findOne({ slug });
+    const exists = await CategoryModel.findOne({
+      slug,
+      is_deleted: false
+    },
+
+    );
+    console.log(">>>>>>>>>>>>>>aagaya", exists)
 
     if (exists) {
       return responseHandler.errorResponse(
         res,
         409,
-        "Category already exists"
+        "Category already exists11"
       );
     }
 
-    // 4️⃣ Create category
+    let imageData = null;
+
+
+    if (req.file) {
+      imageData = await uploadToCloudinary(
+        req.file.path,
+        "categories"
+      );
+    }
+
+    //  Create category
     const category = await CategoryModel.create({
       category_name,
       slug,
       icon,
-      image,
+      image: imageData,
       description,
       order,
       is_active,
@@ -156,7 +172,7 @@ class CategoryController {
 
   // delete Category
 
-  deleteCategry = traCatchFn(async (req, res) => {
+  deleteCategry = tryCatchFn(async (req, res) => {
     const { id } = req.params;
     const category = await CategoryModel.findById(id)
 
@@ -168,6 +184,7 @@ class CategoryController {
       )
     }
     category.is_deleted = true
+    await deleteFromCloudinary(category.image?.privateURL)
     await category.save()
 
     return responseHandler.errorResponse(

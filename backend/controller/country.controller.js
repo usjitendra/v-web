@@ -12,13 +12,14 @@ const capitalizeFirst = (str = "") => {
 class CountryController {
   // Add Country
   addContry = tryCatchFn(async (req, res) => {
-    let { country_name, code, is_active } = req.body;
+    let { country_name, code, url, is_active } = req.body;
     console.log("AA GAYA")
-    if (!country_name || !code) {
+    if (!country_name || !code || !url) {
       return responseHandler.errorResponse(res, 400, "Country name and code are required");
     }
     const existingCountry = await CountryModel.findOne({
-      country_name: { $regex: `^${country_name}$`, $options: "i" }
+      country_name: { $regex: `^${country_name}$`, $options: "i" },
+      is_deleted: false
     })
     if (existingCountry) {
       return responseHandler.errorResponse(res, 409, "Country already exists");
@@ -27,6 +28,7 @@ class CountryController {
     const newCountry = await CountryModel.create({
       country_name,
       code,
+      url,
       is_active
     });
     return responseHandler.successResponse(res, 201, "Country added successfully", newCountry);
@@ -34,29 +36,51 @@ class CountryController {
 
   // Get All Countries
   getCountries = tryCatchFn(async (req, res) => {
-    const { page = 1, limit = 10, name } = req.query;
+    const page = Number(req.query.page) || 1;
+    const limit = Number(req.query.limit) || 10;
+    const { name } = req.query;
+
+    // ✅ correct field names
     const filter = {
-      is_Deleted: false
+      is_deleted: false
     };
 
     if (name) {
       filter.country_name = { $regex: name, $options: "i" };
     }
-    const skip = (parseInt(page) - 1) * parseInt(limit);
-    const Countries = await CountryModel.find(filter)
+
+    const skip = (page - 1) * limit;
+
+    // ✅ filter applied here
+    const countries = await CountryModel.find(filter)
       .sort({ createdAt: -1 })
       .skip(skip)
-      .limit(parserInt(limit));
+      .limit(limit);
 
-    const total = await CountryModel.countDocuments(filter);
+    // 🔢 COUNTS
+    const [total, active, inactive] = await Promise.all([
+      CountryModel.countDocuments({ is_deleted: false }),
+      CountryModel.countDocuments({ is_deleted: false, is_active: true }),
+      CountryModel.countDocuments({ is_deleted: false, is_active: false })
+    ]);
 
-    return responseHandler.successResponse(res, 200, "Countries fetched successfully", {
-      data: Countries,
-      total,
-      page: parseInt(page),
-      limit: parseInt(limit)
-    });
-  })
+    return responseHandler.successResponse(
+      res,
+      200,
+      "Countries fetched successfully",
+      {
+        data: countries,
+        counts: {
+          total,
+          active,
+          inactive
+        },
+        page,
+        limit
+      }
+    );
+  });
+
 
   // Update Country
   updateCountry = tryCatchFn(async (req, res) => {

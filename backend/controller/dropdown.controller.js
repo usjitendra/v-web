@@ -2,6 +2,7 @@ const CountryModel = require('../model/country.model');
 const LanguageMode = require('../model/language.model');
 const { tryCatchFn } = require('../Utils/tryCatch.utils');
 const responseHandler = require('../Utils/responseHandler.utils');
+const CategoryModel = require('../model/category.model');
 
 
 class dropdownController {
@@ -50,6 +51,18 @@ class dropdownController {
       res,
       200, "Languages fetched successfully",
       languages);
+  })
+
+  category = tryCatchFn(async (req, res) => {
+    const categories = await CategoryModel.find({
+      is_deleted: false, is_active: true,
+    }, {
+      category_name: 1, _id: 1
+    }).sort({ category_name: 1 });
+
+    return responseHandler.successResponse(
+      res, 200, "Categories fetched successfully",
+      categories);
   })
 
 }

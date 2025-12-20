@@ -5,8 +5,8 @@ const { ObjectId } = mongoose.Schema.Types;
 
 const LanguageSchema = new Schema(
   {
-    countryID: { type: ObjectId, ref: "Country" },
-    language_name: { type: String, required: true, },
+    language_name: { type: String, default: null },
+    code: { type: String },
     icon: { type: String },
     is_active: { type: Boolean, default: true },
     is_deleted: { type: Boolean, default: false },

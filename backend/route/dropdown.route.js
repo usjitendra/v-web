@@ -4,5 +4,5 @@ const dropdownController = require("../controller/dropdown.controller");
 
 dropdownRoute.get("/country", dropdownController.country);
 dropdownRoute.get("/language", dropdownController.language);
-
+dropdownRoute.get("/category", dropdownController.category);
 module.exports = dropdownRoute;
