@@ -3,7 +3,7 @@ name: Deploy Doctore Backend
 on:
   push:
     branches:
-      - main
+      - maint
 
 jobs:
   deploy:
@@ -18,6 +18,6 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
             cd ${{ secrets.PROJECT_PATH }}
-            git pull origin main
+            git pull origin maint
             npm install
             pm2 restart Doctore-backend
