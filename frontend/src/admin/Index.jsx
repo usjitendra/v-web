@@ -28,7 +28,7 @@ const AdminDashboard = () => {
 
   return (
     <>
-      <WindowHeader />
+      {/* <WindowHeader /> */}
 
       <div className="flex  min-h-screen  font-Poppins w-full montserrat ">
         <div
@@ -48,7 +48,7 @@ const AdminDashboard = () => {
 
         <div className="flex flex-col flex-1 ml-0 transition-all duration-300 ease-in-out overflow-hidden">
           <DashboardHeader toggleSidebar={toggleSidebar} />
-          <div className="px-4 py-3  md:px-6 md:py-4 h-full overflow-y-auto min-h-screen bg-lightBlue ">
+          <div className="  h-full overflow-y-auto min-h-screen bg-lightBlue ">
             <Outlet />
           </div>
         </div>

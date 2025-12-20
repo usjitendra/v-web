@@ -1,16 +1,10 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { apiSlice } from "./slices/apiSlice";
-
-import unreadReducer from "./slices/unreadSlice";
-import sellerUnreadReducer from "./slices/sellerUnreadSlice";
+import { apiMaster } from "./slices/apiMaster";
 
 export const store = configureStore({
   reducer: {
-    [apiSlice.reducerPath]: apiSlice.reducer,
-
-    unread: unreadReducer,
-    sellerUnread: sellerUnreadReducer,
+    [apiMaster.reducerPath]: apiMaster.reducer,
   },
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(apiSlice.middleware),
+    getDefaultMiddleware().concat(apiMaster.middleware),
 });

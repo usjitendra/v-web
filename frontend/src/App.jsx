@@ -6,6 +6,7 @@ import AdminLogin from "./components/admin/AdminLogin";
 import DoctorTable from "./admin/Doctor/DoctoreList";
 import LanguageSetting from "./admin/adminSetting/LanguageSetting";
 import WorkInProgress from "./admin/components/WorkInProgress";
+import CountrySetting from "./admin/adminSetting/CountrySetting";
 
 /* ===== PUBLIC IMPORTS ===== */
 import Header from "./components/Header";
@@ -89,7 +90,7 @@ export default function App() {
           <Route path="doctors/list" element={<DoctorTable />} />
           <Route path="doctors/list" element={<WorkInProgress />} />
           <Route path="doctors-add" element={<WorkInProgress />} />
-          <Route path="master/countries" element={<WorkInProgress />} />
+          <Route path="master/countries" element={<CountrySetting />} />
           <Route path="hospital/language-setting" element={<LanguageSetting />} />
           <Route path="master/categories" element={<WorkInProgress />} />
           <Route path="master/sub-categories" element={<WorkInProgress />} />
