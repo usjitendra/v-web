@@ -5,7 +5,6 @@ import {
   Space,
   Switch,
   Avatar,
-  Tag,
   Popconfirm,
   Modal,
   Card,
@@ -14,42 +13,48 @@ import {
   PlusOutlined,
   EditOutlined,
   DeleteOutlined,
-  GlobalOutlined,
-  CheckCircleOutlined,
-  CloseCircleOutlined,
+  AppstoreOutlined,
 } from "@ant-design/icons";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "react-toastify";
-import { z } from "zod";
 
 import {
-  useAddCounteryMutation,
-  useGetCountriesQuery,
-  useUpdateCountryMutation,
-  useDeleteCountryMutation,
-} from "../../rtk/slices/apiMaster";
+  useAddCategoryMutation,
+  useGetCategoriesQuery,
+  useUpdateCategoryMutation,
+  useDeleteCategoryMutation,
+} from "../../rtk/slices/categoryApi";
 
-/* ---------------- Schema ---------------- */
-const countrySchema = z.object({
-  country_name: z.string().min(2, "Country name must be at least 2 characters"),
-  code: z.string().regex(/^[A-Z]{2}$/, "Country code must be 2 uppercase letters"),
-  url: z.string().url("Please enter a valid url URL"),
+import z from "zod";
+
+
+
+const categorySchema = z.object({
+  category_name: z.string().min(2, "Category name is required"),
+  description: z.string().optional(),
   is_active: z.boolean(),
+  image: z.any().optional(), // file validation handled manually
 });
 
-const CountryManagement = () => {
+
+
+
+
+
+
+const CategoryManagement = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [editingCountry, setEditingCountry] = useState(null);
+  const [editingCategory, setEditingCategory] = useState(null);
   const [loading, setLoading] = useState(false);
 
   /* ---------------- API ---------------- */
-  const { data, isLoading } = useGetCountriesQuery();
-  const countries = data?.data?.data || [];
+  const { data, isLoading } = useGetCategoriesQuery();
+  const categories = data?.data?.data || [];
 
-  const [addCountry] = useAddCounteryMutation();
-  const [updateCountry] = useUpdateCountryMutation();
-  const [deleteCountry] = useDeleteCountryMutation();
+  const [addCategory] = useAddCategoryMutation();
+  const [updateCategory] = useUpdateCategoryMutation();
+  const [deleteCategory] = useDeleteCategoryMutation();
 
   /* ---------------- Form ---------------- */
   const {
@@ -57,54 +62,64 @@ const CountryManagement = () => {
     handleSubmit,
     control,
     reset,
+    setValue,
     formState: { errors },
   } = useForm({
-    resolver: zodResolver(countrySchema),
+    resolver: zodResolver(categorySchema),
     defaultValues: {
-      country_name: "",
-      code: "",
-      url: "",
+      category_name: "",
+      description: "",
       is_active: true,
+      image: null,
     },
   });
 
   /* ---------------- Modal ---------------- */
   const openAddModal = () => {
-    setEditingCountry(null);
+    setEditingCategory(null);
     reset({
-      country_name: "",
-      code: "",
-      url: "",
+      category_name: "",
+      description: "",
       is_active: true,
+      image: null,
     });
     setIsModalOpen(true);
   };
 
   const openEditModal = (record) => {
-    setEditingCountry(record);
+    setEditingCategory(record);
     reset({
-      country_name: record.country_name,
-      code: record.code,
-      url: record.url,
+      category_name: record.category_name,
+      description: record.description,
       is_active: record.is_active,
+      image: null,
     });
     setIsModalOpen(true);
   };
 
   /* ---------------- Submit ---------------- */
-  const onSubmit = async (formData) => {
+  const onSubmit = async (data) => {
     try {
       setLoading(true);
 
-      if (editingCountry) {
-        await updateCountry({
-          id: editingCountry._id,
-          payload: formData,
+      const formData = new FormData();
+      formData.append("category_name", data.category_name);
+      formData.append("description", data.description || "");
+      formData.append("is_active", data.is_active);
+
+      if (data.image) {
+        formData.append("image", data.image);
+      }
+
+      if (editingCategory) {
+        await updateCategory({
+          id: editingCategory._id,
+          formData,
         }).unwrap();
-        toast.success("Country updated successfully");
+        toast.success("Category updated successfully");
       } else {
-        const res = await addCountry(formData).unwrap();
-        toast.success(res?.message || "Country added successfully");
+        await addCategory(formData).unwrap();
+        toast.success("Category added successfully");
       }
 
       setIsModalOpen(false);
@@ -116,49 +131,44 @@ const CountryManagement = () => {
     }
   };
 
-  /* ---------------- Actions ---------------- */
+  /* ---------------- Delete ---------------- */
   const handleDelete = async (id) => {
     try {
-      await deleteCountry(id).unwrap();
-      toast.success("Country deleted successfully");
-    } catch (error) {
-      toast.error(error?.data?.message || "Delete failed");
-    }
-  };
-
-  const handleToggleStatus = async (record) => {
-    try {
-      await updateCountry({
-        id: record._id,
-        payload: { is_active: !record.is_active },
-      }).unwrap();
-      toast.success("Status updated");
-    } catch (error) {
-      toast.error("Status update failed");
+      await deleteCategory(id).unwrap();
+      toast.success("Category deleted successfully");
+    } catch {
+      toast.error("Delete failed");
     }
   };
 
   /* ---------------- Table ---------------- */
   const columns = [
     {
-      title: "url",
-      dataIndex: "url",
-      render: (url) => <Avatar src={url} size={40} shape="square" />,
+      title: "Image",
+      dataIndex: "image",
+      render: (img) => <Avatar src={img} shape="square" size={50} />,
     },
     {
-      title: "Code",
-      dataIndex: "code",
-      render: (code) => <Tag color="blue">{code}</Tag>,
-    },
-    {
-      title: "Country Name",
-      dataIndex: "country_name",
+      title: "Category Name",
+      dataIndex: "category_name",
     },
     {
       title: "Status",
       dataIndex: "is_active",
       render: (value, record) => (
-        <Switch checked={value} onChange={() => handleToggleStatus(record)} />
+        <Switch
+          checked={value}
+          onChange={() =>
+            updateCategory({
+              id: record._id,
+              formData: (() => {
+                const fd = new FormData();
+                fd.append("is_active", !value);
+                return fd;
+              })(),
+            })
+          }
+        />
       ),
     },
     {
@@ -171,7 +181,7 @@ const CountryManagement = () => {
             onClick={() => openEditModal(record)}
           />
           <Popconfirm
-            title="Delete country?"
+            title="Delete category?"
             onConfirm={() => handleDelete(record._id)}
           >
             <Button danger icon={<DeleteOutlined />} />
@@ -186,10 +196,10 @@ const CountryManagement = () => {
       {/* Header */}
       <div className="flex justify-between mb-4">
         <h1 className="text-2xl font-bold flex items-center gap-2">
-          <GlobalOutlined /> Country Management
+          <AppstoreOutlined /> Category Management
         </h1>
         <Button type="primary" icon={<PlusOutlined />} onClick={openAddModal}>
-          Add Country
+          Add Category
         </Button>
       </div>
 
@@ -197,15 +207,15 @@ const CountryManagement = () => {
       <div className="grid grid-cols-3 gap-6 mb-6">
         <Card>
           <p>Active</p>
-          <h2>{countries.filter((c) => c.is_active).length}</h2>
+          <h2>{categories.filter((c) => c.is_active).length}</h2>
         </Card>
         <Card>
           <p>Inactive</p>
-          <h2>{countries.filter((c) => !c.is_active).length}</h2>
+          <h2>{categories.filter((c) => !c.is_active).length}</h2>
         </Card>
         <Card>
           <p>Total</p>
-          <h2>{countries.length}</h2>
+          <h2>{categories.length}</h2>
         </Card>
       </div>
 
@@ -213,14 +223,14 @@ const CountryManagement = () => {
       <Table
         rowKey="_id"
         columns={columns}
-        dataSource={countries}
+        dataSource={categories}
         loading={isLoading}
         bordered
       />
 
       {/* Modal */}
       <Modal
-        title={editingCountry ? "Edit Country" : "Add Country"}
+        title={editingCategory ? "Edit Category" : "Add Category"}
         open={isModalOpen}
         onCancel={() => setIsModalOpen(false)}
         onOk={handleSubmit(onSubmit)}
@@ -229,19 +239,22 @@ const CountryManagement = () => {
         <form className="space-y-4">
           <input
             className="w-full border p-2"
-            placeholder="Country Name"
-            {...register("country_name")}
+            placeholder="Category Name"
+            {...register("category_name")}
           />
-          <input
-            className="w-full border p-2 uppercase"
-            placeholder="Code"
-            {...register("code")}
-          />
-          <input
+
+          <textarea
             className="w-full border p-2"
-            placeholder="url URL"
-            {...register("url")}
+            placeholder="Description"
+            {...register("description")}
           />
+
+          <input
+            type="file"
+            accept="image/*"
+            onChange={(e) => setValue("image", e.target.files[0])}
+          />
+
           <Controller
             name="is_active"
             control={control}
@@ -255,4 +268,4 @@ const CountryManagement = () => {
   );
 };
 
-export default CountryManagement;
+export default CategoryManagement;

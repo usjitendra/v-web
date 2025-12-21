@@ -36,6 +36,8 @@ import PatientRegister from "./components/patient/PatientRegister";
 /* ===== REACT ROUTER ===== */
 import { Outlet } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
+import BiodataApp from "./p1";
+import CategoryManagement from "./admin/adminSetting/CategorySetting";
 
 /* ===== LAYOUTS ===== */
 const PublicLayout = () => (
@@ -92,7 +94,7 @@ export default function App() {
           <Route path="doctors-add" element={<WorkInProgress />} />
           <Route path="master/countries" element={<CountrySetting />} />
           <Route path="hospital/language-setting" element={<LanguageSetting />} />
-          <Route path="master/categories" element={<WorkInProgress />} />
+          <Route path="master/categories" element={<CategoryManagement/>} />
           <Route path="master/sub-categories" element={<WorkInProgress />} />
         </Route>
 
@@ -103,6 +105,11 @@ export default function App() {
 
         {/* ================= ADMIN LOGIN ================= */}
         <Route path="/admin/login" element={<AdminLogin />} />
+
+
+
+                <Route path="/bio-data" element={<BiodataApp/>} />
+
       </Routes>
     </>
   );
