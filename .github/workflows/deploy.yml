@@ -24,3 +24,18 @@ jobs:
           
           echo "----------------- Git Pull ------------------"
           git pull origin ${{ secrets.BRANCH }}
+          echo "----------------- Load NVM ------------------"
+          export NVM_DIR="$HOME/.nvm"
+          [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+
+          echo "----------------- PM2 Restart Server ------------------"
+          pm2 restart all
+
+          echo "----------------- PM2 Status ---------------------------"
+          pm2 status
+
+          echo "----------------------- Pipeline executed Successfully ----------------------------"
+        EOF
+
+    - name: Cleanup
+      run: rm -rf ~/.ssh
