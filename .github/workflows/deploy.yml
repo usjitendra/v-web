@@ -14,8 +14,8 @@ jobs:
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.EC2_HOST }}
-          username: ${{ secrets.EC2_SSH_KEY }}
-          key: ${{ secrets.EC2_SSH_KEY }}
+          username: ${{ secrets.EC2_USER }} # ✅ correct
+          key: ${{ secrets.EC2_SSH_KEY }} # ✅ correct
           script: |
             cd ${{ secrets.PROJECT_PATH }}
             git pull origin maint
