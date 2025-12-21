@@ -210,7 +210,7 @@ app.use('/uploads', express.static(path.join(__dirname, 'Uploads')));
 app.get('/', (req, res) => {
   const dbStatus = mongoose.connection.readyState;
   res.json({
-    status: 'Server is running CI CD kare chal',
+    status: 'Server is running CI CD kare chal111',
     dbStatus: dbStatus === 1 ? 'Connected' : 'Disconnected',
     environment: NODE_ENV
   });
