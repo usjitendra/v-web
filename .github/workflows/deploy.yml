@@ -1,23 +1,26 @@
-name: Deploy Doctore Backend
-
+name: v-web
 on:
   push:
-    branches:
-      - maint
+    branches: [maint]
 
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Deploy to EC2
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ${{ secrets.EC2_USER }}
-          key: ${{ secrets.EC2_SSH_KEY }}
-          script: |
-            cd ${{ secrets.PROJECT_PATH }}
-            git pull origin maint
-            npm install
-            pm2 restart Doctore-backend
+    - uses: actions/checkout@v3
+    - name: Install SSH keys
+      run: |
+        install -m 600 -D /dev/null ~/.ssh/id_rsa
+        echo "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/id_rsa
+        ssh-keyscan -H ${{ secrets.SSH_HOST }} > ~/.ssh/known_hosts
+
+    - name: Connect SSH and pull node-login-app deployment commands
+      run: |
+        ssh ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
+
+          echo "---------- Changing Directory ---------------"
+          cd ${{ secrets.PROJECT_PATH }}
+          
+          echo "----------------- Git Pull ------------------"
+          git pull origin ${{ secrets.BRANCH }}
