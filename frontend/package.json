@@ -54,6 +54,8 @@
     "react-toastify": "^11.0.5",
     "recharts": "^3.6.0",
     "slug": "^11.0.0",
+    "suneditor": "^2.47.8",
+    "suneditor-react": "^3.6.1",
     "swiper": "^12.0.3",
     "zod": "^4.2.1"
   },

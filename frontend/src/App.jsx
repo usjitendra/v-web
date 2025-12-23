@@ -38,6 +38,8 @@ import { Outlet } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import BiodataApp from "./p1";
 import CategoryManagement from "./admin/adminSetting/CategorySetting";
+import SubcategoryManagement from "./admin/adminSetting/subCategoryManagement";
+import DoctorManagement from "./admin/Doctor/DoctorManagement";
 
 /* ===== LAYOUTS ===== */
 const PublicLayout = () => (
@@ -91,11 +93,11 @@ export default function App() {
           <Route path="dashboard" element={<WorkInProgress />} />
           <Route path="doctors/list" element={<DoctorTable />} />
           <Route path="doctors/list" element={<WorkInProgress />} />
-          <Route path="doctors-add" element={<WorkInProgress />} />
+          <Route path="doctors-add" element={<DoctorManagement/>} />
           <Route path="master/countries" element={<CountrySetting />} />
           <Route path="hospital/language-setting" element={<LanguageSetting />} />
           <Route path="master/categories" element={<CategoryManagement/>} />
-          <Route path="master/sub-categories" element={<WorkInProgress />} />
+          <Route path="master/sub-categories" element={<SubcategoryManagement/>} />
         </Route>
 
         {/* ================= PATIENT ROUTES ================= */}
