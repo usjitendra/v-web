@@ -144,4 +144,4 @@ patientSchema.virtual('age').get(function () {
 patientSchema.set('toJSON', { virtuals: true });
 patientSchema.set('toObject', { virtuals: true });
 
-module.exports = mongoose.model('Patient', patientSchema);
+module.exports = mongoose.model('Patient11', patientSchema);

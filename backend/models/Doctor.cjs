@@ -156,4 +156,4 @@ doctorSchema.pre('save', function (next) {
 doctorSchema.index({ hospital: 1, specialty: 1 });
 doctorSchema.index({ specialty: 1 });
 
-module.exports = mongoose.model('Doctor', doctorSchema);
+module.exports = mongoose.model('Doctor11', doctorSchema);

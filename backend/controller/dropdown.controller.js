@@ -3,6 +3,7 @@ const LanguageMode = require('../model/language.model');
 const { tryCatchFn } = require('../Utils/tryCatch.utils');
 const responseHandler = require('../Utils/responseHandler.utils');
 const CategoryModel = require('../model/category.model');
+const SubCategoryModel = require('../model/subcategory.model');
 
 
 class dropdownController {
@@ -54,16 +55,59 @@ class dropdownController {
   })
 
   category = tryCatchFn(async (req, res) => {
-    const categories = await CategoryModel.find({
-      is_deleted: false, is_active: true,
-    }, {
-      category_name: 1, _id: 1
-    }).sort({ category_name: 1 });
+
+    const pipeline = [
+      {
+        $match: { is_deleted: false, is_active: true }
+      },
+      {
+        $lookup: {
+          from: "subcategories",
+          let: { categoryId: "$_id" },
+          pipeline: [
+            {
+              $match: {
+                $expr: {
+                  $and: [
+                    { $eq: ["$categoryId", "$$categoryId"] },
+                    { $eq: ["$is_deleted", false] },
+                    { $eq: ["$is_active", true] }
+                  ]
+                }
+              }
+            },
+            {
+              $project: {
+                _id: 1,
+                subcategory_name: 1
+              }
+            }
+          ],
+          as: "subcategories"
+        }
+      },
+      {
+        $project: {
+          _id: 1,
+          category_name: 1,
+          subcategories: 1
+        }
+      },
+      {
+        $sort: { category_name: 1 }
+      }
+    ];
+
+    const result = await CategoryModel.aggregate(pipeline);
 
     return responseHandler.successResponse(
-      res, 200, "Categories fetched successfully",
-      categories);
-  })
+      res,
+      200,
+      "Categories fetched successfully",
+      result
+    );
+  });
+
 
 }
 

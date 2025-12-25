@@ -32,9 +32,18 @@ export const subcategoryApi = createApi({
 
     // drop down 
 
-        getDropDown: builder.query({
+    getDropDown: builder.query({
       query: () => ({
         url: "dropdown/category",
+        method: "GET",
+      }),
+      providesTags: ["Subcategory"],
+    }),
+
+
+    getConteryDropDown: builder.query({
+      query: () => ({
+        url: "dropdown/country",
         method: "GET",
       }),
       providesTags: ["Subcategory"],
@@ -70,4 +79,5 @@ export const {
   useGetDropDownQuery,
   useUpdateSubcategoryMutation,
   useDeleteSubcategoryMutation,
+  useGetConteryDropDownQuery
 } = subcategoryApi;

@@ -64,7 +64,7 @@ class CategoryController {
       created_by: req.user?._id
     });
 
-    // 5️⃣ Success response
+    // Success response
     return responseHandler.successResponse(
       res,
       201,
@@ -77,7 +77,7 @@ class CategoryController {
   updateCategory = tryCatchFn(async (req, res) => {
 
     console.log("update category is");
-    
+
     const { id } = req.params;
     const {
       category_name,
@@ -89,8 +89,8 @@ class CategoryController {
     } = req.body;
 
 
-    console.log("req.body is",req.body);
-    
+    console.log("req.body is", req.body);
+
 
     // Find category
     const category = await CategoryModel.findById(id);

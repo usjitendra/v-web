@@ -6,7 +6,7 @@ const { ObjectId } = Schema.Types;
 
 const SubCategorySchema = new Schema(
   {
-    category_id: {
+    categoryId: {
       type: ObjectId,
       ref: "Category",
       required: true,
@@ -24,10 +24,13 @@ const SubCategorySchema = new Schema(
       lowercase: true,
       index: true
     },
-
+    image: {
+      publicURL: String,
+      privateURL: String
+    },
     icon: String,
-    image: String,
-    description: String,
+    description1: String,
+    description2: String,
 
     order: {
       type: Number,

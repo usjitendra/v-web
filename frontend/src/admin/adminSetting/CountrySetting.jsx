@@ -29,6 +29,7 @@ import {
   useUpdateCountryMutation,
   useDeleteCountryMutation,
 } from "../../rtk/slices/apiMaster";
+import { Loader } from "lucide-react";
 
 /* ---------------- Schema ---------------- */
 const countrySchema = z.object({
@@ -47,9 +48,10 @@ const CountryManagement = () => {
   const { data, isLoading } = useGetCountriesQuery();
   const countries = data?.data?.data || [];
 
-  const [addCountry] = useAddCounteryMutation();
-  const [updateCountry] = useUpdateCountryMutation();
-  const [deleteCountry] = useDeleteCountryMutation();
+  const [addCountry, { isLoading: isAdding }] = useAddCounteryMutation();
+  const [updateCountry, { isLoading: isUpdate }] = useUpdateCountryMutation();
+  const [deleteCountry, { isLoading: isDeleting }] = useDeleteCountryMutation();
+
 
   /* ---------------- Form ---------------- */
   const {
@@ -180,6 +182,14 @@ const CountryManagement = () => {
       ),
     },
   ];
+
+  if (isLoading || isUpdate || isDeleting) {
+    return (
+      <div className="flex  items-center justify-center min-h-screen">
+        <Loader className="h-4 w-4 animate-spin" />
+      </div>
+    )
+  }
 
   return (
     <div className="px-6 py-5 bg-white min-h-screen">
