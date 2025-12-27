@@ -40,6 +40,8 @@ import BiodataApp from "./p1";
 import CategoryManagement from "./admin/adminSetting/CategorySetting";
 import SubcategoryManagement from "./admin/adminSetting/subCategoryManagement";
 import DoctorManagement from "./admin/Doctor/DoctorManagement";
+import HospitalManagement from "./admin/Hospital/Hospital";
+import HospitalList from "./admin/Hospital/HospitalList";
 
 /* ===== LAYOUTS ===== */
 const PublicLayout = () => (
@@ -94,6 +96,8 @@ export default function App() {
           <Route path="doctors/list" element={<DoctorTable />} />
           <Route path="doctors/list" element={<WorkInProgress />} />
           <Route path="doctors-add" element={<DoctorManagement/>} />
+          <Route path="hospitals-add" element={<HospitalManagement/>} />
+          <Route path="hospitals/list" element={<HospitalList/>} />
           <Route path="master/countries" element={<CountrySetting />} />
           <Route path="hospital/language-setting" element={<LanguageSetting />} />
           <Route path="master/categories" element={<CategoryManagement/>} />

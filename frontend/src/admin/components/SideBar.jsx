@@ -46,6 +46,26 @@ const menuItems = [
     ],
 
   },
+    {
+    icon: <PiLockKeyOpen />,
+    label: "Hospital",
+    permission: "rbac",
+    subItems: [
+      {
+        icon: <PiShieldChevron />,
+        label: "Hospital List",
+        link: "/admin/hospitals/list",
+        permission: "hospital.create",
+      },
+      {
+        icon: <PiUserPlus />,
+        label: "Add Hospital",
+        link: "/admin/hospitals-add",
+        permission: "hospital.create",
+      },
+    ],
+
+  },
   {
     icon: <PiStack />,
     label: "Master Management",
