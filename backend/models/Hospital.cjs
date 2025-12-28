@@ -79,4 +79,4 @@ hospitalSchema.index({ country: 1, city: 1 });
 hospitalSchema.index({ rating: -1 });
 hospitalSchema.index({ specialties: 1 });
 
-module.exports = mongoose.model('Hospital', hospitalSchema);
+module.exports = mongoose.model('Hospital11', hospitalSchema);

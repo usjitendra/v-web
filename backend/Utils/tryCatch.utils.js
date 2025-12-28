@@ -6,7 +6,7 @@ const tryCatchFn = (fn) => {
       await fn(req, res, next);
     } catch (error) {
       // console.log("in error ------------__>>>>>>>>>>>>>",error)
-       const errorInfo = {
+      const errorInfo = {
         message: error?.message,
         stack: error?.stack,
         // ...(error.response && { response: error.response }),
@@ -14,17 +14,17 @@ const tryCatchFn = (fn) => {
         // ...(error.config && { config: error.config }),
       };
 
-  
-  
-    console.log("ERROR: ",error)
-    return    responseHandler.errorResponse(
+
+
+      console.log("ERROR: ", error)
+      return responseHandler.errorResponse(
         res,
         error.statusCode || 500,
         error.message || "SOMETHING_WRONG",
         { error: error.message }
       );
 
-       next(error);
+      next(error);
     }
   };
 };

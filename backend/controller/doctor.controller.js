@@ -9,8 +9,8 @@ const slugify = require("slugify");
 
 
 class DoctorController {
+  // --- ADD DOCTOR ---
 
-  // /--- ADD DOCTOR ---
   addDoctor = tryCatchFn(async (req, res) => {
     const {
       name,
@@ -32,6 +32,8 @@ class DoctorController {
       is_active
     } = req.body;
 
+
+    console.log("add data", req.body)
     // --- HELPER ---
     const parseArray = (val) => {
       if (!val) return [];
@@ -170,9 +172,7 @@ class DoctorController {
       medicalProblems: parseArray(medicalProblems),
       medicalProcedures: parseArray(medicalProcedures),
       workExperience,
-      educationAndTraining: Array.isArray(educationAndTraining)
-        ? educationAndTraining
-        : JSON.parse(educationAndTraining),
+      educationAndTraining: parseArray(educationAndTraining),
       honoursAndAwards: parseArray(honoursAndAwards),
       youtubeVideo: parseObject(youtubeVideo),
       is_active: is_active === "true" || is_active === true,
@@ -188,8 +188,7 @@ class DoctorController {
     );
   });
 
-
-  // /--- GET ALL DOCTORS ---
+  // --- GET ALL DOCTORS ---
   getAllDoctors = tryCatchFn(async (req, res) => {
     const { page = 1, limit = 10, search } = req.query;
     const query = { is_deleted: false };
@@ -224,7 +223,7 @@ class DoctorController {
     });
   });
 
-  // /--- UPDATE DOCTOR ---
+  // --- UPDATE DOCTOR ---
   updateDoctor = tryCatchFn(async (req, res) => {
     const doctorId = req.params.id;
     if (!doctorId) {
@@ -420,7 +419,7 @@ class DoctorController {
   });
 
 
-  // /--- DELETE DOCTOR ---
+  // --- DELETE DOCTOR ---
   deleteDoctor = tryCatchFn(async (req, res) => {
     const { id } = req.params;
 

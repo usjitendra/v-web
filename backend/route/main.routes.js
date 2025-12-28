@@ -7,5 +7,6 @@ mainRoute.use("/category", require("./category.route"));
 mainRoute.use("/subcategory", require("./subcategory.route"));
 mainRoute.use("/dropdown", require("./dropdown.route"));
 mainRoute.use("/doctor", require("./doctor.route"));
+mainRoute.use("/hospital", require("./hospital.route"));
 
 module.exports = mainRoute; 
