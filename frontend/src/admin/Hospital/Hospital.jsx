@@ -17,6 +17,8 @@ const HospitalManagement = () => {
     const hospitalData = location.state?.hospital; // Get hospital data from location state
     const isEditMode = !!hospitalData;
 
+    console.log('hospitalData', hospitalData);
+
     const [current, setCurrent] = useState(0);
     const [form] = Form.useForm();
 
@@ -34,7 +36,7 @@ const HospitalManagement = () => {
     const [galleryFileList, setGalleryFileList] = useState([]);
 
 
-    // const initializedRef = useRef(false);
+    const initializedRef = useRef(false);
 
     useEffect(() => {
         if (
