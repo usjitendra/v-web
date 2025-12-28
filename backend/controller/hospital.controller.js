@@ -1,6 +1,6 @@
 const { tryCatchFn } = require("../Utils/tryCatch.utils")
 const responseHandler = require("../Utils/responseHandler.utils")
-const HospitalModel = require("../model/hospital.model")
+// const HospitalModel = require("../model/hospital.model")
 const CategoryModel = require("../model/category.model");
 const { uploadToCloudinary } = require("../Utils/cloudinaryUpload");
 
