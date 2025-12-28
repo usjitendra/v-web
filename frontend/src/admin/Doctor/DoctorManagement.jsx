@@ -12,7 +12,7 @@ import {
 
 const DoctorManagement = () => {
   const [isFormOpen, setIsFormOpen] = useState(false);
-  const [editingDoctor, setEdisetEditingDoctortingDoctor] = useState(null);
+  const [editingDoctor, setEditingDoctor] = useState(null);
 
   // API Hooks
   const { data: doctorsData, isLoading: isFetchingDoctors, refetch } = useGetDoctorsQuery();

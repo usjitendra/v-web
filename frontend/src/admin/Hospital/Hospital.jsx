@@ -34,7 +34,7 @@ const HospitalManagement = () => {
     const [galleryFileList, setGalleryFileList] = useState([]);
 
 
-    const initializedRef = useRef(false);
+    // const initializedRef = useRef(false);
 
     useEffect(() => {
         if (
