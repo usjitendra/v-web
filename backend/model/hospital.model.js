@@ -23,6 +23,10 @@ const hospitalSchema = new mongoose.Schema(
       type: ObjectId,
       ref: "Category",
     },
+    phone: {
+      type: String,
+      trim: true,
+    },
 
 
     address: {

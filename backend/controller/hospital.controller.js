@@ -278,6 +278,7 @@ class hospitalController {
           slug: 1,
           phone: 1,
           address: 1,
+          numberOfBeds: 1,
           hospitalType: 1,
           categories: 1,
           is_active: 1,
@@ -290,6 +291,8 @@ class hospitalController {
       HospitalModel.aggregate(pipeline),
       HospitalModel.countDocuments(filter),
     ]);
+
+    console.log("get all hospitals", data);
 
     return responseHandler.successResponse(
       res,
