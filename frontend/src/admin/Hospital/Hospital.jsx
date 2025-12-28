@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Steps, Button, Form, Input, Upload, Select, Card, Row, Col, Divider, message } from 'antd';
 import { PlusOutlined, UploadOutlined, RightOutlined, LeftOutlined, CheckCircleOutlined } from '@ant-design/icons';
 import SunEditor from 'suneditor-react';
@@ -34,13 +34,17 @@ const HospitalManagement = () => {
     const [galleryFileList, setGalleryFileList] = useState([]);
 
 
+    const initializedRef = useRef(false);
 
-
-    
-
-    // Populate form with existing data in edit mode
     useEffect(() => {
-        if (isEditMode && hospitalData) {
+        if (
+            isEditMode &&
+            hospitalData &&
+            categories.length &&
+            !initializedRef.current
+        ) {
+            initializedRef.current = true;
+
             form.setFieldsValue({
                 name: hospitalData.name,
                 phone: hospitalData.phone,
@@ -61,7 +65,16 @@ const HospitalManagement = () => {
                 youtubeLinks: hospitalData.youtubeVideos || [],
             });
 
-            // Set main photo if exists
+            // ✅ set subcategories ONCE
+            const selectedSubcats = categories
+                .filter(cat =>
+                    hospitalData.categories.some(hCat => hCat._id === cat._id)
+                )
+                .flatMap(cat => cat.subcategories || []);
+
+            setSubcategories(selectedSubcats);
+
+            // photos
             if (hospitalData.photo?.publicURL) {
                 setMainPhotoFileList([{
                     uid: '-1',
@@ -71,25 +84,19 @@ const HospitalManagement = () => {
                 }]);
             }
 
-            // Set gallery photos if exist
             if (hospitalData.gallery?.length) {
-                setGalleryFileList(hospitalData.gallery.map((img, index) => ({
-                    uid: `-${index + 2}`,
-                    name: `gallery-${index}.jpg`,
-                    status: 'done',
-                    url: img.publicURL,
-                })));
-            }
-
-            // Set subcategories based on selected categories
-            if (hospitalData.categories?.length) {
-                const selectedSubcats = categories
-                    .filter(cat => hospitalData.categories.some(hCat => hCat._id === cat._id))
-                    .flatMap(cat => cat.subcategories || []);
-                setSubcategories(selectedSubcats);
+                setGalleryFileList(
+                    hospitalData.gallery.map((img, index) => ({
+                        uid: `-${index}`,
+                        name: `gallery-${index}.jpg`,
+                        status: 'done',
+                        url: img.publicURL,
+                    }))
+                );
             }
         }
-    }, [isEditMode, hospitalData, form, categories]);
+    }, [isEditMode, hospitalData, categories, form]);
+
 
     const handleCategoryChange = (selectedIds) => {
         const selectedSubcats = categories
@@ -164,7 +171,7 @@ const HospitalManagement = () => {
             title: 'Basic Info',
             content: (
                 <div style={{ display: current === 0 ? "block" : "none" }}>
-                    <Divider orientation="left" style={{ fontSize: 16, fontWeight: 600, color: '#1890ff' }}>
+                    <Divider titlePlacement="left" style={{ fontSize: 16, fontWeight: 600, color: '#1890ff' }}>
                         Hospital Media
                     </Divider>
 
@@ -205,7 +212,7 @@ const HospitalManagement = () => {
                         </Col>
                     </Row>
 
-                    <Divider orientation="left" style={{ fontSize: 16, fontWeight: 600, color: '#1890ff' }}>
+                    <Divider titlePlacement="left" style={{ fontSize: 16, fontWeight: 600, color: '#1890ff' }}>
                         Hospital Introduction
                     </Divider>
 
@@ -230,7 +237,7 @@ const HospitalManagement = () => {
             title: 'Address & Contact',
             content: (
                 <div style={{ display: current === 1 ? "block" : "none" }}>
-                    <Divider orientation="left" style={{ fontSize: 16, fontWeight: 600, color: '#1890ff' }}>
+                    <Divider titlePlacement="left" style={{ fontSize: 16, fontWeight: 600, color: '#1890ff' }}>
                         Contact Information
                     </Divider>
 
@@ -245,7 +252,7 @@ const HospitalManagement = () => {
                         <Input placeholder="9876543210" maxLength={10} />
                     </Form.Item>
 
-                    <Divider orientation="left" style={{ fontSize: 16, fontWeight: 600, color: '#1890ff' }}>
+                    <Divider titlePlacement="left" style={{ fontSize: 16, fontWeight: 600, color: '#1890ff' }}>
                         Address Details
                     </Divider>
 
@@ -310,7 +317,7 @@ const HospitalManagement = () => {
             title: 'Hospital Details',
             content: (
                 <div style={{ display: current === 2 ? "block" : "none" }}>
-                    <Divider orientation="left" style={{ fontSize: 16, fontWeight: 600, color: '#1890ff' }}>
+                    <Divider titlePlacement="left" style={{ fontSize: 16, fontWeight: 600, color: '#1890ff' }}>
                         Capacity
                     </Divider>
 
@@ -321,7 +328,7 @@ const HospitalManagement = () => {
                         <Input type="number" min={0} placeholder="Enter total beds" />
                     </Form.Item>
 
-                    <Divider orientation="left" style={{ fontSize: 16, fontWeight: 600, color: '#1890ff' }}>
+                    <Divider titlePlacement="left" style={{ fontSize: 16, fontWeight: 600, color: '#1890ff' }}>
                         Infrastructure
                     </Divider>
 
@@ -331,7 +338,7 @@ const HospitalManagement = () => {
                     >
                         <SunEditor
                             // defaultValue={form.getFieldValue("infrastructure")}
-                         onChange={(content) => form.setFieldValue("infrastructure", content)}
+                            onChange={(content) => form.setFieldValue("infrastructure", content)}
                             setOptions={{
                                 buttonList: [['bold', 'italic', 'underline', 'fontColor', 'align', 'list']],
                                 height: 200
@@ -339,7 +346,7 @@ const HospitalManagement = () => {
                         />
                     </Form.Item>
 
-                    <Divider orientation="left" style={{ fontSize: 16, fontWeight: 600, color: '#1890ff' }}>
+                    <Divider titlePlacement="left" style={{ fontSize: 16, fontWeight: 600, color: '#1890ff' }}>
                         Facilities & Team
                     </Divider>
 
@@ -349,7 +356,7 @@ const HospitalManagement = () => {
                     >
                         <SunEditor
                             // defaultValue={form.getFieldValue("facilities")}
-                      onChange={(content) => form.setFieldValue("facilities", content)}
+                            onChange={(content) => form.setFieldValue("facilities", content)}
                             setOptions={{
                                 buttonList: [['bold', 'italic', 'underline', 'fontColor', 'align', 'list']],
                                 height: 200
@@ -363,7 +370,7 @@ const HospitalManagement = () => {
                     >
                         <SunEditor
                             // defaultValue={form.getFieldValue("teamSpecialties")}
-                          onChange={(content) => form.setFieldValue("teamSpecialties", content)}
+                            onChange={(content) => form.setFieldValue("teamSpecialties", content)}
                             setOptions={{
                                 buttonList: [['bold', 'italic', 'underline', 'fontColor', 'align', 'list']],
                                 height: 200
@@ -377,7 +384,7 @@ const HospitalManagement = () => {
             title: 'Categories & Doctors',
             content: (
                 <div style={{ display: current === 3 ? "block" : "none" }}>
-                    <Divider orientation="left" style={{ fontSize: 16, fontWeight: 600, color: '#1890ff' }}>
+                    <Divider titlePlacement="left" style={{ fontSize: 16, fontWeight: 600, color: '#1890ff' }}>
                         Medical Categories
                     </Divider>
 
@@ -415,7 +422,7 @@ const HospitalManagement = () => {
                         </Select>
                     </Form.Item>
 
-                    <Divider orientation="left" style={{ fontSize: 16, fontWeight: 600, color: '#1890ff' }}>
+                    <Divider titlePlacement="left" style={{ fontSize: 16, fontWeight: 600, color: '#1890ff' }}>
                         Doctor Information
                     </Divider>
 
@@ -439,7 +446,7 @@ const HospitalManagement = () => {
             title: 'Media & Final',
             content: (
                 <div style={{ display: current === 4 ? "block" : "none" }}>
-                    <Divider orientation="left" style={{ fontSize: 16, fontWeight: 600, color: '#1890ff' }}>
+                    <Divider titlePlacement="left" style={{ fontSize: 16, fontWeight: 600, color: '#1890ff' }}>
                         Additional Media
                     </Divider>
 
@@ -502,7 +509,7 @@ const HospitalManagement = () => {
                 // UPDATE MODE
                 await updateHospital({ id: hospitalData._id, formData }).unwrap();
                 message.success("Hospital updated successfully!");
-                navigate('/admin/hospitals');
+                navigate('/admin/hospitals/list');
             } else {
                 // ADD MODE
                 await addHospital(formData).unwrap();
@@ -521,12 +528,12 @@ const HospitalManagement = () => {
 
     const isLoading = isAdding || isUpdating;
 
-        // console.log('location',hospitalData);
+    // console.log('location',hospitalData);
 
     return (
         <div style={{ maxWidth: 1200, margin: '0 auto', padding: '40px 24px' }}>
             <Card
-                bordered={false}
+                variant="outlined"
                 style={{
                     boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
                     borderRadius: 8

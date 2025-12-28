@@ -12,7 +12,7 @@ import {
 
 const DoctorManagement = () => {
   const [isFormOpen, setIsFormOpen] = useState(false);
-  const [editingDoctor, setEditingDoctor] = useState(null);
+  const [editingDoctor, setEdisetEditingDoctortingDoctor] = useState(null);
 
   // API Hooks
   const { data: doctorsData, isLoading: isFetchingDoctors, refetch } = useGetDoctorsQuery();
@@ -238,7 +238,6 @@ const DoctorManagement = () => {
     },
   ];
 
-  console.log("kare", doctors)
 
   return (
     <div className="p-6 bg-white rounded-lg shadow">

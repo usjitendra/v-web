@@ -1,41 +1,68 @@
-name: v-web
+# name: v-web
+# on:
+#   push:
+#     branches: [maint]
+
+# jobs:
+#   build:
+#     runs-on: ubuntu-latest
+
+#     steps:
+#     - uses: actions/checkout@v3
+#     - name: Install SSH keys
+#       run: |
+#         install -m 600 -D /dev/null ~/.ssh/id_rsa
+#         echo "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/id_rsa
+#         ssh-keyscan -H ${{ secrets.EC2_HOST }} > ~/.ssh/known_hosts
+
+#     - name: Connect SSH and pull node-login-app deployment commands
+#       run: |
+#         ssh ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
+
+#           echo "---------- Changing Directory ---------------"
+#           cd ${{ secrets.PROJECT_PATH }}
+
+#           echo "----------------- Git Pull ------------------"
+#           git pull origin ${{ secrets.BRANCH }}
+#           echo "----------------- Load NVM ------------------"
+#           export NVM_DIR="$HOME/.nvm"
+#           [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+
+#           echo "----------------- PM2 Restart Server ------------------"
+#           pm2 restart all
+
+#           echo "----------------- PM2 Status ---------------------------"
+#           pm2 status
+
+#           echo "----------------------- Pipeline executed Successfully ----------------------------"
+#         EOF
+
+#     - name: Cleanup
+#       run: rm -rf ~/.ssh
+
+name: Deploy to EC2
+
 on:
   push:
-    branches: [maint]
+    branches:
+      - maint
 
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
-    - name: Install SSH keys
-      run: |
-        install -m 600 -D /dev/null ~/.ssh/id_rsa
-        echo "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/id_rsa
-        ssh-keyscan -H ${{ secrets.EC2_HOST }} > ~/.ssh/known_hosts
+      - uses: actions/checkout@v4
 
-    - name: Connect SSH and pull node-login-app deployment commands
-      run: |
-        ssh ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
-
-          echo "---------- Changing Directory ---------------"
-          cd ${{ secrets.PROJECT_PATH }}
-          
-          echo "----------------- Git Pull ------------------"
-          git pull origin ${{ secrets.BRANCH }}
-          echo "----------------- Load NVM ------------------"
-          export NVM_DIR="$HOME/.nvm"
-          [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-
-          echo "----------------- PM2 Restart Server ------------------"
-          pm2 restart all
-
-          echo "----------------- PM2 Status ---------------------------"
-          pm2 status
-
-          echo "----------------------- Pipeline executed Successfully ----------------------------"
-        EOF
-
-    - name: Cleanup
-      run: rm -rf ~/.ssh
+      - name: Deploy to EC2
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ubuntu
+          key: ${{ secrets.EC2_KEY }}
+          script: |
+            set -e
+            cd /var/www/app
+            git pull origin maint
+            npm install
+            pm2 restart app || pm2 start index.js --name app

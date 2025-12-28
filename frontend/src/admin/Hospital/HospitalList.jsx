@@ -32,7 +32,7 @@ const HospitalList = () => {
 
             await updateHospital({
                 id: hospitalId,
-                body: formData,
+                formData,
             }).unwrap();
         } catch (err) {
             console.error('Failed to toggle hospital status:', err);
