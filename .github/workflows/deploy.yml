@@ -62,8 +62,17 @@ jobs:
           key: ${{ secrets.EC2_KEY }}
           script: |
             set -e
+
+            # ---- LOAD NVM (MOST IMPORTANT) ----
+            export NVM_DIR="$HOME/.nvm"
+            [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
+
+            # optional safety
+            nvm use 20
+
             cd /var/www/app
             git pull origin maint
             npm install
-            /usr/local/bin/pm2 restart app || /usr/local/bin/pm2 start index.js --name app
-            /usr/local/bin/pm2 save
+
+            pm2 restart app || pm2 start index.js --name app
+            pm2 save
