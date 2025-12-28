@@ -65,4 +65,5 @@ jobs:
             cd /var/www/app
             git pull origin maint
             npm install
-            pm2 restart app || pm2 start index.js --name app
+            /usr/local/bin/pm2 restart app || /usr/local/bin/pm2 start index.js --name app
+            /usr/local/bin/pm2 save
