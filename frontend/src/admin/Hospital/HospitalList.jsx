@@ -10,8 +10,10 @@ const HospitalList = () => {
     const [deleteHospital, { isLoading: isDeleting }] = useDeleteHospitalMutation();
     const navigate = useNavigate();
 
-    const hospitals = data?.message?.data || [];
+    const hospitals = data?.data?.data || [];
+    const hospitalCount = data?.data?.total || 0;
     const pagination = data?.message?.pagination || { total: 0, page: 1, limit: 10, totalPages: 1 };
+
     const activeHospitalsCount = hospitals.filter(h => h.is_active).length;
     const loading = isLoading || isUpdating || isDeleting;
 
@@ -24,10 +26,6 @@ const HospitalList = () => {
             hour: '2-digit',
             minute: '2-digit'
         });
-    };
-
-    const handleAddHospital = () => {
-        window.location.href = '/admin/hospitals-add';
     };
 
     const handleToggleStatus = async (record) => {
@@ -45,16 +43,11 @@ const HospitalList = () => {
             console.error('Failed to toggle hospital status:', err);
             message.error('Failed to update hospital status.');
         }
+
     };
 
     const handleEdit = (hospital) => {
         navigate('/admin/hospitals-add', { state: { hospital } });
-    };
-
-    const handleViewDetails = (hospital) => {
-        // Implement view details logic
-        console.log('View details:', hospital);
-        message.info('View details functionality to be implemented');
     };
 
     const handleDeleteHospital = async (hospitalId) => {
@@ -127,25 +120,17 @@ const HospitalList = () => {
             title: 'Categories',
             dataIndex: 'categories',
             key: 'categories',
-            render: (categories) => (
-                <div>
-                    {categories && categories.length > 0 ? (
-                        <>
-                            {categories.slice(0, 2).map((category) => (
-                                <Tag key={category._id} color="cyan" className="mb-1">
-                                    {category.category_name}
-                                </Tag>
-                            ))}
-                            {categories.length > 2 && (
-                                <Tag color="default">+{categories.length - 2} more</Tag>
-                            )}
-                        </>
-                    ) : (
-                        <span className="text-gray-400">No categories</span>
-                    )}
-                </div>
+            render: (category) => (
+                category ? (
+                    <Tag color="cyan">
+                        {category.category_name}
+                    </Tag>
+                ) : (
+                    <span className="text-gray-400">No categories</span>
+                )
             ),
-        },
+        }
+        ,
         {
             title: 'Created',
             dataIndex: 'createdAt',
@@ -223,7 +208,7 @@ const HospitalList = () => {
                 <Button
                     type="primary"
                     icon={<PlusOutlined />}
-                    onClick={handleAddHospital}
+                    onClick={() => navigate('/admin/hospitals-add')}
                     size="large"
                 >
                     Add Hospital
@@ -244,7 +229,7 @@ const HospitalList = () => {
                 </div>
                 <div className="bg-purple-50 p-4 rounded-lg">
                     <div className="text-2xl font-bold text-purple-600">{pagination.totalPages}</div>
-                    <div className="text-sm text-gray-600">Total Pages</div>
+                    <div className="text-sm text-gray-600">Inactive Hospitals</div>
                 </div>
             </div>
 

@@ -17,8 +17,6 @@ const HospitalManagement = () => {
     const hospitalData = location.state?.hospital; // Get hospital data from location state
     const isEditMode = !!hospitalData;
 
-    console.log('hospitalData', hospitalData);
-
     const [current, setCurrent] = useState(0);
     const [form] = Form.useForm();
 
@@ -38,6 +36,8 @@ const HospitalManagement = () => {
 
     const initializedRef = useRef(false);
 
+    console.log("hospitalData", hospitalData);
+
     useEffect(() => {
         if (
             isEditMode &&
@@ -54,7 +54,7 @@ const HospitalManagement = () => {
                     line1: hospitalData.address?.line1,
                     city: hospitalData.address?.city,
                     state: hospitalData.address?.state,
-                    country: hospitalData.address?.country,
+                    country: hospitalData.countryData?._id,
                     pincode: hospitalData.address?.pincode,
                 },
                 beds: hospitalData.numberOfBeds,
@@ -62,30 +62,35 @@ const HospitalManagement = () => {
                 infrastructure: hospitalData.infrastructure,
                 facilities: hospitalData.facilities,
                 teamSpecialties: hospitalData.teamAndSpeciality,
-                categories: hospitalData.categories?.map(cat => cat._id),
-                subcategories: hospitalData.subcategories?.map(sub => sub._id),
+
+                // ✅ CATEGORY FIX (object → value)
+                categories: hospitalData.categories?._id,
+
                 youtubeLinks: hospitalData.youtubeVideos || [],
             });
 
-            // ✅ set subcategories ONCE
-            const selectedSubcats = categories
-                .filter(cat =>
-                    hospitalData.categories.some(hCat => hCat._id === cat._id)
-                )
-                .flatMap(cat => cat.subcategories || []);
+            // ✅ Subcategories FIX
+            if (hospitalData.categories?._id) {
+                const selectedCategory = categories.find(
+                    (cat) => cat._id === hospitalData.categories._id
+                );
 
-            setSubcategories(selectedSubcats);
-
-            // photos
-            if (hospitalData.photo?.publicURL) {
-                setMainPhotoFileList([{
-                    uid: '-1',
-                    name: 'main-photo.jpg',
-                    status: 'done',
-                    url: hospitalData.photo.publicURL,
-                }]);
+                setSubcategories(selectedCategory?.subcategories || []);
             }
 
+            // ✅ Main photo
+            if (hospitalData.photo?.publicURL) {
+                setMainPhotoFileList([
+                    {
+                        uid: '-1',
+                        name: 'main-photo.jpg',
+                        status: 'done',
+                        url: hospitalData.photo.publicURL,
+                    },
+                ]);
+            }
+
+            // ✅ Gallery photos
             if (hospitalData.gallery?.length) {
                 setGalleryFileList(
                     hospitalData.gallery.map((img, index) => ({
@@ -224,6 +229,7 @@ const HospitalManagement = () => {
                         rules={[{ required: true, message: 'Please provide hospital introduction' }]}
                     >
                         <SunEditor
+                            setContents={form.getFieldValue("hospitalIntro")}
                             setOptions={{
                                 buttonList: [['bold', 'italic', 'underline', 'fontColor', 'align', 'list']],
                                 height: 200
@@ -339,7 +345,7 @@ const HospitalManagement = () => {
                         label="Infrastructure Details"
                     >
                         <SunEditor
-                            // defaultValue={form.getFieldValue("infrastructure")}
+                            setContents={form.getFieldValue("infrastructure")}
                             onChange={(content) => form.setFieldValue("infrastructure", content)}
                             setOptions={{
                                 buttonList: [['bold', 'italic', 'underline', 'fontColor', 'align', 'list']],
@@ -357,7 +363,7 @@ const HospitalManagement = () => {
                         label="Available Facilities"
                     >
                         <SunEditor
-                            // defaultValue={form.getFieldValue("facilities")}
+                            setContents={form.getFieldValue("facilities")}
                             onChange={(content) => form.setFieldValue("facilities", content)}
                             setOptions={{
                                 buttonList: [['bold', 'italic', 'underline', 'fontColor', 'align', 'list']],
@@ -371,7 +377,7 @@ const HospitalManagement = () => {
                         label="Team & Specialties"
                     >
                         <SunEditor
-                            // defaultValue={form.getFieldValue("teamSpecialties")}
+                            setContents={form.getFieldValue("teamSpecialties")}
                             onChange={(content) => form.setFieldValue("teamSpecialties", content)}
                             setOptions={{
                                 buttonList: [['bold', 'italic', 'underline', 'fontColor', 'align', 'list']],
@@ -433,7 +439,7 @@ const HospitalManagement = () => {
                         label="Doctors Info (per category)"
                     >
                         <SunEditor
-                            // defaultValue={form.getFieldValue("categoryDoctors")}
+                            setContents={form.getFieldValue("categoryDoctors")}
                             onChange={(content) => form.setFieldValue("categoryDoctors", content)}
                             setOptions={{
                                 buttonList: [['bold', 'italic', 'underline', 'fontColor', 'align', 'list']],
@@ -482,7 +488,11 @@ const HospitalManagement = () => {
             formData.append("address[state]", values?.address?.state || "");
             formData.append("address[pincode]", values?.address?.pincode || "");
 
-            values?.categories?.forEach(id => {
+            const categoryIds = Array.isArray(values.categories)
+                ? values.categories
+                : values.categories ? [values.categories] : [];
+
+            categoryIds.forEach(id => {
                 formData.append("categoryIds[]", id);
             });
 

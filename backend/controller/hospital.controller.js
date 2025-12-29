@@ -258,15 +258,27 @@ class hospitalController {
       },
       {
         $lookup: {
-          from: "categories",
+          from: "countries",
           localField: "countryId",
           foreignField: "_id",
-          as: "country",
+          as: "countryData",
         },
       },
       {
-        $unwind: { path: "$country", preserveNullAndEmptyArrays: true }
+        $unwind: "$countryData"
       },
+      {
+        $unwind: "$categories"
+      },
+      {
+        $lookup: {
+          from: "subcategories",
+          localField: "categories._id",
+          foreignField: "categoryId",
+          as: "categories.subcategories"
+        }
+      },
+
       { $sort: { createdAt: -1 } },
       { $skip: skip },
       { $limit: limitNumber },
@@ -279,8 +291,18 @@ class hospitalController {
           phone: 1,
           address: 1,
           numberOfBeds: 1,
+          infrastructure: 1,
+          facilities: 1,
+          youtubeVideos: 1,
+          hospitalIntro: 1,
+          countryData: 1,
+          teamAndSpeciality: 1,
           hospitalType: 1,
-          categories: 1,
+          categories: {
+            category_name: 1,
+            _id: 1,
+            subcategories: { _id: 1, subcategory_name: 1 }
+          },
           is_active: 1,
           createdAt: 1,
         },
@@ -297,6 +319,7 @@ class hospitalController {
     return responseHandler.successResponse(
       res,
       200,
+      "Hospital fetched successfully",
       {
         data,
         pagination: {
@@ -305,8 +328,12 @@ class hospitalController {
           limit: limitNumber,
           totalPages: Math.ceil(total / limitNumber),
         },
+        hospitalCount: {
+          totalHospitals: total,
+          activeHospitals: data.filter(h => h.is_active).length,
+        }
       },
-      "Hospital fetched successfully"
+
     );
   });
 
