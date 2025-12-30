@@ -3,6 +3,7 @@ import { Table, Button, Space, Tag, Switch, Popconfirm, message, Avatar } from '
 import { PlusOutlined, EditOutlined, DeleteOutlined, EyeOutlined, PhoneOutlined, EnvironmentOutlined, BuildOutlined } from '@ant-design/icons';
 import { useDeleteHospitalMutation, useGetHospitalsQuery, useUpdateHospitalMutation } from '@/rtk/slices/hospitalApiSlice';
 import { useNavigate } from 'react-router-dom';
+import { Loader } from 'lucide-react';
 
 const HospitalList = () => {
     const { data, isLoading, error } = useGetHospitalsQuery();
@@ -11,11 +12,13 @@ const HospitalList = () => {
     const navigate = useNavigate();
 
     const hospitals = data?.data?.data || [];
-    const hospitalCount = data?.data?.total || 0;
+    const hospitalCount = data?.data?.hospitalCount || 0;
     const pagination = data?.message?.pagination || { total: 0, page: 1, limit: 10, totalPages: 1 };
 
     const activeHospitalsCount = hospitals.filter(h => h.is_active).length;
     const loading = isLoading || isUpdating || isDeleting;
+
+
 
     const formatDate = (dateString) => {
         const date = new Date(dateString);
@@ -184,15 +187,12 @@ const HospitalList = () => {
         },
     ];
 
-    if (error) {
+    if (isLoading || isUpdating || isDeleting) {
         return (
-            <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-                <div className="text-center">
-                    <p className="text-red-600 text-lg font-semibold">Error loading hospitals</p>
-                    <p className="text-gray-600 mt-2">{error.message || 'Something went wrong'}</p>
-                </div>
+            <div className='flex justify-center items-center h-screen '>
+                <Loader className="animate-spin w-6 h-6" />
             </div>
-        );
+        )
     }
 
     return (
@@ -218,17 +218,17 @@ const HospitalList = () => {
             {/* STATS CARDS */}
             <div className="grid grid-cols-3 gap-4 mb-6">
                 <div className="bg-blue-50 p-4 rounded-lg">
-                    <div className="text-2xl font-bold text-blue-600">{pagination.total}</div>
+                    <div className="text-2xl font-bold text-blue-600">{hospitalCount.totalHospitals}</div>
                     <div className="text-sm text-gray-600">Total Hospitals</div>
                 </div>
                 <div className="bg-green-50 p-4 rounded-lg">
                     <div className="text-2xl font-bold text-green-600">
-                        {activeHospitalsCount}
+                        {hospitalCount.activeHospitals}
                     </div>
                     <div className="text-sm text-gray-600">Active Hospitals</div>
                 </div>
                 <div className="bg-purple-50 p-4 rounded-lg">
-                    <div className="text-2xl font-bold text-purple-600">{pagination.totalPages}</div>
+                    <div className="text-2xl font-bold text-purple-600">{hospitalCount.inactiveHospitals}</div>
                     <div className="text-sm text-gray-600">Inactive Hospitals</div>
                 </div>
             </div>

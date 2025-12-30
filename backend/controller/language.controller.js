@@ -57,17 +57,28 @@ class LanguageController {
     }
     const skip = (parseInt(page) - 1) * parseInt(limit);
 
-    const languages = await LanguageModel.find(filter)
-      .sort({ createdAt: -1 })
-      .skip(skip)
-      .limit(parseInt(limit));
+    const [languages, total, totalActiveLanguage, totalLanguages] = await Promise.all([
+      LanguageModel.find(filter)
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(parseInt(limit)),
+      LanguageModel.countDocuments(filter),
+      LanguageModel.countDocuments({ is_deleted: false, is_active: true }),
+      LanguageModel.countDocuments({ is_deleted: false })
+    ]);
 
-    const total = await LanguageModel.countDocuments({ is_deleted: false });
     return responseHandler.successResponse(
       res,
       200,
       "Languages fetched successfully",
-      { languages, total, page: parseInt(page), limit: parseInt(limit) }
+      {
+        languages, total, page: parseInt(page), limit: parseInt(limit),
+        languageCount: {
+          totalLanguages: totalLanguages,
+          activeLanguages: totalActiveLanguage,
+          inactiveLanguages: totalLanguages - totalActiveLanguage
+        }
+      }
     );
   });
 

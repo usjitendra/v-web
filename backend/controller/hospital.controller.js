@@ -331,6 +331,7 @@ class hospitalController {
         hospitalCount: {
           totalHospitals: total,
           activeHospitals: data.filter(h => h.is_active).length,
+          inactiveHospitals: data.filter(h => !h.is_active).length,
         }
       },
 

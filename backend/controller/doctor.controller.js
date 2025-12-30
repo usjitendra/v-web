@@ -203,14 +203,17 @@ class DoctorController {
 
 
 
-    const [data, total] = await Promise.all([
+    const [data, total, activeDoctors, totalDoctors] = await Promise.all([
       DoctorModel.find(query)
         .populate("categoryId")
         .populate("subCategoryId")
         .skip((page - 1) * limit)
         .limit(Number(limit))
         .sort({ createdAt: -1 }),
-      DoctorModel.countDocuments(query)
+      DoctorModel.countDocuments(query),
+      DoctorModel.countDocuments({ is_deleted: false, is_active: true }),
+      DoctorModel.countDocuments({ is_deleted: false })
+
     ])
 
     return responseHandler.successResponse(res, 200, "Doctors fetched successfully", {
@@ -219,7 +222,13 @@ class DoctorController {
         total,
         page: Number(page),
         limit: Number(limit),
+      },
+      doctoreCount: {
+        totalDoctors: totalDoctors,
+        activeDoctors: activeDoctors,
+        inactiveDoctors: totalDoctors - activeDoctors
       }
+
     });
   });
 
