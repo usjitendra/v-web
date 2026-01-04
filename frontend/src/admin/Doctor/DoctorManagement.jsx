@@ -9,6 +9,7 @@ import {
   useDeleteDoctorMutation,
   // useUpdateDoctorStatusMutation
 } from "../../rtk/slices/doctorApi"; // Adjust path as needed
+import { Loader } from "lucide-react";
 
 const DoctorManagement = () => {
   const [isFormOpen, setIsFormOpen] = useState(false);
@@ -22,6 +23,7 @@ const DoctorManagement = () => {
   // const [updateDoctorStatus] = useUpdateDoctorStatusMutation();
 
   const doctors = doctorsData?.data?.data || [];
+  const doctoreCount = doctorsData?.data?.doctoreCount || {};
   const loading = isFetchingDoctors || isAdding || isUpdating || isDeleting;
 
   // ---------------- OPEN ADD ----------------
@@ -239,6 +241,14 @@ const DoctorManagement = () => {
   ];
 
 
+  if (isFetchingDoctors || isAdding || isUpdating || isDeleting) {
+    return (
+      <div className="flex justify-center items-center h-screen ">
+        <Loader className="animate-spin w-6 h-6" />
+      </div>
+    )
+  }
+
   return (
     <div className="p-6 bg-white rounded-lg shadow">
       {/* HEADER */}
@@ -262,18 +272,18 @@ const DoctorManagement = () => {
       {/* STATS CARDS */}
       <div className="grid grid-cols-4 gap-4 mb-6">
         <div className="bg-blue-50 p-4 rounded-lg">
-          <div className="text-2xl font-bold text-blue-600">{doctors.length}</div>
+          <div className="text-2xl font-bold text-blue-600">{doctoreCount.totalDoctors}</div>
           <div className="text-sm text-gray-600">Total Doctors</div>
         </div>
         <div className="bg-green-50 p-4 rounded-lg">
           <div className="text-2xl font-bold text-green-600">
-            {doctors?.filter(d => d.is_active).length}
+            {doctoreCount.activeDoctors}
           </div>
           <div className="text-sm text-gray-600">Active Doctors</div>
         </div>
         <div className="bg-orange-50 p-4 rounded-lg">
           <div className="text-2xl font-bold text-orange-600">
-            {doctors?.filter(d => !d.is_active).length}
+            {doctoreCount.inactiveDoctors}
           </div>
           <div className="text-sm text-gray-600">Inactive Doctors</div>
         </div>

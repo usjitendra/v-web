@@ -4,6 +4,7 @@ import { categoryApi } from "./slices/categoryApi";
 import { subcategoryApi } from "./slices/subcategoryApi";
 import { doctorApi } from "./slices/doctorApi";
 import { hospitalApi } from "./slices/hospitalApiSlice";
+import { commanApiSlice } from "./slices/commanApiSlice";
 
 export const store = configureStore({
   reducer: {
@@ -12,6 +13,7 @@ export const store = configureStore({
     [subcategoryApi.reducerPath]: subcategoryApi.reducer,
     [doctorApi.reducerPath]: doctorApi.reducer,
     [hospitalApi.reducerPath]: hospitalApi.reducer,
+    [commanApiSlice.reducerPath]: commanApiSlice.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(
@@ -19,6 +21,7 @@ export const store = configureStore({
       categoryApi.middleware,
       subcategoryApi.middleware,
       doctorApi.middleware,
-      hospitalApi.middleware
+      hospitalApi.middleware,
+      commanApiSlice.middleware
     ),
 });
