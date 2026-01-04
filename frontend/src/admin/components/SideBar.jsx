@@ -46,7 +46,7 @@ const menuItems = [
     ],
 
   },
-    {
+  {
     icon: <PiLockKeyOpen />,
     label: "Hospital",
     permission: "rbac",

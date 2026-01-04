@@ -7,7 +7,6 @@ const { ObjectId } = Schema.Types;
 
 const doctorSchema = new mongoose.Schema(
   {
-
     name: {
       type: String,
       trim: true,
@@ -38,8 +37,8 @@ const doctorSchema = new mongoose.Schema(
     phone: {
       type: String,
       required: true,
-
     },
+
     location: {
       city: { type: String, default: "" },
       state: { type: String, default: "" },
@@ -108,7 +107,6 @@ const doctorSchema = new mongoose.Schema(
 
       },
     ],
-
 
     youtubeVideo: {
       title: String,

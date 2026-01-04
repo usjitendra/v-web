@@ -14,6 +14,7 @@ router.post("/add", upload.fields([
 router.get("/list", DoctorController.getAllDoctors);
 router.get("/:id", DoctorController.getDoctorById);
 
+
 router.put(
   "/update/:id",
   upload.fields([

@@ -49,6 +49,8 @@ const HospitalList = () => {
 
     };
 
+    cons
+
     const handleEdit = (hospital) => {
         navigate('/admin/hospitals-add', { state: { hospital } });
     };
@@ -194,6 +196,7 @@ const HospitalList = () => {
             </div>
         )
     }
+
 
     return (
         <div className="p-6 bg-white rounded-lg shadow">
