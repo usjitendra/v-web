@@ -16,10 +16,19 @@ module.exports = {
           border: "hsl(var(--border))",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
+                main: '#1F509A',
+        light: '#656262',
+        // prime: '#1A9CA6', 
+        lightSky: '#F7FBFF',
+        dark: '#001E3A',
+        white: '#ffffff',  // Standard white color
+        black: '#000000',  // Standard black color
+        yellow:'#f9e666'
       },
       
       fontFamily: {
         sans: ["Poppins", "sans-serif"],
+            sans: ["Poppins", "sans-serif"],
       },
       boxShadow: {
         smooth: "0 8px 30px rgba(16,24,40,0.06)",

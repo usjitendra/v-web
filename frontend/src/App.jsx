@@ -42,12 +42,13 @@ import SubcategoryManagement from "./admin/adminSetting/subCategoryManagement";
 import DoctorManagement from "./admin/Doctor/DoctorManagement";
 import HospitalManagement from "./admin/Hospital/Hospital";
 import HospitalList from "./admin/Hospital/HospitalList";
+import DoctorHome from "./pages/Doctor/DoctorHome";
 
 /* ===== LAYOUTS ===== */
 const PublicLayout = () => (
   <div className="min-h-screen flex flex-col text-gray-800">
     <Header />
-    <main className="flex-grow mt-2 pt-14">
+    <main className="flex-grow">
       <Outlet />
     </main>
     <Footer />
@@ -76,7 +77,8 @@ export default function App() {
         {/* ================= PUBLIC ROUTES ================= */}
         <Route element={<PublicLayout />}>
           <Route path="/" element={<Home />} />
-          <Route path="/doctors" element={<Doctors />} />
+                <Route path="/doctors" element={<DoctorHome/>} />
+          {/* <Route path="/doctors" element={<Doctors />} /> */}
           <Route path="/doctors/:id" element={<DoctorDetails />} />
           <Route path="/treatments" element={<Treatments />} />
           <Route path="/treatments/:id" element={<TreatmentDetails />} />
@@ -114,7 +116,7 @@ export default function App() {
 
 
 
-                <Route path="/bio-data" element={<BiodataApp/>} />
+        <Route path="/bio-data" element={<BiodataApp/>} />
 
       </Routes>
     </>

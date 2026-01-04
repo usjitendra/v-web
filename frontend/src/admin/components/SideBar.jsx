@@ -31,15 +31,15 @@ const menuItems = [
     label: "Doctor",
     permission: "rbac",
     subItems: [
-      {
-        icon: <PiShieldChevron />,
-        label: "Doctor List",
-        link: "/admin/doctors/list",
-        permission: "doctor.create",
-      },
+      // {
+      //   icon: <PiShieldChevron />,
+      //   label: "Doctor List",
+      //   link: "/admin/doctors/list",
+      //   permission: "doctor.create",
+      // },
       {
         icon: <PiUserPlus />,
-        label: "Add Doctor",
+        label: "Doctor List",
         link: "/admin/doctors-add",
         permission: "doctor.create",
       },
@@ -194,7 +194,7 @@ const Sidebar = ({ sidebarCollapsed, toggleSidebar }) => {
           </span>
         </div>
 
-        <ul className="space-y-1">2
+        <ul className="space-y-1">
           {filteredMenuItems.map((item, index) => {
             const filteredSubItems = item.subItems
               ? item.subItems.filter((subItem) =>

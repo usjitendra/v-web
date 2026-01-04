@@ -10,6 +10,14 @@ import Services from "../components/Services";
 import Stats from "../components/Stats";
 import WhatsAppButton from "../components/WhatsAppButton";
 import { useLanguage } from "../hooks/useLanguage";
+import UpdatesAndBlogs from "./Home/Blog";
+import Feature from "./Home/Feature";
+import HeroSection from "./Home/HeroSection";
+import HomeAbout from "./Home/HomeAbout";
+import HowWeWork from "./Home/HowWeWork";
+import MultiSpecialtyFocus from "./Home/MutiSpecality";
+import ServicesSection from "./Home/OurService";
+import WhyWe from "./Home/WhyWe";
 
 export default function Home() {
   const [language] = useLanguage();
@@ -17,26 +25,38 @@ export default function Home() {
 
   return (
     <div>
-      <Hero />
+      {/* <Hero /> */}
+      <HeroSection/>
+      <HomeAbout/>
 
       {/* Services */}
+{/* 
+      <Stats /> */}
 
-      <Stats />
+      {/* <Services /> */}
 
-      <Services />
+      <MultiSpecialtyFocus/>
 
-      <HospitalCarousel />
+      <Feature/>
 
-      <ProcedureCost />
-      <WhatsAppButton />
+      {/* <HospitalCarousel /> */}
 
-      <ProcessFlow />
-      <WhatsAppButton />
-      <OurServices />
-      <WhatsAppButton />
+      <ServicesSection/>
+
+      <HowWeWork/>
+      <WhyWe/>
+
+      {/* <ProcedureCost /> */}
+      {/* <WhatsAppButton /> */}
+
+      {/* <ProcessFlow /> */}
+      {/* <WhatsAppButton /> */}
+      {/* <OurServices /> */}
+      {/* <WhatsAppButton /> */}
       <PatientOpinions />
 
-      <Blog />
+      {/* <Blog /> */}
+      <UpdatesAndBlogs/>
 
       <FAQ />
     </div>
