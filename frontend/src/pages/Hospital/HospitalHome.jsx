@@ -1,9 +1,9 @@
 import React from 'react'
-import DoctorSearch from './Search'
-import DoctorListingPage from './DoctorListing'
+import HospitalSearch from './Search'
+import HospitalListingPage from './HospitalListing'
 import BreadCrumbs from '@/components/Breadcums';
 
-const DoctorHome = () => {
+const HospitalHome = () => {
 
 
   const breadcrumbItems = [
@@ -11,15 +11,13 @@ const DoctorHome = () => {
     // { label: 'About ASTITVA CLINIC ' },
     { label: 'About Us' }
   ];
-
   return (
     <div>
       <BreadCrumbs headText={"About Shanya Scans & Theranostics"} items={breadcrumbItems} />
-      <DoctorSearch />
-      <DoctorListingPage />
-
+      <HospitalSearch />
+      <HospitalListingPage />
     </div>
   )
 }
 
-export default DoctorHome
+export default HospitalHome

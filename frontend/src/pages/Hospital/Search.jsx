@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { MapPin, ChevronDown } from 'lucide-react';
 
-export default function DoctorSearch() {
+export default function HospitalSearch() {
   const [country, setCountry] = useState('India');
   const [city, setCity] = useState('All Cities');
   const [specialty, setSpecialty] = useState('CARDIOLOGY AND CARDIAC SURGERY');
@@ -18,7 +18,7 @@ export default function DoctorSearch() {
         {/* Header */}
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-gray-800">
-            Best Cardiac Surgeons in India
+            Best Cardiac Hospital in India
           </h1>
         </div>
 
