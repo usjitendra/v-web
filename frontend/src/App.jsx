@@ -43,6 +43,10 @@ import DoctorManagement from "./admin/Doctor/DoctorManagement";
 import HospitalManagement from "./admin/Hospital/Hospital";
 import HospitalList from "./admin/Hospital/HospitalList";
 import DoctorHome from "./pages/Doctor/DoctorHome";
+import HospitalListingPage from "./pages/Hospital/HospitalListing";
+import HospitalHome from "./pages/Hospital/HospitalHome";
+import DoctorDetailPage from "./pages/Doctor/DoctorDetailsPage/DoctorDetailPage";
+import HospitalDetailPage from "./pages/Hospital/HospitalDetailPage";
 
 /* ===== LAYOUTS ===== */
 const PublicLayout = () => (
@@ -78,11 +82,14 @@ export default function App() {
         <Route element={<PublicLayout />}>
           <Route path="/" element={<Home />} />
           <Route path="/doctors" element={<DoctorHome />} />
+          <Route path="/doctors/details" element={<DoctorDetailPage />} />
           {/* <Route path="/doctors" element={<Doctors />} /> */}
           <Route path="/doctors/:id" element={<DoctorDetails />} />
           <Route path="/treatments" element={<Treatments />} />
           <Route path="/treatments/:id" element={<TreatmentDetails />} />
-          <Route path="/hospitals" element={<Hospitals />} />
+          {/* <Route path="/hospitals" element={<Hospitals />} /> */}
+          <Route path="/hospitals" element={<HospitalHome />} />
+          <Route path="/hospitals/detail" element={<HospitalDetailPage />} />
           <Route path="/hospitals/:id" element={<HospitalDetails />} />
           <Route path="/book" element={<BookingFlow />} />
           <Route path="/about" element={<About />} />
