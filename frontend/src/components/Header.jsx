@@ -1,16 +1,22 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Menu, X, Search, ChevronDown, Globe } from 'lucide-react';
 import { useGetConteryDropDownQuery } from '@/rtk/slices/subcategoryApi';
+import { useGetCountryCategoryDropdownQuery } from '@/rtk/slices/dropdownApiSlice';
 
 const Header = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState(null);
-  const { data, isLoading, isFetching, isError } = useGetConteryDropDownQuery();
+  const { data, isLoading, isFetching, isError } = useGetCountryCategoryDropdownQuery();
+  const countries = data?.data?.result || [];
+  console.log('countries:', countries);
 
-  const countries = data?.data || [];
-
-  console.log('Countries for dropdown:', countries);
-
+  const [hoverCountry, setHoverCountry] = useState(null);
+  useEffect(() => {
+    if (countries.length) {
+      setHoverCountry(countries[0]);
+    }
+  }, [countries]);
+  console.log('hoverCountry:', hoverCountry);
   // Navigation data structure
   const navItems = [
     { id: 1, label: 'Home', path: '/', hasDropdown: false },
@@ -19,14 +25,14 @@ const Header = () => {
       label: 'Hospitals',
       path: '/hospitals',
       hasDropdown: true,
-      dropdownItems: countries
+      dropdownItems: ['Treatment Costs', 'Compare Prices', 'Insurance']
     },
     {
       id: 3,
       label: 'Doctors',
       path: '/doctors',
       hasDropdown: true,
-      dropdownItems: countries
+      dropdownItems: ['Treatment Costs', 'Compare Prices', 'Insurance']
     },
     {
       id: 4,
@@ -130,19 +136,41 @@ const Header = () => {
                   {item.hasDropdown && <ChevronDown className="w-4 h-4" />}
                 </button>
 
-                {item.hasDropdown && (
-                  <div className="hidden group-hover:block absolute top-full left-0 bg-white shadow-lg rounded-b min-w-48 z-50">
-                    {item.dropdownItems.map((countries) => (
-                      <a
-                        key={countries._id}
-                        href="#"
-                        className="block px-4 py-2 text-gray-700 hover:bg-blue-50 transition"
-                      >
-                        {countries.country_name}
-                      </a>
-                    ))}
+                {item.label === "Hospitals" && item.hasDropdown && (
+                  <div className="hidden group-hover:flex absolute top-full left-0 bg-white shadow-lg rounded-b z-50">
+
+                    {/* LEFT: Countries */}
+                    <div className="min-w-52 border-r">
+                      {countries.map((country) => (
+                        <div
+                          key={country.countryId}
+                          onMouseEnter={() => setHoverCountry(country)}
+                          className="flex items-center justify-between px-4 py-2 cursor-pointer hover:bg-blue-50"
+                        >
+                          <span className="text-gray-800">
+                            {country.countryName}
+                          </span>
+                          <ChevronDown className="w-4 h-4 -rotate-90" />
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* RIGHT: Categories */}
+                    <div className="min-w-60 bg-gray-50">
+                      {hoverCountry?.categories?.map((cat) => (
+                        <a
+                          key={cat.categoryId}
+                          href="#"
+                          className="block px-4 py-2 text-gray-700 hover:bg-blue-100"
+                        >
+                          {cat.categoryName}
+                        </a>
+                      ))}
+                    </div>
+
                   </div>
                 )}
+
               </li>
             ))}
 

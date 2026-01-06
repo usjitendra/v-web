@@ -5,6 +5,7 @@ import { subcategoryApi } from "./slices/subcategoryApi";
 import { doctorApi } from "./slices/doctorApi";
 import { hospitalApi } from "./slices/hospitalApiSlice";
 import { commanApiSlice } from "./slices/commanApiSlice";
+import { dropdownApi } from "./slices/dropdownApiSlice";
 
 export const store = configureStore({
   reducer: {
@@ -14,6 +15,7 @@ export const store = configureStore({
     [doctorApi.reducerPath]: doctorApi.reducer,
     [hospitalApi.reducerPath]: hospitalApi.reducer,
     [commanApiSlice.reducerPath]: commanApiSlice.reducer,
+    [dropdownApi.reducerPath]: dropdownApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(
@@ -22,6 +24,7 @@ export const store = configureStore({
       subcategoryApi.middleware,
       doctorApi.middleware,
       hospitalApi.middleware,
-      commanApiSlice.middleware
+      commanApiSlice.middleware,
+      dropdownApi.middleware
     ),
 });

@@ -108,6 +108,36 @@ class dropdownController {
     );
   });
 
+  countryCategory = tryCatchFn(async (req, res) => {
+
+    const countries = await CountryModel.find({ is_active: true, is_deleted: false },
+      { _id: 1, country_name: 1 }
+    )
+    const categories = await CategoryModel.find({ is_active: true, is_deleted: false },
+      { _id: 1, category_name: 1 }
+    )
+
+    const result = countries.map(country => ({
+      countryId: country._id,
+      countryName: country.country_name,
+      categories: categories.map(cat => ({
+        categoryId: cat._id,
+        categoryName: cat.category_name
+      }))
+    }));
+
+
+
+    return responseHandler.successResponse(
+      res,
+      200,
+      "Categories Cuntry fetched successfully",
+      {
+        result
+      }
+    );
+  })
+
 
 }
 
