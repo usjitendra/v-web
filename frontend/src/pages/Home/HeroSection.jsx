@@ -35,7 +35,7 @@ const HeroSection = () => {
   return (
     <section className="relative w-full overflow-hidden bg-gray-50">
       {/* Background Image with Overlay */}
-      <div 
+      <div
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
         style={{
           backgroundImage: `url(${bgimage})`,
@@ -47,10 +47,10 @@ const HeroSection = () => {
       {/* Content Container */}
       <div className="relative z-10 max-w-7xl mx-auto px-4 py-12 md:py-16 lg:py-20">
         <div className="max-w-3xl">
-          
+
           {/* Main Heading */}
           <div className="space-y-4 mb-8 lg:mb-10">
-            <h1 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-gray-900 leading-tight">
+            <h1 className="text-2xl md:text-2xl lg:text-4xl xl:text-5xl font-bold text-gray-900 leading-tight">
               Medical Treatment With Unmatched Personal Care
             </h1>
             <p className="text-lg md:text-xl lg:text-2xl text-gray-700 font-medium">
@@ -70,7 +70,7 @@ const HeroSection = () => {
               Get FREE Consultation
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </button>
-            
+
             <button
               onClick={handleCallNow}
               className="flex items-center justify-center gap-2 bg-white hover:bg-gray-50 text-gray-900 font-bold px-8 py-4 rounded-lg text-base lg:text-lg transition-all duration-300 shadow-xl hover:shadow-2xl border-2 border-gray-200"
@@ -136,9 +136,8 @@ const HeroSection = () => {
                     {[1, 2, 3, 4, 5].map((star) => (
                       <Star
                         key={star}
-                        className={`w-4 h-4 ${
-                          star <= 4 ? 'fill-yellow-400 text-yellow-400' : 'fill-gray-300 text-gray-300'
-                        }`}
+                        className={`w-4 h-4 ${star <= 4 ? 'fill-yellow-400 text-yellow-400' : 'fill-gray-300 text-gray-300'
+                          }`}
                       />
                     ))}
                   </div>

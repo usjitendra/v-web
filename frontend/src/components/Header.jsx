@@ -1,38 +1,44 @@
 import React, { useState } from 'react';
 import { Menu, X, Search, ChevronDown, Globe } from 'lucide-react';
+import { useGetConteryDropDownQuery } from '@/rtk/slices/subcategoryApi';
 
 const Header = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState(null);
+  const { data, isLoading, isFetching, isError } = useGetConteryDropDownQuery();
+
+  const countries = data?.data || [];
+
+  console.log('Countries for dropdown:', countries);
 
   // Navigation data structure
   const navItems = [
     { id: 1, label: 'Home', path: '/', hasDropdown: false },
-    { 
-      id: 2, 
-      label: 'Hospitals', 
-      path: '/hospitals', 
+    {
+      id: 2,
+      label: 'Hospitals',
+      path: '/hospitals',
       hasDropdown: true,
-      dropdownItems: ['Top Hospitals', 'By Specialty', 'By Location']
+      dropdownItems: countries
     },
-    { 
-      id: 3, 
-      label: 'Doctors', 
-      path: '/doctors', 
+    {
+      id: 3,
+      label: 'Doctors',
+      path: '/doctors',
       hasDropdown: true,
-      dropdownItems: ['Find Doctors', 'By Specialty', 'Top Rated']
+      dropdownItems: countries
     },
-    { 
-      id: 4, 
-      label: 'Cost', 
-      path: '/cost', 
+    {
+      id: 4,
+      label: 'Cost',
+      path: '/cost',
       hasDropdown: true,
       dropdownItems: ['Treatment Costs', 'Compare Prices', 'Insurance']
     },
-    { 
-      id: 5, 
-      label: 'Knowledge', 
-      path: '/knowledge', 
+    {
+      id: 5,
+      label: 'Knowledge',
+      path: '/knowledge',
       hasDropdown: true,
       dropdownItems: ['Articles', 'Videos', 'FAQs']
     },
@@ -49,20 +55,20 @@ const Header = () => {
   return (
     <header className="w-full shadow-md">
       {/* Top Blue Bar */}
-      <div className="bg-blue-700 text-white">
+      <div className="bg-gradient-to-r from-teal-600 to-teal-700 text-white">
         <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
           {/* Logo Section */}
           <div className="flex items-center space-x-3">
             <div className="flex items-center">
               <div className="bg-white rounded-full p-2 w-12 h-12 flex items-center justify-center">
-                <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center">
+                <div className="w-8 h-8 bg-teal-600 rounded-full flex items-center justify-center">
                   <div className="w-4 h-4 bg-white rounded-full"></div>
                 </div>
               </div>
             </div>
             <div className="text-left">
-              <h1 className="text-xl font-bold tracking-wide">Vaidam.com</h1>
-              <p className="text-xs tracking-wider uppercase">For Medical Procedures</p>
+              <h1 className="text-xl font-bold tracking-wide text-white">Vaidam.com</h1>
+              <p className="text-xs tracking-wider uppercase text-white">For Medical Procedures</p>
             </div>
           </div>
 
@@ -74,7 +80,7 @@ const Header = () => {
                 placeholder="Search doctors, hospitals, treatments..."
                 className="w-full px-4 py-2 pr-12 rounded-full text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-400"
               />
-              <button className="absolute right-2 top-1/2 -translate-y-1/2 bg-blue-600 p-2 rounded-full hover:bg-blue-700 transition">
+              <button className="absolute right-2 top-[10%] -translate-y-1/2 bg-teal-600 p-2 rounded-full hover:bg-blue-700 transition">
                 <Search className="w-4 h-4 text-white" />
               </button>
             </div>
@@ -112,7 +118,6 @@ const Header = () => {
 
       {/* Navigation Bar */}
       <nav className="bg-blue-200">
-        {/* Desktop Navigation */}
         <div className="hidden md:block max-w-7xl mx-auto px-4">
           <ul className="flex items-center space-x-1">
             {navItems.map((item) => (
@@ -124,24 +129,23 @@ const Header = () => {
                   <span>{item.label}</span>
                   {item.hasDropdown && <ChevronDown className="w-4 h-4" />}
                 </button>
-                
-                {/* Dropdown Menu */}
+
                 {item.hasDropdown && (
                   <div className="hidden group-hover:block absolute top-full left-0 bg-white shadow-lg rounded-b min-w-48 z-50">
-                    {item.dropdownItems.map((dropItem, idx) => (
+                    {item.dropdownItems.map((countries) => (
                       <a
-                        key={idx}
+                        key={countries._id}
                         href="#"
                         className="block px-4 py-2 text-gray-700 hover:bg-blue-50 transition"
                       >
-                        {dropItem}
+                        {countries.country_name}
                       </a>
                     ))}
                   </div>
                 )}
               </li>
             ))}
-            
+
             {/* Language Selector */}
             <li className="ml-auto relative group">
               <button className="flex items-center space-x-2 px-4 py-3 text-gray-800 hover:bg-blue-300 transition">
@@ -149,7 +153,7 @@ const Header = () => {
                 <span className="text-sm font-medium">Select Language</span>
                 <ChevronDown className="w-4 h-4" />
               </button>
-              
+
               <div className="hidden group-hover:block absolute top-full right-0 bg-white shadow-lg rounded-b min-w-40 z-50">
                 {languages.map((lang, idx) => (
                   <a
@@ -178,13 +182,12 @@ const Header = () => {
                     <span>{item.label}</span>
                     {item.hasDropdown && (
                       <ChevronDown
-                        className={`w-4 h-4 transition-transform ${
-                          activeDropdown === item.id ? 'rotate-180' : ''
-                        }`}
+                        className={`w-4 h-4 transition-transform ${activeDropdown === item.id ? 'rotate-180' : ''
+                          }`}
                       />
                     )}
                   </button>
-                  
+
                   {/* Mobile Dropdown */}
                   {item.hasDropdown && activeDropdown === item.id && (
                     <div className="bg-blue-100">
@@ -201,7 +204,7 @@ const Header = () => {
                   )}
                 </li>
               ))}
-              
+
               {/* Mobile Language Selector */}
               <li>
                 <button
@@ -213,12 +216,11 @@ const Header = () => {
                     <span>Select Language</span>
                   </span>
                   <ChevronDown
-                    className={`w-4 h-4 transition-transform ${
-                      activeDropdown === 'language' ? 'rotate-180' : ''
-                    }`}
+                    className={`w-4 h-4 transition-transform ${activeDropdown === 'language' ? 'rotate-180' : ''
+                      }`}
                   />
                 </button>
-                
+
                 {activeDropdown === 'language' && (
                   <div className="bg-blue-100">
                     {languages.map((lang, idx) => (
@@ -233,7 +235,7 @@ const Header = () => {
                   </div>
                 )}
               </li>
-              
+
               {/* Mobile CTA Button */}
               <li className="px-4 py-3">
                 <button className="w-full bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded font-semibold transition">

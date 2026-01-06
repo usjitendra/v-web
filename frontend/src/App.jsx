@@ -77,7 +77,7 @@ export default function App() {
         {/* ================= PUBLIC ROUTES ================= */}
         <Route element={<PublicLayout />}>
           <Route path="/" element={<Home />} />
-                <Route path="/doctors" element={<DoctorHome/>} />
+          <Route path="/doctors" element={<DoctorHome />} />
           {/* <Route path="/doctors" element={<Doctors />} /> */}
           <Route path="/doctors/:id" element={<DoctorDetails />} />
           <Route path="/treatments" element={<Treatments />} />
@@ -97,13 +97,13 @@ export default function App() {
           <Route path="dashboard" element={<WorkInProgress />} />
           <Route path="doctors/list" element={<DoctorTable />} />
           <Route path="doctors/list" element={<WorkInProgress />} />
-          <Route path="doctors-add" element={<DoctorManagement/>} />
-          <Route path="hospitals-add" element={<HospitalManagement/>} />
-          <Route path="hospitals/list" element={<HospitalList/>} />
+          <Route path="doctors-add" element={<DoctorManagement />} />
+          <Route path="hospitals-add" element={<HospitalManagement />} />
+          <Route path="hospitals/list" element={<HospitalList />} />
           <Route path="master/countries" element={<CountrySetting />} />
           <Route path="hospital/language-setting" element={<LanguageSetting />} />
-          <Route path="master/categories" element={<CategoryManagement/>} />
-          <Route path="master/sub-categories" element={<SubcategoryManagement/>} />
+          <Route path="master/categories" element={<CategoryManagement />} />
+          <Route path="master/sub-categories" element={<SubcategoryManagement />} />
         </Route>
 
         {/* ================= PATIENT ROUTES ================= */}
@@ -116,7 +116,7 @@ export default function App() {
 
 
 
-        <Route path="/bio-data" element={<BiodataApp/>} />
+        <Route path="/bio-data" element={<BiodataApp />} />
 
       </Routes>
     </>
