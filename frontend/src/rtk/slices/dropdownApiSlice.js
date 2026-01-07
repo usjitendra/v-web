@@ -15,9 +15,18 @@ export const dropdownApi = createApi({
       }),
       providesTags: ["Dropdown"],
     }),
+
+    getLanguageDropdown: builder.query({
+      query: () => ({
+        url: "dropdown/language",
+        method: "GET",
+      }),
+      providesTags: ["Dropdown"],
+    }),
   }),
 });
 
 export const {
   useGetCountryCategoryDropdownQuery,
+  useGetLanguageDropdownQuery
 } = dropdownApi;

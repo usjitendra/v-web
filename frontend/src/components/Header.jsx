@@ -1,14 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { Menu, X, Search, ChevronDown, Globe } from 'lucide-react';
 import { useGetConteryDropDownQuery } from '@/rtk/slices/subcategoryApi';
-import { useGetCountryCategoryDropdownQuery } from '@/rtk/slices/dropdownApiSlice';
+import { useGetCountryCategoryDropdownQuery, useGetLanguageDropdownQuery } from '@/rtk/slices/dropdownApiSlice';
 
 const Header = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState(null);
   const { data, isLoading, isFetching, isError } = useGetCountryCategoryDropdownQuery();
+  const { data: languageData } = useGetLanguageDropdownQuery()
   const countries = data?.data?.result || [];
-  console.log('countries:', countries);
+  const languages = languageData?.data || []
+
+  console.log('language:', languages);
 
   const [hoverCountry, setHoverCountry] = useState(null);
   useEffect(() => {
@@ -52,7 +55,7 @@ const Header = () => {
     { id: 7, label: 'FREE Consult', path: '/free-consult', hasDropdown: false }
   ];
 
-  const languages = ['English', 'Hindi', 'Spanish', 'Arabic', 'French'];
+  // const languages = ['English', 'Hindi', 'Spanish', 'Arabic', 'French'];
 
   const toggleDropdown = (id) => {
     setActiveDropdown(activeDropdown === id ? null : id);
@@ -136,40 +139,48 @@ const Header = () => {
                   {item.hasDropdown && <ChevronDown className="w-4 h-4" />}
                 </button>
 
-                {item.label === "Hospitals" && item.hasDropdown && (
-                  <div className="hidden group-hover:flex absolute top-full left-0 bg-white shadow-lg rounded-b z-50">
+                {(item.label === "Hospitals" || item.label === "Doctors" || item.label === "Cost")
+                  && item.hasDropdown && (
+                    <div className="hidden group-hover:block absolute top-full left-0 bg-white shadow-lg rounded-b z-50">
 
-                    {/* LEFT: Countries */}
-                    <div className="min-w-52 border-r">
-                      {countries.map((country) => (
-                        <div
-                          key={country.countryId}
-                          onMouseEnter={() => setHoverCountry(country)}
-                          className="flex items-center justify-between px-4 py-2 cursor-pointer hover:bg-blue-50"
-                        >
-                          <span className="text-gray-800">
-                            {country.countryName}
-                          </span>
-                          <ChevronDown className="w-4 h-4 -rotate-90" />
+                      {/* MAIN CONTAINER */}
+                      <div className="relative flex">
+
+                        {/* LEFT: Countries (FIXED) */}
+                        <div className="min-w-52 border-r bg-white">
+                          {countries.map((country) => (
+                            <div
+                              key={country.countryId}
+                              onMouseEnter={() => setHoverCountry(country)}
+                              className="flex items-center justify-between px-4 py-2 cursor-pointer hover:bg-blue-50"
+                            >
+                              <span className="text-gray-800">
+                                {country.countryName}
+                              </span>
+                              <ChevronDown className="w-4 h-4 -rotate-90" />
+                            </div>
+                          ))}
                         </div>
-                      ))}
-                    </div>
 
-                    {/* RIGHT: Categories */}
-                    <div className="min-w-60 bg-gray-50">
-                      {hoverCountry?.categories?.map((cat) => (
-                        <a
-                          key={cat.categoryId}
-                          href="#"
-                          className="block px-4 py-2 text-gray-700 hover:bg-blue-100"
-                        >
-                          {cat.categoryName}
-                        </a>
-                      ))}
-                    </div>
+                        {/* RIGHT: Categories (ABSOLUTE – no push) */}
+                        {hoverCountry && (
+                          <div className="absolute top-0 left-full min-w-60 bg-gray-50">
+                            {hoverCountry.categories.map((cat) => (
+                              <a
+                                key={cat.categoryId}
+                                href="#"
+                                className="block px-4 py-2 text-gray-700 hover:bg-blue-100 whitespace-nowrap"
+                              >
+                                {cat.categoryName}
+                              </a>
+                            ))}
+                          </div>
+                        )}
 
-                  </div>
-                )}
+                      </div>
+                    </div>
+                  )}
+
 
               </li>
             ))}
@@ -189,7 +200,7 @@ const Header = () => {
                     href="#"
                     className="block px-4 py-2 text-gray-700 hover:bg-blue-50 transition"
                   >
-                    {lang}
+                    {lang?.language_name}
                   </a>
                 ))}
               </div>
@@ -198,6 +209,7 @@ const Header = () => {
         </div>
 
         {/* Mobile Navigation */}
+
         {isMobileMenuOpen && (
           <div className="md:hidden bg-blue-200">
             <ul className="py-2">
@@ -257,7 +269,7 @@ const Header = () => {
                         href="#"
                         className="block px-8 py-2 text-gray-700 hover:bg-blue-200"
                       >
-                        {lang}
+                        {lang?.language_name}
                       </a>
                     ))}
                   </div>
@@ -273,6 +285,7 @@ const Header = () => {
             </ul>
           </div>
         )}
+
       </nav>
     </header>
   );

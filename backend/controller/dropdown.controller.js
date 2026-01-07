@@ -26,8 +26,8 @@ class dropdownController {
       { $match: { is_deleted: false, is_active: true } },
       {
         $lookup: {
-          from: "countries",
-          localField: "countryID",
+          from: "languages",
+          localField: "_id",
           foreignField: "_id",
           as: "country"
         }
@@ -35,12 +35,11 @@ class dropdownController {
       { $unwind: "$country" },
       {
         $project: {
-          _id: 0,
-          languagesId: "$_id",
+          _id: 1,
           language_name: 1,
-          icon: 1,
           countryID: 1,
-          country_name: "$country.country_name"
+          country_name: "$country.country_name",
+          country_code: "$country.code"
         }
       },
       { $sort: { language_name: 1 } }
