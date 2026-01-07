@@ -17,7 +17,7 @@ export const commanApiSlice = createApi({
       providesTags: ["Comman"],
     }),
 
-    //  LANGUAGE LIST
+    // LANGUAGE LIST
     getLanguageList: builder.query({
       query: () => ({
         url: "language/list",
@@ -26,7 +26,7 @@ export const commanApiSlice = createApi({
       providesTags: ["Comman"],
     }),
 
-    //  CATEGORY LIST
+    // CATEGORY LIST
     getCategoryList: builder.query({
       query: () => ({
         url: "category/list",
@@ -35,7 +35,7 @@ export const commanApiSlice = createApi({
       providesTags: ["Comman"],
     }),
 
-    //  SUBCATEGORY LIST
+    // SUBCATEGORY LIST
     getSubCategoryList: builder.query({
       query: () => ({
         url: "subcategory/list",
@@ -44,7 +44,7 @@ export const commanApiSlice = createApi({
       providesTags: ["Comman"],
     }),
 
-    // DOCTOR LIST
+    // DOCTOR LIST (OLD)
     getDoctorList: builder.query({
       query: () => ({
         url: "doctor/list",
@@ -53,11 +53,59 @@ export const commanApiSlice = createApi({
       providesTags: ["Comman"],
     }),
 
-    // HOSPITAL LIST
+    // HOSPITAL LIST (OLD)
     getHospitalList: builder.query({
       query: () => ({
         url: "hospital/list",
         method: "GET",
+      }),
+      providesTags: ["Comman"],
+    }),
+
+    // ✅ DOCTOR GET ALL (WITH FILTERS)
+    getAllDoctors: builder.query({
+      query: ({
+        city,
+        state,
+        country,
+        category,
+        page = 1,
+        limit = 10,
+      }) => ({
+        url: "doctor/get-all",
+        method: "GET",
+        params: {
+          city,
+          state,
+          country,
+          category,
+          page,
+          limit,
+        },
+      }),
+      providesTags: ["Comman"],
+    }),
+
+    // ✅ HOSPITAL GET ALL (WITH FILTERS)
+    getAllHospitals: builder.query({
+      query: ({
+        city,
+        state,
+        country,
+        category,
+        page = 1,
+        limit = 10,
+      }) => ({
+        url: "hospital/get-all",
+        method: "GET",
+        params: {
+          city,
+          state,
+          country,
+          category,
+          page,
+          limit,
+        },
       }),
       providesTags: ["Comman"],
     }),
@@ -72,4 +120,8 @@ export const {
   useGetSubCategoryListQuery,
   useGetDoctorListQuery,
   useGetHospitalListQuery,
+
+
+  useGetAllDoctorsQuery,
+  useGetAllHospitalsQuery,
 } = commanApiSlice;

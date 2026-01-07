@@ -5,7 +5,7 @@ const ServiceCard = ({ icon: Icon, title, description, bgColor }) => (
   <div className="bg-gray-50 rounded-xl p-6 hover:shadow-md transition-shadow duration-300">
     <div className="flex items-start gap-4">
       <div className={`${bgColor} p-3 rounded-full flex-shrink-0`}>
-        <Icon className="w-6 h-6 text-blue-600" />
+        <Icon className="w-6 h-6 text-black" />
       </div>
       <div className="flex-1">
         <h3 className="text-gray-800 font-semibold text-base md:text-lg mb-2">
@@ -25,55 +25,55 @@ const ServicesSection = () => {
       icon: FileText,
       title: "Medical Opinion and Cost Estimations",
       description: "Expert opinions and cost estimates.",
-      bgColor: "bg-blue-100"
+      bgColor: "bg-green-300"
     },
     {
       icon: MessageCircle,
       title: "Pre-Travel Consultations",
       description: "Understand your procedure before traveling.",
-      bgColor: "bg-blue-100"
+      bgColor: "bg-green-300"
     },
     {
       icon: CreditCard,
       title: "Visa Assistance",
       description: "Complete medical visa assistance.",
-      bgColor: "bg-blue-100"
+      bgColor: "bg-green-300"
     },
     {
       icon: DollarSign,
       title: "Money Exchange",
       description: "Convenient currency exchange services in your city.",
-      bgColor: "bg-blue-100"
+      bgColor: "bg-green-300"
     },
     {
       icon: Users,
       title: "Interpreters and Translators",
       description: "Fluent professionals to break language barriers at every step.",
-      bgColor: "bg-blue-100"
+      bgColor: "bg-green-300"
     },
     {
       icon: Truck,
       title: "Transportation Assistance",
       description: "Complimentary airport transfers.",
-      bgColor: "bg-blue-100"
+      bgColor: "bg-green-300"
     },
     {
       icon: Building,
       title: "Accommodation Options",
       description: "Near the hospital and matching your budget and needs.",
-      bgColor: "bg-blue-100"
+      bgColor: "bg-green-300"
     },
     {
       icon: Clipboard,
       title: "Admission, Appointment, Pharma Care",
       description: "Full coordination of medical logistics.",
-      bgColor: "bg-blue-100"
+      bgColor: "bg-green-300"
     },
     {
       icon: UserCheck,
       title: "Private Duty Nursing",
       description: "Arrangements of private nursing care as needed.",
-      bgColor: "bg-blue-100"
+      bgColor: "bg-green-300"
     }
   ];
 
@@ -82,7 +82,7 @@ const ServicesSection = () => {
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="text-center mb-12">
-          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-800 mb-4">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-main mb-4">
             Our Services Cover Every Need
           </h1>
           <p className="text-gray-600 text-sm sm:text-base max-w-3xl mx-auto px-4">

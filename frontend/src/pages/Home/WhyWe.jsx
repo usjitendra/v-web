@@ -33,7 +33,7 @@ const FeaturedItem = ({ feature }) => {
       className="bg-slate-800 shadow-lg rounded-xl p-4 flex flex-col items-center justify-center"
       data-aos="fade-up"
     >
-      <h4 className="text-3xl sm:text-4xl text-blue-600 font-medium">{amount}</h4>
+      <h4 className="text-3xl sm:text-4xl text-main font-medium">{amount}</h4>
       <h6 className="font-medium  text-white mt-2">{title}</h6>
     </div>
   );
@@ -55,8 +55,8 @@ const WhyWe = () => {
   return (
     <section className="py-6 sm:py-8 md:py-10 lg:py-6 bg-white text-black relative overflow-hidden ">
       {/* Background Shapes */}
-      <div className="ezy__featured55-shape-one absolute left-0 bottom-0 min-w-[20%] h-full bg-[#1F509A] bg-opacity-80 -z-10" />
-      <div className="ezy__featured55-shape-two absolute left-[20%] bottom-0 min-w-[25%] h-full bg-[#1F509A] bg-opacity-30 -z-10" />
+      <div className="ezy__featured55-shape-one absolute left-0 bottom-0 min-w-[20%] h-full bg-main bg-opacity-80 -z-10" />
+      <div className="ezy__featured55-shape-two absolute left-[20%] bottom-0 min-w-[25%] h-full bg-main bg-opacity-30 -z-10" />
 
       <div className="max-w-7xl px-4 sm:px-6 lg:px-8 mx-auto ">
         <div className="grid grid-cols-12 gap-6 items-center">
@@ -70,7 +70,7 @@ const WhyWe = () => {
               <img
                 src={"mainImage"}
                 alt="Why Choose Us"
-                className="w-full max-w-md sm:max-w-sm lg:max-w-full mx-auto rounded-lg"
+                className="w-full max-w-md sm:max-w-sm lg:max-w-full mx-auto rounded-lg text-main"
               />
             </Link>
           </div>
@@ -80,7 +80,7 @@ const WhyWe = () => {
             className="col-span-12 sm:col-span-6 order-1 sm:order-2 text-center sm:text-left"
             data-aos="fade-left"
           >
-            <h3 className="text-2xl sm:text-3xl lg:text-4xl font-bold leading-tight mt-6 sm:mt-0">
+            <h3 className="text-2xl sm:text-3xl lg:text-4xl font-bold leading-tight mt-6 sm:mt-0 text-main">
               Why Choose Us?
             </h3>
             <p className="text-base sm:text-lg opacity-80 leading-7 my-4 sm:my-6 text-justify">

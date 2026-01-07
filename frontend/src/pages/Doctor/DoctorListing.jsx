@@ -42,7 +42,7 @@ export default function DoctorListingPage() {
                                 <div className="flex flex-col sm:flex-row gap-4 sm:gap-6">
                                     {/* Doctor Image */}
                                     <div className="flex-shrink-0 mx-auto sm:mx-0">
-                                        <div className="w-32 h-32 sm:w-40 sm:h-40 rounded-lg overflow-hidden bg-gradient-to-br from-blue-100 to-blue-50">
+                                        <div className="w-32 h-32 sm:w-40 sm:h-40 rounded-lg overflow-hidden bg-gradient-to-br from-green-100 to-green-50">
                                             <img
                                                 src="https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=400&h=400&fit=crop"
                                                 alt="Dr. Y K Mishra"
@@ -58,7 +58,7 @@ export default function DoctorListingPage() {
                                             <CheckCircle className="w-5 h-5 text-green-500 mx-auto sm:mx-0" />
                                         </div>
 
-                                        <span className="inline-block bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm font-medium mb-3">
+                                        <span className="inline-block bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm font-medium mb-3">
                                             Cardiac Surgeon
                                         </span>
 
@@ -90,7 +90,7 @@ export default function DoctorListingPage() {
                                         <div className="flex items-center justify-center sm:justify-start gap-1">
                                             <Building2 className="w-4 h-4 text-gray-500" />
                                             <span className="text-gray-700 font-medium">Works At: </span>
-                                            <span className="text-blue-600">Manipal Hospitals Dwarka, Delhi</span>
+                                            <span className="text-green-600">Manipal Hospitals Dwarka, Delhi</span>
                                         </div>
                                     </div>
 
@@ -166,7 +166,7 @@ export default function DoctorListingPage() {
 
                                 <button
                                     onClick={() => setShowMore(!showMore)}
-                                    className="mt-4 text-blue-600 hover:text-blue-700 font-semibold"
+                                    className="mt-4 text-green-600 hover:text-green-700 font-semibold"
                                 >
                                     {showMore ? 'Show Less' : 'Show More'}
                                 </button>
@@ -178,7 +178,7 @@ export default function DoctorListingPage() {
                                 <div className="flex flex-col sm:flex-row gap-4 sm:gap-6">
                                     {/* Doctor Image */}
                                     <div className="flex-shrink-0 mx-auto sm:mx-0">
-                                        <div className="w-32 h-32 sm:w-40 sm:h-40 rounded-lg overflow-hidden bg-gradient-to-br from-blue-100 to-blue-50">
+                                        <div className="w-32 h-32 sm:w-40 sm:h-40 rounded-lg overflow-hidden bg-gradient-to-br from-green-100 to-green-50">
                                             <img
                                                 src="https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=400&h=400&fit=crop"
                                                 alt="Dr. Y K Mishra"
@@ -194,7 +194,7 @@ export default function DoctorListingPage() {
                                             <CheckCircle className="w-5 h-5 text-green-500 mx-auto sm:mx-0" />
                                         </div>
 
-                                        <span className="inline-block bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm font-medium mb-3">
+                                        <span className="inline-block bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm font-medium mb-3">
                                             Cardiac Surgeon
                                         </span>
 
@@ -226,7 +226,7 @@ export default function DoctorListingPage() {
                                         <div className="flex items-center justify-center sm:justify-start gap-1">
                                             <Building2 className="w-4 h-4 text-gray-500" />
                                             <span className="text-gray-700 font-medium">Works At: </span>
-                                            <span className="text-blue-600">Manipal Hospitals Dwarka, Delhi</span>
+                                            <span className="text-green-600">Manipal Hospitals Dwarka, Delhi</span>
                                         </div>
                                     </div>
 
@@ -302,7 +302,7 @@ export default function DoctorListingPage() {
 
                                 <button
                                     onClick={() => setShowMore(!showMore)}
-                                    className="mt-4 text-blue-600 hover:text-blue-700 font-semibold"
+                                    className="mt-4 text-green-600 hover:text-green-700 font-semibold"
                                 >
                                     {showMore ? 'Show Less' : 'Show More'}
                                 </button>
@@ -314,7 +314,7 @@ export default function DoctorListingPage() {
                                 <div className="flex flex-col sm:flex-row gap-4 sm:gap-6">
                                     {/* Doctor Image */}
                                     <div className="flex-shrink-0 mx-auto sm:mx-0">
-                                        <div className="w-32 h-32 sm:w-40 sm:h-40 rounded-lg overflow-hidden bg-gradient-to-br from-blue-100 to-blue-50">
+                                        <div className="w-32 h-32 sm:w-40 sm:h-40 rounded-lg overflow-hidden bg-gradient-to-br from-green-100 to-green-50">
                                             <img
                                                 src="https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=400&h=400&fit=crop"
                                                 alt="Dr. Y K Mishra"
@@ -330,7 +330,7 @@ export default function DoctorListingPage() {
                                             <CheckCircle className="w-5 h-5 text-green-500 mx-auto sm:mx-0" />
                                         </div>
 
-                                        <span className="inline-block bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm font-medium mb-3">
+                                        <span className="inline-block bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm font-medium mb-3">
                                             Cardiac Surgeon
                                         </span>
 
@@ -362,7 +362,7 @@ export default function DoctorListingPage() {
                                         <div className="flex items-center justify-center sm:justify-start gap-1">
                                             <Building2 className="w-4 h-4 text-gray-500" />
                                             <span className="text-gray-700 font-medium">Works At: </span>
-                                            <span className="text-blue-600">Manipal Hospitals Dwarka, Delhi</span>
+                                            <span className="text-green-600">Manipal Hospitals Dwarka, Delhi</span>
                                         </div>
                                     </div>
 
@@ -438,7 +438,7 @@ export default function DoctorListingPage() {
 
                                 <button
                                     onClick={() => setShowMore(!showMore)}
-                                    className="mt-4 text-blue-600 hover:text-blue-700 font-semibold"
+                                    className="mt-4 text-green-600 hover:text-green-700 font-semibold"
                                 >
                                     {showMore ? 'Show Less' : 'Show More'}
                                 </button>
@@ -448,9 +448,9 @@ export default function DoctorListingPage() {
 
                     {/* Contact Form Section */}
                     <div className="lg:col-span-1">
-                        <div className="bg-gradient-to-br from-blue-700 to-blue-900 rounded-lg shadow-lg p-6 sticky top-4">
+                        <div className="bg-gradient-to-br from-green-700 to-green-900 rounded-lg shadow-lg p-6 sticky top-4">
                             <h2 className="text-2xl font-bold text-white text-center mb-2">Get FREE Evaluation</h2>
-                            <p className="text-blue-100 text-center mb-6">Treatment plan and quote within 2 days</p>
+                            <p className="text-green-100 text-center mb-6">Treatment plan and quote within 2 days</p>
 
                             <div className="space-y-4">
                                 <input
@@ -459,14 +459,14 @@ export default function DoctorListingPage() {
                                     placeholder="Patient Name"
                                     value={formData.patientName}
                                     onChange={handleInputChange}
-                                    className="w-full px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+                                    className="w-full px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400"
                                 />
 
                                 <select
                                     name="country"
                                     value={formData.country}
                                     onChange={handleInputChange}
-                                    className="w-full px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 bg-white"
+                                    className="w-full px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 bg-white"
                                 >
                                     <option value="India">India</option>
                                     <option value="USA">USA</option>
@@ -481,7 +481,7 @@ export default function DoctorListingPage() {
                                     placeholder="Enter city"
                                     value={formData.city}
                                     onChange={handleInputChange}
-                                    className="w-full px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+                                    className="w-full px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400"
                                 />
 
                                 <div className="flex gap-2">
@@ -494,7 +494,7 @@ export default function DoctorListingPage() {
                                         placeholder="Enter Phone no."
                                         value={formData.phone}
                                         onChange={handleInputChange}
-                                        className="flex-1 px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+                                        className="flex-1 px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400"
                                     />
                                 </div>
 
@@ -504,7 +504,7 @@ export default function DoctorListingPage() {
                                     placeholder="Example: 30 Yrs or 29-05-1985"
                                     value={formData.age}
                                     onChange={handleInputChange}
-                                    className="w-full px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+                                    className="w-full px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400"
                                 />
 
                                 <textarea
@@ -513,7 +513,7 @@ export default function DoctorListingPage() {
                                     value={formData.problem}
                                     onChange={handleInputChange}
                                     rows="4"
-                                    className="w-full px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 resize-none"
+                                    className="w-full px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 resize-none"
                                 ></textarea>
 
                                 <button
@@ -523,7 +523,7 @@ export default function DoctorListingPage() {
                                     Contact Us Now
                                 </button>
 
-                                <p className="text-xs text-blue-100 text-center">
+                                <p className="text-xs text-green-100 text-center">
                                     By submitting the form I agree to the{' '}
                                     <a href="#" className="text-white underline">Terms of Use</a> and{' '}
                                     <a href="#" className="text-white underline">Privacy Policy</a> of Vaidam Health.

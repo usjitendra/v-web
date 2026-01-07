@@ -79,7 +79,7 @@ export default function HomeAbout() {
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 0.2 * index, duration: 0.5 }}
               >
-                <h3 className="text-xl font-semibold">{item.title}</h3>
+                <h3 className="text-xl text-[#252424]">{item.title}</h3>
                 <p className="text-gray-600 mt-2">{item.desc}</p>
               </motion.div>
             ))}
@@ -87,7 +87,7 @@ export default function HomeAbout() {
 
            {/* Call to Action Button */}
         <motion.button
-          className="mt-10 bg-yellow text-gray-800 text-lg font-semibold rounded-full px-8 py-3 transition-all duration-300 shadow-lg"
+          className="mt-10 bg-yellow text-white text-lg font-semibold rounded-full px-8 py-3 transition-all duration-300 shadow-lg"
           onClick={() => navigate("/about")}
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}

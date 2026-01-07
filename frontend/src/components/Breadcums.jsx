@@ -14,7 +14,7 @@ const BreadCrumbs = ({ items, headText }) => {
           <React.Fragment key={index}>
             {index > 0 && <MdKeyboardArrowRight className="text-gray-500 mx-1" />}
             {item.href ? (
-              <Link to={item.href} className="text-blue-600 hover:underline">
+              <Link to={item.href} className="text-green-600 hover:underline">
                 {item.label}
               </Link>
             ) : (

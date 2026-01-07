@@ -4,7 +4,7 @@ import { Heart, Brain, Bone, Activity, User, Scale, Hospital, Droplet, Baby } fr
 const SpecialtyCard = ({ icon: Icon, title, description, iconColor }) => (
   <div className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300 p-6 relative">
     <div className="flex items-start gap-4">
-      <div className={`${iconColor} p-3 rounded-lg flex-shrink-0`}>
+      <div className={`${iconColor} p-3 rounded-lg flex-shrink-0 bg-main`}>
         <Icon className="w-8 h-8 text-white" />
       </div>
       <div className="flex-1">
@@ -99,7 +99,7 @@ const MultiSpecialtyFocus = () => {
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="text-center mb-12">
-          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+          <h1 className="text-3xl md:text-4xl font-bold text-main mb-4">
             Multi-Specialty Focus
           </h1>
           <p className="text-gray-600 text-base md:text-lg">

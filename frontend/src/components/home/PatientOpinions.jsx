@@ -119,12 +119,12 @@ const PatientOpinions = () => {
       <section className="patient-opinions-section bg-sectiondiv py-16 relative overflow-hidden">
         <div className="container mx-auto px-4 relative z-10">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-800">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-main">
               {/* Stories of <span className="text-teal-600">Healing</span> &{" "}
               <span className="text-teal-600">Hope</span> */}
               {headings.heading}
             </h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+            <p className="text-lg text-main max-w-2xl mx-auto">
               {/* Discover what our patients have to say about their healthcare
               journey with us */}
               {headings.subheading}
