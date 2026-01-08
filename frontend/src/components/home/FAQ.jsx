@@ -199,7 +199,7 @@ const FAQ = () => {
           <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-100 rounded-full mb-4">
             <FaQuestionCircle className="text-teal-600 text-2xl" />
           </div>
-          <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-800">
+          <h2 className="text-3xl md:text-4xl font-bold mb-4 text-main">
             {/* Frequently Asked <span className="text-teal-600">Questions</span> */}
             {headings.heading}
           </h2>
@@ -294,7 +294,7 @@ const FAQItem = ({ faq, index, isActive, onClick }) => {
           transition={{ duration: 0.3 }}
           className="flex-shrink-0"
         >
-          <FaChevronDown className="text-blue-500" />
+          <FaChevronDown className="text-green-500" />
         </motion.div>
       </button>
 

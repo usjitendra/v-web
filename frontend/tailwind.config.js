@@ -13,22 +13,22 @@ module.exports = {
         // sectiondiv: "#d8e8e8ff",
         sectiondiv: "#d8e8e8b0",
         sectiondivgradient: "linear-gradient(135deg, #e6f2f2 0%, #d8e8e8 100%)",
-          border: "hsl(var(--border))",
+        border: "hsl(var(--border))",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
-                main: '#1F509A',
+        main: '#0E857F',
         light: '#656262',
         // prime: '#1A9CA6', 
         lightSky: '#F7FBFF',
         dark: '#001E3A',
         white: '#ffffff',  // Standard white color
         black: '#000000',  // Standard black color
-        yellow:'#f9e666'
+        yellow: '#0E857F'
       },
-      
+
       fontFamily: {
         sans: ["Poppins", "sans-serif"],
-            sans: ["Poppins", "sans-serif"],
+        sans: ["Poppins", "sans-serif"],
       },
       boxShadow: {
         smooth: "0 8px 30px rgba(16,24,40,0.06)",

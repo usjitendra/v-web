@@ -209,7 +209,7 @@ const HospitalDetailPage = () => {
             {/* About Section */}
             <section id="about" className="bg-white rounded-2xl shadow-lg p-8 hover:shadow-xl transition-shadow">
               <h2 className="text-3xl font-bold text-gray-900 mb-6 flex items-center">
-                <Building2 className="w-8 h-8 mr-3 text-blue-600" />
+                <Building2 className="w-8 h-8 mr-3 text-main" />
                 About Hospital
               </h2>
               <p className="text-gray-700 leading-relaxed mb-6">
@@ -220,7 +220,7 @@ const HospitalDetailPage = () => {
               <div className="grid sm:grid-cols-2 gap-4">
                 {achievements.map((achievement, idx) => (
                   <div key={idx} className="flex items-start space-x-3 p-4 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-lg hover:shadow-md transition">
-                    <div className="flex-shrink-0 w-6 h-6 bg-blue-600 text-white rounded-full flex items-center justify-center text-sm font-bold">
+                    <div className="flex-shrink-0 w-6 h-6 bg-main text-white rounded-full flex items-center justify-center text-sm font-bold">
                       ✓
                     </div>
                     <p className="text-sm text-gray-700 flex-1">{achievement}</p>
@@ -239,7 +239,7 @@ const HospitalDetailPage = () => {
                 {services.map((service, idx) => (
                   <div key={idx} className="bg-white rounded-xl p-6 shadow-md hover:shadow-lg transition">
                     <div className="flex items-start space-x-3">
-                      <div className="flex-shrink-0 w-10 h-10 bg-blue-600 text-white rounded-full flex items-center justify-center">
+                      <div className="flex-shrink-0 w-10 h-10 bg-main text-white rounded-full flex items-center justify-center">
                         ✓
                       </div>
                       <div className="flex-1">
@@ -308,7 +308,7 @@ const HospitalDetailPage = () => {
 
           {/* Right Column - Contact Form */}
           <div className="lg:col-span-1">
-            <div className="bg-gradient-to-br from-blue-600 to-indigo-700 rounded-2xl shadow-2xl p-8 sticky top-24">
+            <div className="bg-gradient-to-br from-green-600 to-green-700 rounded-2xl shadow-2xl p-8 sticky top-24">
               <h3 className="text-2xl font-bold text-white mb-2">Contact Hospital</h3>
               <p className="text-blue-100 mb-6 text-sm">Treatment plan and quote within 2 days</p>
               

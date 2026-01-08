@@ -23,7 +23,7 @@ export default function DoctorSearch() {
         </div>
 
         {/* Search Box */}
-        <div className="bg-blue-800 rounded-xl p-5 shadow-lg">
+        <div className="bg-main rounded-xl p-5 shadow-lg">
           <div className="bg-white rounded-lg p-4 flex flex-col lg:flex-row items-stretch lg:items-center gap-3">
             {/* Country Input */}
             <div className="flex-1 min-w-0">

@@ -124,7 +124,7 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* About */}
           <div>
-            <h3 className="text-lg font-semibold mb-4">About Vaidam</h3>
+            <h3 className="text-lg font-semibold mb-4 text-white">About Vaidam</h3>
             <p className="text-sm opacity-90">
               Vaidam Health helps patients worldwide find the best hospitals and
               doctors for their treatment abroad. We connect patients with top
@@ -134,10 +134,10 @@ export default function Footer() {
 
           {/* Quick Links */}
           <div>
-            <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
+            <h3 className="text-lg font-semibold mb-4 text-white">Quick Links</h3>
             <ul className="space-y-2 text-sm">
               <li>
-                <a href="#" className="hover:underline">
+                <a href="#" className="hover:underline text-sm opacity-90">
                   Home
                 </a>
               </li>
@@ -166,7 +166,7 @@ export default function Footer() {
 
           {/* Medical Destinations */}
           <div>
-            <h3 className="text-lg font-semibold mb-4">
+            <h3 className="text-lg font-semibold mb-4 text-white">
               Our Medical Destinations
             </h3>
             <div className="grid grid-cols-3 gap-3 text-sm">
@@ -199,7 +199,7 @@ export default function Footer() {
 
           {/* Social + CTA */}
           <div>
-            <h3 className="text-lg font-semibold mb-4">Connect With Us</h3>
+            <h3 className="text-lg font-semibold mb-4 text-white">Connect With Us</h3>
             <div className="flex flex-wrap gap-4 mb-4">
               <a
                 href="#"

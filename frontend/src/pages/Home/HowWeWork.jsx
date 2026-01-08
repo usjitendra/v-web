@@ -75,7 +75,7 @@ const HowItWorks = () => {
           className="flex flex-col max-w-xl justify-center md:items-center md:text-center px-4 mx-auto"
           data-aos="fade-in"
         >
-          <h3 className="mb-2 md:text-3xl text-2xl  ">How We Work</h3>
+          <h3 className="mb-2 md:text-3xl text-2xl text-main ">How We Work</h3>
           <p className=" opacity-80 mb-2">
           We offer exceptional customer support and foster long-lasting relationships with our clients for a truly personalized experience
           </p>
