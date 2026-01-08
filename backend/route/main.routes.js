@@ -9,4 +9,7 @@ mainRoute.use("/dropdown", require("./dropdown.route"));
 mainRoute.use("/doctor", require("./doctor.route"));
 mainRoute.use("/hospital", require("./hospital.route"));
 
+// mainRoute.use("/dashboard-doctor", require("./hospital.route"));
+
+
 module.exports = mainRoute; 

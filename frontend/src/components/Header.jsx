@@ -37,6 +37,7 @@ const Header = () => {
   return (
     <header className="w-full shadow-md">
       {/* Top Blue Bar */}
+
       <div className="bg-gradient-to-r from-teal-600 to-teal-700 text-white">
         <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
 
@@ -164,6 +165,7 @@ const Header = () => {
           </ul>
         </div>
       </nav>
+
     </header>
   );
 };

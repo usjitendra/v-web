@@ -3,6 +3,8 @@ const responseHandler = require("../Utils/responseHandler.utils")
 const HospitalModel = require("../model/hospital.model")
 const CategoryModel = require("../model/category.model");
 const { uploadToCloudinary } = require("../Utils/cloudinaryUpload");
+const { image } = require("framer-motion/client");
+const CountryModel = require("../model/country.model");
 
 
 class hospitalController {
@@ -336,6 +338,171 @@ class hospitalController {
       },
 
     );
+  });
+
+  getAllHospitalList = tryCatchFn(async (req, res) => {
+    const {
+      city,
+      state,
+      country,
+      category,
+      page = 1,
+      limit = 10,
+    } = req.query;
+
+    const matchStage = {
+      is_deleted: false,
+      is_active: true,
+    };
+
+    /* ---------------- COUNTRY NAME -> ObjectId ---------------- */
+    if (country) {
+      const countryDoc = await CountryModel.findOne({
+        country_name: { $regex: country, $options: "i" },
+      }).select("_id");
+
+      if (!countryDoc) {
+        return responseHandler.successResponse(res, 200, "Hospital fetched successfully", {
+          data: [],
+          total: 0,
+          page: Number(page),
+          limit: Number(limit),
+        });
+      }
+
+      matchStage.countryId = countryDoc._id;
+    }
+
+    /* ---------------- CATEGORY SLUG -> ObjectId ---------------- */
+    if (category) {
+      const categoryDoc = await CategoryModel.findOne({
+        slug: category,
+      }).select("_id");
+
+      if (!categoryDoc) {
+        return responseHandler.successResponse(res, 200, "Hospital fetched successfully", {
+          data: [],
+          total: 0,
+          page: Number(page),
+          limit: Number(limit),
+        });
+      }
+
+      // categoryIds is ARRAY
+      matchStage.categoryIds = categoryDoc._id;
+    }
+
+    /* ---------------- LOCATION FILTERS ---------------- */
+    if (city) {
+      matchStage["address.city"] = { $regex: city, $options: "i" };
+    }
+
+    if (state) {
+      matchStage["address.state"] = { $regex: state, $options: "i" };
+    }
+
+    const skip = (Number(page) - 1) * Number(limit);
+
+    /* ---------------- AGGREGATION PIPELINE ---------------- */
+    const pipeline = [
+      { $match: matchStage },
+
+      { $sort: { createdAt: -1 } },
+
+      {
+        $facet: {
+          data: [
+            { $skip: skip },
+            { $limit: Number(limit) },
+
+            /* ---- COUNTRY ---- */
+            {
+              $lookup: {
+                from: "countries",
+                localField: "countryId",
+                foreignField: "_id",
+                as: "countryData",
+              },
+            },
+            { $unwind: { path: "$countryData", preserveNullAndEmptyArrays: true } },
+
+            /* ---- CATEGORIES ---- */
+            {
+              $lookup: {
+                from: "categories",
+                localField: "categoryIds",
+                foreignField: "_id",
+                as: "categoryData",
+              },
+            },
+
+            { $unwind: { path: "$categoryData", preserveNullAndEmptyArrays: true } },
+
+            /* ---- PROJECTION ---- */
+            {
+              $project: {
+                name: 1,
+                slug: 1,
+                phone: 1,
+                address: 1,
+                hospitalType: 1,
+                numberOfBeds: 1,
+                photo: 1,
+                gallery: 1,
+                facilities: 1,
+                hospitalIntro: 1,
+                createdAt: 1,
+                countryData: {
+                  _id: "$countryData._id",
+                  name: "$countryData.country_name",
+                  slug: "$countryData.slug",
+                  code: "$countryData.code",
+                  image: "$countryData.image",
+                },
+                categoryData: {
+                  _id: "$categoryData._id",
+                  name: "$categoryData.category_name",
+                  slug: "$categoryData.slug",
+                  image: "$categoryData.image",
+                  description: "$categoryData.description",
+                },
+              },
+            },
+          ],
+
+          total: [
+            { $count: "count" },
+          ],
+        },
+      },
+    ];
+
+    const result = await HospitalModel.aggregate(pipeline);
+
+    const hospitals = result[0]?.data || [];
+    const total = result[0]?.total[0]?.count || 0;
+
+    return responseHandler.successResponse(res, 200, "Hospital fetched successfully", {
+      data: hospitals,
+      total,
+      page: Number(page),
+      limit: Number(limit),
+    });
+  });
+
+
+  getHospitalBySlug = tryCatchFn(async (req, res) => {
+    const { slug } = req.params;
+
+    const hospital = await HospitalModel.findOne({ slug, is_deleted: false, is_active: true })
+      .populate("countryId", "country_name slug code image")
+      .populate("categoryIds", "category_name slug image description");
+
+    if (!hospital) {
+      return responseHandler.errorResponse(res, 404, "Hospital not found");
+    }
+
+    return responseHandler.successResponse(res, 200, "Hospital fetched successfully", hospital);
   });
 
 

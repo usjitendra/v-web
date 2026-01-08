@@ -13,7 +13,8 @@ router.post("/add", upload.fields([
 );
 
 router.get("/list", DoctorController.getAllHospital);
-// router.get("/:id", DoctorController.getHospitalById);
+router.get("/get-all", DoctorController.getAllHospitalList);
+router.get("get-by-slug/:slug", DoctorController.getHospitalBySlug);
 
 router.put(
   "/update/:id",
