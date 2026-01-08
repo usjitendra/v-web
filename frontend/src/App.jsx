@@ -82,7 +82,7 @@ export default function App() {
         <Route element={<PublicLayout />}>
           <Route path="/" element={<Home />} />
           <Route path="/doctors" element={<DoctorHome />} />
-          <Route path="/doctors/details" element={<DoctorDetailPage />} />
+          <Route path="/doctor/:slug" element={<DoctorDetailPage />} />
           {/* <Route path="/doctors" element={<Doctors />} /> */}
           <Route path="/doctors/:id" element={<DoctorDetails />} />
           <Route path="/treatments" element={<Treatments />} />

@@ -62,7 +62,7 @@ export const commanApiSlice = createApi({
       providesTags: ["Comman"],
     }),
 
-    // ✅ DOCTOR GET ALL (WITH FILTERS)
+
     getAllDoctors: builder.query({
       query: ({
         city,
@@ -86,7 +86,16 @@ export const commanApiSlice = createApi({
       providesTags: ["Comman"],
     }),
 
-    // ✅ HOSPITAL GET ALL (WITH FILTERS)
+
+    // DOCTOR DETAIL
+    getDoctorsDetail: builder.query({
+      query: ({ slug }) => ({
+        url: `doctor/get-by-slug/${slug}`,
+        method: "GET",
+      }),
+      providesTags: ["Comman"],
+    }),
+    // HOSPITAL GET ALL (WITH FILTERS)
     getAllHospitals: builder.query({
       query: ({
         city,
@@ -110,6 +119,18 @@ export const commanApiSlice = createApi({
       providesTags: ["Comman"],
     }),
 
+
+    getHospitalDetail: builder.query({
+      query: ({ slug }) => ({
+        url: `hospital/get-by-slug/${slug}`,
+        method: "GET",
+      }),
+      providesTags: ["Comman"],
+    }), 
+
+
+
+
   }),
 });
 
@@ -120,8 +141,8 @@ export const {
   useGetSubCategoryListQuery,
   useGetDoctorListQuery,
   useGetHospitalListQuery,
-
-
   useGetAllDoctorsQuery,
   useGetAllHospitalsQuery,
+  useGetDoctorsDetailQuery,
+  useGetHospitalDetailQuery
 } = commanApiSlice;
