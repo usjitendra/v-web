@@ -4,6 +4,7 @@ const HospitalModel = require("../model/hospital.model")
 const CategoryModel = require("../model/category.model");
 const { uploadToCloudinary } = require("../Utils/cloudinaryUpload");
 const { image } = require("framer-motion/client");
+const CountryModel = require("../model/country.model");
 
 
 class hospitalController {
@@ -357,7 +358,7 @@ class hospitalController {
     /* ---------------- COUNTRY NAME -> ObjectId ---------------- */
     if (country) {
       const countryDoc = await CountryModel.findOne({
-        name: { $regex: country, $options: "i" },
+        country_name: { $regex: country, $options: "i" },
       }).select("_id");
 
       if (!countryDoc) {
@@ -487,6 +488,21 @@ class hospitalController {
       page: Number(page),
       limit: Number(limit),
     });
+  });
+
+
+  getHospitalBySlug = tryCatchFn(async (req, res) => {
+    const { slug } = req.params;
+
+    const hospital = await HospitalModel.findOne({ slug, is_deleted: false, is_active: true })
+      .populate("countryId", "country_name slug code image")
+      .populate("categoryIds", "category_name slug image description");
+
+    if (!hospital) {
+      return responseHandler.errorResponse(res, 404, "Hospital not found");
+    }
+
+    return responseHandler.successResponse(res, 200, "Hospital fetched successfully", hospital);
   });
 
 

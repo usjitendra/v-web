@@ -11,7 +11,7 @@ router.post("/add", upload.fields([
   DoctorController.addDoctor
 );
 router.get("/get-all", DoctorController.getAllDoctorList);
-
+router.get("/get-by-slug/:slug", DoctorController.getDoctorBySlug);
 router.get("/list", DoctorController.getAllDoctors);
 router.get("/:id", DoctorController.getDoctorById);
 

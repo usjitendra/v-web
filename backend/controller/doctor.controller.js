@@ -491,7 +491,7 @@ class DoctorController {
     /* ---------------- COUNTRY NAME -> ObjectId ---------------- */
     if (country) {
       const countryDoc = await CountryModel.findOne({
-        name: { $regex: country, $options: "i" },
+        country_name: { $regex: country, $options: "i" },
       }).select("_id");
 
       if (!countryDoc) {
@@ -590,6 +590,7 @@ class DoctorController {
                 location: 1,
                 experience: 1,
                 slug: 1,
+                image: 1,
                 createdAt: 1,
                 categoryData: {
                   name: "$categoryData.category_name",
@@ -631,6 +632,26 @@ class DoctorController {
       page: Number(page),
       limit: Number(limit),
     });
+  });
+
+  getDoctorBySlug = tryCatchFn(async (req, res) => {
+    const { slug } = req.params;
+
+    const doctor = await DoctorModel.findOne({ slug, is_deleted: false, is_active: true })
+      .populate("categoryId")
+      .populate("subCategoryId")
+      .populate("conteryId");
+
+    if (!doctor) {
+      return responseHandler.errorResponse(res, 404, "Doctor not found");
+    }
+
+    return responseHandler.successResponse(
+      res,
+      200,
+      "Doctor fetched successfully",
+      doctor
+    );
   });
 
 
