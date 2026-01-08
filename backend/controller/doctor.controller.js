@@ -472,6 +472,170 @@ class DoctorController {
     );
   });
 
+
+  getAllDoctorList = tryCatchFn(async (req, res) => {
+    const {
+      city,
+      state,
+      country,
+      category,
+      page = 1,
+      limit = 10,
+    } = req.query;
+
+    const matchStage = {
+      is_deleted: false,
+      is_active: true,
+    };
+
+    /* ---------------- COUNTRY NAME -> ObjectId ---------------- */
+    if (country) {
+      const countryDoc = await CountryModel.findOne({
+        name: { $regex: country, $options: "i" },
+      }).select("_id");
+
+      if (!countryDoc) {
+        return responseHandler.successResponse(res, 200, "Doctor fetched successfully", {
+          data: [],
+          total: 0,
+          page: Number(page),
+          limit: Number(limit),
+        });
+      }
+
+      matchStage.conteryId = countryDoc._id;
+    }
+
+    /* ---------------- CATEGORY SLUG -> ObjectId ---------------- */
+    if (category) {
+      const categoryDoc = await CategoryModel.findOne({
+        slug: category,
+      }).select("_id");
+
+      if (!categoryDoc) {
+        return responseHandler.successResponse(res, 200, "Doctor fetched successfully", {
+          data: [],
+          total: 0,
+          page: Number(page),
+          limit: Number(limit),
+        });
+      }
+
+      matchStage.categoryId = categoryDoc._id;
+    }
+
+    /* ---------------- LOCATION FILTERS ---------------- */
+    if (city) {
+      matchStage["location.city"] = { $regex: city, $options: "i" };
+    }
+
+    if (state) {
+      matchStage["location.state"] = { $regex: state, $options: "i" };
+    }
+
+    const skip = (Number(page) - 1) * Number(limit);
+
+    /* ---------------- AGGREGATION PIPELINE ---------------- */
+    const pipeline = [
+      { $match: matchStage },
+
+      { $sort: { createdAt: -1 } },
+
+      {
+        $facet: {
+          data: [
+            { $skip: skip },
+            { $limit: Number(limit) },
+
+            /* ---- CATEGORY ---- */
+            {
+              $lookup: {
+                from: "categories",
+                localField: "categoryId",
+                foreignField: "_id",
+                as: "categoryData",
+              },
+            },
+            { $unwind: { path: "$categoryData", preserveNullAndEmptyArrays: true } },
+
+            /* ---- COUNTRY ---- */
+            {
+              $lookup: {
+                from: "countries",
+                localField: "conteryId",
+                foreignField: "_id",
+                as: "conteryData",
+              },
+            },
+            { $unwind: { path: "$conteryData", preserveNullAndEmptyArrays: true } },
+
+            /* ---- SUB CATEGORY ---- */
+            {
+              $lookup: {
+                from: "subcategories",
+                localField: "subCategoryId",
+                foreignField: "_id",
+                as: "subCategoryData",
+              },
+            },
+
+            { $unwind: { path: "$subCategoryData", preserveNullAndEmptyArrays: true } },
+
+            /* ---- PROJECTION (optional but recommended) ---- */
+            {
+              $project: {
+                name: 1,
+                email: 1,
+                phone: 1,
+                location: 1,
+                experience: 1,
+                slug: 1,
+                createdAt: 1,
+                categoryData: {
+                  name: "$categoryData.category_name",
+                  slug: "$categoryData.slug",
+                  image: "$categoryData.image",
+                  description: "$categoryData.description",
+                },
+
+                conteryData: {
+                  name: "$conteryData.country_name",
+                  slug: "$conteryData.slug",
+                  code: "$conteryData.code",
+                },
+                subCategoryData: {
+                  name: "$subCategoryData.subcategory_name",
+                  slug: "$subCategoryData.slug",
+                  image: "$subCategoryData.image",
+                  description: "$subCategoryData.description",
+                },
+              },
+            },
+          ],
+
+          total: [
+            { $count: "count" },
+          ],
+        },
+      },
+    ];
+
+    const result = await DoctorModel.aggregate(pipeline);
+
+    const doctors = result[0]?.data || [];
+    const total = result[0]?.total[0]?.count || 0;
+
+    return responseHandler.successResponse(res, 200, "Doctor fetched successfully", {
+      data: doctors,
+      total,
+      page: Number(page),
+      limit: Number(limit),
+    });
+  });
+
+
 }
 
 module.exports = new DoctorController();
+
+
