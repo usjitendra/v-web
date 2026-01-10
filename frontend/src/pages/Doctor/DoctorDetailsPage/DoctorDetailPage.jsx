@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { Calendar, MessageCircle, MapPin, CheckCircle, Star, Menu, X, Award, Briefcase, GraduationCap, Stethoscope, Clock, Phone, Mail } from 'lucide-react';
 import BreadCrumbs from '@/components/Breadcums';
+import SEOHead from '../../../components/SEOHead';
 import { useGetDoctorsDetailQuery } from '@/rtk/slices/commanApiSlice';
 
 const DoctorDetailPage = () => {
@@ -75,6 +76,13 @@ const DoctorDetailPage = () => {
 
   return (
     <>
+      <SEOHead
+        pageType="doctor-detail"
+        pageIdentifier={slug}
+        customTitle={doctor ? `Dr. ${doctor.name} - ${doctor.specialty || 'Medical Professional'} | Medical Tourism Platform` : undefined}
+        customDescription={doctor ? `Book an appointment with Dr. ${doctor.name}, a ${doctor.experience || 'experienced'} ${doctor.specialty || 'medical professional'}. ${doctor.description?.substring(0, 100) || 'Expert healthcare services.'}` : undefined}
+        customImage={doctor?.images?.[0] || doctor?.image}
+      />
       <style>
         {`
           .scrollbar-hide {

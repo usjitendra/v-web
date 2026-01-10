@@ -1,20 +1,34 @@
-import React, { useState } from "react";
-import { Link, useSearchParams } from "react-router-dom";
+import React, { useState, useMemo } from "react";
+import { Link, useSearchParams, useNavigate } from "react-router-dom";
 import {
-    Star,
-    MapPin,
-    Briefcase,
-    Building2,
-    CheckCircle,
-    MessageCircle,
+  Star,
+  MapPin,
+  Briefcase,
+  Building2,
+  CheckCircle,
+  MessageCircle,
+  Filter,
+  SortAsc,
+  SortDesc,
+  Calendar,
+  X,
 } from "lucide-react";
 import { useGetAllDoctorsQuery } from "@/rtk/slices/commanApiSlice";
+import { useCreateBookingMutation } from "@/rtk/slices/bookingApiSlice";
 
 export default function DoctorListingPage() {
-    const [searchParams] = useSearchParams();
+    const [searchParams, setSearchParams] = useSearchParams();
+    const navigate = useNavigate();
 
     const country = searchParams.get("country");
     const category = searchParams.get("category");
+    const city = searchParams.get("city");
+    const treatment = searchParams.get("treatment");
+    const hospital = searchParams.get("hospital");
+    const priceRange = searchParams.get("priceRange");
+    const rating = searchParams.get("rating");
+    const experience = searchParams.get("experience");
+    const availability = searchParams.get("availability");
 
     const {
         data,
@@ -24,18 +38,66 @@ export default function DoctorListingPage() {
         {
             country,
             category,
+            city,
+            treatment,
+            hospital,
+            priceRange,
+            rating,
+            experience,
+            availability,
             page: 1,
             limit: 10,
         },
         {
-            skip: !country || !category,
+            skip: false, // Always fetch doctors, apply filters on frontend if needed
         }
     );
 
-    console.log("data is", data);
-
-
     const doctors = data?.data?.data || [];
+
+    // Sorting state
+    const [sortBy, setSortBy] = useState('name');
+    const [sortOrder, setSortOrder] = useState('asc');
+
+    // Sorted doctors
+    const sortedDoctors = useMemo(() => {
+        if (!doctors.length) return doctors;
+
+        return [...doctors].sort((a, b) => {
+            let aValue, bValue;
+
+            switch (sortBy) {
+                case 'name':
+                    aValue = a.name?.toLowerCase() || '';
+                    bValue = b.name?.toLowerCase() || '';
+                    break;
+                case 'rating':
+                    aValue = a.rating || 0;
+                    bValue = b.rating || 0;
+                    break;
+                case 'experience':
+                    aValue = a.experience || 0;
+                    bValue = b.experience || 0;
+                    break;
+                case 'location':
+                    aValue = a.location?.city?.toLowerCase() || '';
+                    bValue = b.location?.city?.toLowerCase() || '';
+                    break;
+                default:
+                    return 0;
+            }
+
+            if (sortOrder === 'asc') {
+                return aValue < bValue ? -1 : aValue > bValue ? 1 : 0;
+            } else {
+                return aValue > bValue ? -1 : aValue < bValue ? 1 : 0;
+            }
+        });
+    }, [doctors, sortBy, sortOrder]);
+
+    const clearFilters = () => {
+        navigate('/doctors');
+    };
 
     const [formData, setFormData] = useState({
         patientName: "",
@@ -48,12 +110,27 @@ export default function DoctorListingPage() {
 
     const [showMore, setShowMore] = useState(false);
 
+    // Appointment booking state
+    const [showAppointmentModal, setShowAppointmentModal] = useState(false);
+    const [selectedDoctor, setSelectedDoctor] = useState(null);
+    const [appointmentForm, setAppointmentForm] = useState({
+        patientName: "",
+        phone: "",
+        email: "",
+        date: "",
+        time: "",
+        message: "",
+    });
+
+    const [createBooking, { isLoading: isBookingLoading }] = useCreateBookingMutation();
+    const [createContactBooking, { isLoading: isContactBookingLoading }] = useCreateBookingMutation();
+
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setFormData((prev) => ({ ...prev, [name]: value }));
     };
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         if (
             !formData.patientName ||
             !formData.city ||
@@ -64,7 +141,77 @@ export default function DoctorListingPage() {
             alert("Please fill all fields");
             return;
         }
-        alert("Form submitted! We will contact you soon.");
+
+        try {
+            const bookingData = {
+                name: formData.patientName,
+                email: formData.email || `${formData.patientName.toLowerCase().replace(/\s+/g, '')}@example.com`, // Generate email if not provided
+                phone: formData.phone,
+                message: `City: ${formData.city}\nAge: ${formData.age}\nProblem: ${formData.problem}`,
+                type: 'query'
+            };
+
+            const result = await createContactBooking(bookingData).unwrap();
+            alert("Your inquiry has been submitted successfully! We will contact you soon.");
+        } catch (error) {
+            console.error('Contact booking error:', error);
+            alert("Failed to submit your inquiry. Please try again.");
+        }
+    };
+
+    // Appointment booking functions
+    const openAppointmentModal = (doctor) => {
+        setSelectedDoctor(doctor);
+        setShowAppointmentModal(true);
+        setAppointmentForm({
+            patientName: "",
+            phone: "",
+            email: "",
+            date: "",
+            time: "",
+            message: "",
+        });
+    };
+
+    const closeAppointmentModal = () => {
+        setShowAppointmentModal(false);
+        setSelectedDoctor(null);
+    };
+
+    const handleAppointmentFormChange = (e) => {
+        const { name, value } = e.target;
+        setAppointmentForm(prev => ({ ...prev, [name]: value }));
+    };
+
+    const handleAppointmentSubmit = async (e) => {
+        e.preventDefault();
+
+        if (!appointmentForm.patientName || !appointmentForm.phone || !appointmentForm.email || !appointmentForm.date || !appointmentForm.time) {
+            alert("Please fill all required fields");
+            return;
+        }
+
+        try {
+            const bookingData = {
+                name: appointmentForm.patientName,
+                email: appointmentForm.email,
+                phone: appointmentForm.phone,
+                doctor: selectedDoctor._id,
+                hospital: selectedDoctor.hospital?._id || selectedDoctor.hospitalId,
+                date: appointmentForm.date,
+                time: appointmentForm.time,
+                message: appointmentForm.message,
+                type: 'appointment'
+            };
+
+            const result = await createBooking(bookingData).unwrap();
+
+            alert("Appointment booked successfully! We will contact you soon.");
+            closeAppointmentModal();
+        } catch (error) {
+            console.error('Booking error:', error);
+            alert("Failed to book appointment. Please try again.");
+        }
     };
 
     return (
@@ -84,6 +231,108 @@ export default function DoctorListingPage() {
                                 Connect with top-rated medical professionals worldwide
                             </p>
                         </div>
+
+                        {/* ===== SORTING AND FILTERS ===== */}
+                        {!isLoading && sortedDoctors.length > 0 && (
+                            <div className="mb-8">
+                                <div className="bg-white rounded-xl shadow-lg p-4">
+                                    <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+                                        <div className="flex items-center gap-2 text-gray-600">
+                                            <Filter className="w-5 h-5" />
+                                            <span className="font-medium">
+                                                {sortedDoctors.length} doctor{sortedDoctors.length !== 1 ? 's' : ''} found
+                                            </span>
+                                        </div>
+
+                                        <div className="flex items-center gap-4">
+                                            <label className="text-sm font-medium text-gray-600">Sort by:</label>
+                                            <select
+                                                value={sortBy}
+                                                onChange={(e) => setSortBy(e.target.value)}
+                                                className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-main focus:border-transparent"
+                                            >
+                                                <option value="name">Name</option>
+                                                <option value="rating">Rating</option>
+                                                <option value="experience">Experience</option>
+                                                <option value="location">Location</option>
+                                            </select>
+
+                                            <button
+                                                onClick={() => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')}
+                                                className="flex items-center gap-2 px-3 py-2 border border-gray-300 rounded-md hover:bg-gray-50 transition-colors"
+                                            >
+                                                {sortOrder === 'asc' ? (
+                                                    <SortAsc className="w-4 h-4" />
+                                                ) : (
+                                                    <SortDesc className="w-4 h-4" />
+                                                )}
+                                                <span className="text-sm font-medium">
+                                                    {sortOrder === 'asc' ? 'A-Z' : 'Z-A'}
+                                                </span>
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    {/* Active Filters Display */}
+                                    <div className="mt-4 flex flex-wrap gap-2 items-center">
+                                        {(country || city || category || treatment || hospital || priceRange || rating || experience || availability) && (
+                                            <button
+                                                onClick={clearFilters}
+                                                className="text-red-600 hover:text-red-700 font-medium text-sm underline"
+                                            >
+                                                Clear all filters
+                                            </button>
+                                        )}
+
+                                        {country && (
+                                            <span className="inline-flex items-center px-3 py-1 bg-main/10 text-main rounded-full text-sm font-medium">
+                                                Country: {country}
+                                            </span>
+                                        )}
+                                        {city && (
+                                            <span className="inline-flex items-center px-3 py-1 bg-main/10 text-main rounded-full text-sm font-medium">
+                                                City: {city}
+                                            </span>
+                                        )}
+                                        {category && (
+                                            <span className="inline-flex items-center px-3 py-1 bg-main/10 text-main rounded-full text-sm font-medium">
+                                                Specialty: {category}
+                                            </span>
+                                        )}
+                                        {treatment && (
+                                            <span className="inline-flex items-center px-3 py-1 bg-main/10 text-main rounded-full text-sm font-medium">
+                                                Treatment: {treatment}
+                                            </span>
+                                        )}
+                                        {hospital && (
+                                            <span className="inline-flex items-center px-3 py-1 bg-main/10 text-main rounded-full text-sm font-medium">
+                                                Hospital: {hospital}
+                                            </span>
+                                        )}
+                                        {priceRange && (
+                                            <span className="inline-flex items-center px-3 py-1 bg-main/10 text-main rounded-full text-sm font-medium">
+                                                Fee: {priceRange}
+                                            </span>
+                                        )}
+                                        {rating && (
+                                            <span className="inline-flex items-center px-3 py-1 bg-main/10 text-main rounded-full text-sm font-medium">
+                                                Rating: {rating}
+                                            </span>
+                                        )}
+                                        {experience && (
+                                            <span className="inline-flex items-center px-3 py-1 bg-main/10 text-main rounded-full text-sm font-medium">
+                                                Experience: {experience}
+                                            </span>
+                                        )}
+                                        {availability && (
+                                            <span className="inline-flex items-center px-3 py-1 bg-main/10 text-main rounded-full text-sm font-medium">
+                                                Availability: {availability}
+                                            </span>
+                                        )}
+                                    </div>
+                                </div>
+                            </div>
+                        )}
 
                         {/* ===== Spinner ===== */}
                         {isLoading && (
@@ -105,7 +354,7 @@ export default function DoctorListingPage() {
                         )}
 
                         {/* ===== Empty ===== */}
-                        {!isLoading && doctors.length === 0 && (
+                        {!isLoading && sortedDoctors.length === 0 && (
                             <div className="text-center bg-white rounded-xl shadow-lg p-12 mx-auto max-w-md">
                                 <div className="text-gray-400 text-6xl mb-4">👨‍⚕️</div>
                                 <h3 className="text-xl font-semibold text-gray-700 mb-2">No doctors found</h3>
@@ -115,7 +364,7 @@ export default function DoctorListingPage() {
 
                         {/* ===== Doctors List ===== */}
                         {!isLoading &&
-                            doctors.map((doctor, index) => (
+                            sortedDoctors.map((doctor, index) => (
                                 <div
                                     key={doctor._id}
                                     className="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden transform hover:-translate-y-1"
@@ -223,7 +472,11 @@ export default function DoctorListingPage() {
 
                                             {/* Buttons */}
                                             <div className="hidden lg:flex flex-col gap-4 flex-shrink-0">
-                                                <button className="bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white px-8 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
+                                                <button
+                                                    onClick={() => openAppointmentModal(doctor)}
+                                                    className="bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white px-8 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 flex items-center justify-center gap-2"
+                                                >
+                                                    <Calendar className="w-5 h-5" />
                                                     Book Appointment
                                                 </button>
                                                 <button className="bg-gradient-to-r from-main to-primary hover:from-primary hover:to-main text-white px-8 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 flex items-center justify-center gap-2">
@@ -322,6 +575,163 @@ export default function DoctorListingPage() {
 
                 </div>
             </div>
+
+            {/* Appointment Booking Modal */}
+            {showAppointmentModal && selectedDoctor && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+                    <div className="bg-white rounded-2xl max-w-md w-full max-h-[90vh] overflow-y-auto">
+                        <div className="p-6">
+                            {/* Header */}
+                            <div className="flex items-center justify-between mb-6">
+                                <h3 className="text-xl font-bold text-gray-900">Book Appointment</h3>
+                                <button
+                                    onClick={closeAppointmentModal}
+                                    className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+                                >
+                                    <X className="w-5 h-5" />
+                                </button>
+                            </div>
+
+                            {/* Doctor Info */}
+                            <div className="bg-gray-50 rounded-xl p-4 mb-6">
+                                <div className="flex items-center gap-3 mb-2">
+                                    <div className="w-12 h-12 bg-main rounded-full flex items-center justify-center">
+                                        <span className="text-white font-bold text-lg">
+                                            {selectedDoctor.name?.charAt(0)?.toUpperCase()}
+                                        </span>
+                                    </div>
+                                    <div>
+                                        <h4 className="font-semibold text-gray-900">{selectedDoctor.name}</h4>
+                                        <p className="text-sm text-gray-600">{selectedDoctor.categoryData?.name}</p>
+                                    </div>
+                                </div>
+                                <div className="flex items-center gap-2 text-sm text-gray-600">
+                                    <MapPin className="w-4 h-4" />
+                                    <span>{selectedDoctor.location?.city}, {selectedDoctor.location?.country}</span>
+                                </div>
+                            </div>
+
+                            {/* Appointment Form */}
+                            <form onSubmit={handleAppointmentSubmit} className="space-y-4">
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                                        Full Name *
+                                    </label>
+                                    <input
+                                        type="text"
+                                        name="patientName"
+                                        value={appointmentForm.patientName}
+                                        onChange={handleAppointmentFormChange}
+                                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-main focus:border-transparent"
+                                        placeholder="Enter your full name"
+                                        required
+                                    />
+                                </div>
+
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                                        Phone Number *
+                                    </label>
+                                    <input
+                                        type="tel"
+                                        name="phone"
+                                        value={appointmentForm.phone}
+                                        onChange={handleAppointmentFormChange}
+                                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-main focus:border-transparent"
+                                        placeholder="Enter your phone number"
+                                        required
+                                    />
+                                </div>
+
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                                        Email Address *
+                                    </label>
+                                    <input
+                                        type="email"
+                                        name="email"
+                                        value={appointmentForm.email}
+                                        onChange={handleAppointmentFormChange}
+                                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-main focus:border-transparent"
+                                        placeholder="Enter your email"
+                                        required
+                                    />
+                                </div>
+
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                                            Preferred Date *
+                                        </label>
+                                        <input
+                                            type="date"
+                                            name="date"
+                                            value={appointmentForm.date}
+                                            onChange={handleAppointmentFormChange}
+                                            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-main focus:border-transparent"
+                                            min={new Date().toISOString().split('T')[0]}
+                                            required
+                                        />
+                                    </div>
+
+                                    <div>
+                                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                                            Preferred Time *
+                                        </label>
+                                        <select
+                                            name="time"
+                                            value={appointmentForm.time}
+                                            onChange={handleAppointmentFormChange}
+                                            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-main focus:border-transparent"
+                                            required
+                                        >
+                                            <option value="">Select Time</option>
+                                            <option value="09:00">9:00 AM</option>
+                                            <option value="10:00">10:00 AM</option>
+                                            <option value="11:00">11:00 AM</option>
+                                            <option value="14:00">2:00 PM</option>
+                                            <option value="15:00">3:00 PM</option>
+                                            <option value="16:00">4:00 PM</option>
+                                            <option value="17:00">5:00 PM</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                                        Message (Optional)
+                                    </label>
+                                    <textarea
+                                        name="message"
+                                        value={appointmentForm.message}
+                                        onChange={handleAppointmentFormChange}
+                                        rows="3"
+                                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-main focus:border-transparent resize-none"
+                                        placeholder="Describe your symptoms or reason for visit"
+                                    />
+                                </div>
+
+                                <div className="flex gap-3 pt-4">
+                                    <button
+                                        type="button"
+                                        onClick={closeAppointmentModal}
+                                        className="flex-1 px-4 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+                                    >
+                                        Cancel
+                                    </button>
+                                    <button
+                                        type="submit"
+                                        disabled={isBookingLoading}
+                                        className="flex-1 px-4 py-3 bg-main text-white rounded-lg hover:bg-primary transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                                    >
+                                        {isBookingLoading ? 'Booking...' : 'Book Appointment'}
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

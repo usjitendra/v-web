@@ -4,10 +4,12 @@ import { GoDotFill } from "react-icons/go";
 import { FaUserLarge } from "react-icons/fa6";
 import { Link } from "react-router-dom";
 import { useState, useRef, useEffect } from "react";
+import { useAuth } from "../../hooks/useAuth";
 
 const DashboardHeader = ({ toggleSidebar }) => {
   const [open, setOpen] = useState(false);
   const dropdownRef = useRef(null);
+  const { logout, adminData } = useAuth();
 
   useEffect(() => {
     const handleClickOutside = (e) => {
@@ -31,7 +33,7 @@ const DashboardHeader = ({ toggleSidebar }) => {
       {/* Welcome Text */}
       <div className="flex-1 mx-3 md:mx-0">
         <h1 className="text-md md:text-lg xl:text-2xl font-semibold text-gray-900">
-          Welcome Back, <span className="font-bold">Admin</span>! 👋
+          Welcome Back, <span className="font-bold">{adminData?.username || 'Admin'}</span>! 👋
         </h1>
         <p className="text-xs xl:text-sm text-gray-500 mt-1 hidden md:block">
           Let's see how your Dashboard looks today.
@@ -88,7 +90,13 @@ const DashboardHeader = ({ toggleSidebar }) => {
               My Profile
             </Link>
             <div className="border-t border-gray-200" />
-            <button className="w-full text-left px-4 py-2 text-xs text-gray-700 hover:bg-red-100">
+            <button
+              onClick={() => {
+                setOpen(false);
+                logout();
+              }}
+              className="w-full text-left px-4 py-2 text-xs text-gray-700 hover:bg-red-100"
+            >
               Sign Out
             </button>
           </div>}

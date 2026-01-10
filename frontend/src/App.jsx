@@ -26,6 +26,8 @@ import Treatments from "./pages/Treatments";
 /* ===== BLOG ===== */
 import Blog from "./pages/Blog";
 import BlogPost from "./pages/BlogPost";
+import BlogListing from "./pages/BlogListing";
+import BlogDetail from "./pages/BlogDetail";
 
 /* ===== PATIENT ===== */
 import PatientDashboardp from "./components/patient/PatientDashboard";
@@ -36,12 +38,18 @@ import PatientRegister from "./components/patient/PatientRegister";
 /* ===== REACT ROUTER ===== */
 import { Outlet } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
+import { AuthProvider } from "./hooks/useAuth";
+import ProtectedRoute from "./components/ProtectedRoute";
 import BiodataApp from "./p1";
 import CategoryManagement from "./admin/adminSetting/CategorySetting";
 import SubcategoryManagement from "./admin/adminSetting/subCategoryManagement";
 import DoctorManagement from "./admin/Doctor/DoctorManagement";
 import HospitalManagement from "./admin/Hospital/Hospital";
 import HospitalList from "./admin/Hospital/HospitalList";
+import BlogManagement from "./admin/Blog/BlogManagement";
+import BlogForm from "./admin/Blog/BlogForm";
+import SEOManagement from "./admin/SEO/SEOManagement";
+// import AdminDashboard from "./admin/Dashbaord/AdminDashboard";
 import DoctorHome from "./pages/Doctor/DoctorHome";
 import HospitalListingPage from "./pages/Hospital/HospitalListing";
 import HospitalHome from "./pages/Hospital/HospitalHome";
@@ -63,7 +71,7 @@ const PublicLayout = () => (
 /* ===== APP ===== */
 export default function App() {
   return (
-    <>
+    <AuthProvider>
       {/* ✅ Toaster OUTSIDE Routes */}
       <Toaster
         position="top-right"
@@ -95,15 +103,24 @@ export default function App() {
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/appointment" element={<Appointment />} />
-          <Route path="/blog" element={<Blog />} />
-          <Route path="/blog/:slug" element={<BlogPost />} />
+          <Route path="/blog" element={<BlogListing />} />
+          <Route path="/blog/:slug" element={<BlogDetail />} />
         </Route>
 
         {/* ================= ADMIN ROUTES ================= */}
-        <Route path="/admin" element={<AdminDashboard />}>
-          <Route path="dashboard" element={<WorkInProgress />} />
+        <Route path="/admin/login" element={
+          <ProtectedRoute requireAuth={false}>
+            <AdminLogin />
+          </ProtectedRoute>
+        } />
+
+        <Route path="/admin" element={
+          <ProtectedRoute>
+            <AdminDashboard />
+          </ProtectedRoute>
+        }>
+          <Route path="dashboard" element={<AdminDashboard />} />
           <Route path="doctors/list" element={<DoctorTable />} />
-          <Route path="doctors/list" element={<WorkInProgress />} />
           <Route path="doctors-add" element={<DoctorManagement />} />
           <Route path="hospitals-add" element={<HospitalManagement />} />
           <Route path="hospitals/list" element={<HospitalList />} />
@@ -111,6 +128,10 @@ export default function App() {
           <Route path="hospital/language-setting" element={<LanguageSetting />} />
           <Route path="master/categories" element={<CategoryManagement />} />
           <Route path="master/sub-categories" element={<SubcategoryManagement />} />
+          <Route path="blogs" element={<BlogManagement />} />
+          <Route path="blogs/create" element={<BlogForm />} />
+          <Route path="blogs/edit/:id" element={<BlogForm />} />
+          <Route path="seo" element={<SEOManagement />} />
         </Route>
 
         {/* ================= PATIENT ROUTES ================= */}
@@ -118,15 +139,13 @@ export default function App() {
         <Route path="/patient/register" element={<PatientRegister />} />
         <Route path="/patient/dashboard" element={<PatientDashboardp />} />
 
-        {/* ================= ADMIN LOGIN ================= */}
-        <Route path="/admin/login" element={<AdminLogin />} />
 
 
 
         <Route path="/bio-data" element={<BiodataApp />} />
 
       </Routes>
-    </>
+    </AuthProvider>
   );
 }
 

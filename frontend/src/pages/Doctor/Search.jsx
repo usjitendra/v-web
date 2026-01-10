@@ -1,24 +1,66 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { MapPin, ChevronDown } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useGetCountryListQuery, useGetCategoryListQuery } from '../../rtk/slices/commanApiSlice';
 
 export default function DoctorSearch() {
   const navigate = useNavigate();
+  const { data: countriesData, isLoading: countriesLoading } = useGetCountryListQuery();
+  const { data: categoriesData, isLoading: categoriesLoading } = useGetCategoryListQuery();
 
-  const [country, setCountry] = useState("India");
-  const [city, setCity] = useState("");
-  const [specialty, setSpecialty] = useState("cardiology");
-  const [treatment, setTreatment] = useState("");
-  const [hospital, setHospital] = useState("");
+  const [country, setCountry] = useState('All Countries');
+  const [city, setCity] = useState('All Cities');
+  const [specialty, setSpecialty] = useState('All Specialties');
+  const [treatment, setTreatment] = useState('All Treatments');
+  const [hospital, setHospital] = useState('All Hospitals');
+
+  // Advanced filters
+  const [priceRange, setPriceRange] = useState('All Ranges');
+  const [rating, setRating] = useState('All Ratings');
+  const [experience, setExperience] = useState('All Experience');
+  const [availability, setAvailability] = useState('All Availability');
+  const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
+
+  const countries = countriesData?.data || [];
+  const categories = categoriesData?.data || [];
+
+  // Set default country to first available country
+  useEffect(() => {
+    if (countries.length > 0 && country === 'All Countries') {
+      setCountry(countries[0].name);
+    }
+  }, [countries, country]);
 
   const handleSearch = () => {
     const params = new URLSearchParams();
 
-    if (country) params.append("country", country.toLowerCase());
-    if (city) params.append("city", city.toLowerCase());
-    if (specialty) params.append("category", specialty.toLowerCase());
-    if (treatment) params.append("treatment", treatment.toLowerCase());
-    if (hospital) params.append("hospital", hospital.toLowerCase());
+    if (country && country !== 'All Countries') {
+      params.append("country", country);
+    }
+    if (city && city !== 'All Cities') {
+      params.append("city", city);
+    }
+    if (specialty && specialty !== 'All Specialties') {
+      params.append("category", specialty);
+    }
+    if (treatment && treatment !== 'All Treatments') {
+      params.append("treatment", treatment);
+    }
+    if (hospital && hospital !== 'All Hospitals') {
+      params.append("hospital", hospital);
+    }
+    if (priceRange && priceRange !== 'All Ranges') {
+      params.append("priceRange", priceRange);
+    }
+    if (rating && rating !== 'All Ratings') {
+      params.append("rating", rating);
+    }
+    if (experience && experience !== 'All Experience') {
+      params.append("experience", experience);
+    }
+    if (availability && availability !== 'All Availability') {
+      params.append("availability", availability);
+    }
 
     navigate(`/doctors?${params.toString()}`);
   };
@@ -30,7 +72,7 @@ export default function DoctorSearch() {
         {/* Header */}
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-gray-800">
-            Best Cardiac Surgeons in India
+            Find Your Perfect Doctor Worldwide
           </h1>
         </div>
 
@@ -39,59 +81,182 @@ export default function DoctorSearch() {
           <div className="bg-white rounded-lg p-4 flex flex-col lg:flex-row gap-3">
 
             {/* Country */}
-            <input
-              value={country}
-              onChange={(e) => setCountry(e.target.value)}
-              className="flex-1 px-3 py-2.5 font-medium"
-              placeholder="Country"
-            />
+            <div className="flex-1 min-w-0 relative flex items-center gap-2">
+              <MapPin className="w-5 h-5 text-red-500 flex-shrink-0" />
+              <select
+                value={country}
+                onChange={(e) => setCountry(e.target.value)}
+                className="flex-1 py-2.5 text-gray-800 font-medium focus:outline-none appearance-none bg-transparent pr-6 cursor-pointer"
+                disabled={countriesLoading}
+              >
+                <option>All Countries</option>
+                {countries.map((countryItem) => (
+                  <option key={countryItem._id} value={countryItem.name}>
+                    {countryItem.name}
+                  </option>
+                ))}
+              </select>
+            </div>
 
             {/* City */}
-            <div className="flex-1 flex items-center gap-2">
-              <MapPin className="w-5 h-5 text-red-500" />
+            <div className="flex-1 min-w-0 relative flex items-center gap-2">
+              <MapPin className="w-5 h-5 text-red-500 flex-shrink-0" />
               <select
                 value={city}
                 onChange={(e) => setCity(e.target.value)}
-                className="flex-1 py-2.5 font-medium bg-transparent"
+                className="flex-1 py-2.5 text-gray-800 font-medium focus:outline-none appearance-none bg-transparent pr-6 cursor-pointer"
               >
-                <option value="">All Cities</option>
-                <option value="delhi">Delhi</option>
-                <option value="mumbai">Mumbai</option>
+                <option>All Cities</option>
+                <option>Mumbai</option>
+                <option>Delhi</option>
+                <option>Bangalore</option>
+                <option>Chennai</option>
+                <option>Kolkata</option>
+                <option>Pune</option>
+                <option>Hyderabad</option>
+                <option>Ahmedabad</option>
               </select>
             </div>
 
             {/* Specialty */}
-            <select
-              value={specialty}
-              onChange={(e) => setSpecialty(e.target.value)}
-              className="flex-1 py-2.5 font-medium bg-transparent"
-            >
-              <option value="cardiology">Cardiology</option>
-              <option value="neurology">Neurology</option>
-            </select>
+            <div className="flex-1 min-w-0 relative flex items-center gap-2">
+              <MapPin className="w-5 h-5 text-red-500 flex-shrink-0" />
+              <select
+                value={specialty}
+                onChange={(e) => setSpecialty(e.target.value)}
+                className="flex-1 py-2.5 text-gray-800 font-medium focus:outline-none appearance-none bg-transparent pr-6 cursor-pointer"
+                disabled={categoriesLoading}
+              >
+                <option>All Specialties</option>
+                {categories.map((category) => (
+                  <option key={category._id} value={category.name}>
+                    {category.name}
+                  </option>
+                ))}
+              </select>
+            </div>
 
             {/* Hospital */}
-            <div className="flex-1 relative">
+            <div className="flex-1 min-w-0 relative flex items-center">
               <select
                 value={hospital}
                 onChange={(e) => setHospital(e.target.value)}
-                className="w-full py-2.5 font-medium bg-transparent"
+                className="flex-1 py-2.5 text-gray-800 font-medium focus:outline-none appearance-none bg-transparent pr-8 cursor-pointer"
               >
-                <option value="">All Hospitals</option>
-                <option value="apollo">Apollo</option>
-                <option value="fortis">Fortis</option>
+                <option>All Hospitals</option>
+                <option>Apollo Hospitals</option>
+                <option>Fortis Healthcare</option>
+                <option>Max Healthcare</option>
+                <option>Medanta</option>
+                <option>AIIMS</option>
               </select>
-              <ChevronDown className="absolute right-2 top-3 w-5 h-5" />
+              <ChevronDown className="w-5 h-5 text-gray-600 absolute right-2 pointer-events-none" />
             </div>
 
             {/* Search */}
             <button
               onClick={handleSearch}
-              className="px-8 py-2.5 bg-red-600 text-white font-semibold rounded-md"
+              className="lg:ml-4 px-8 py-2.5 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-md transition-colors duration-200"
             >
               Search
             </button>
           </div>
+
+          {/* Advanced Filters Toggle */}
+          <div className="mt-4 text-center">
+            <button
+              onClick={() => setShowAdvancedFilters(!showAdvancedFilters)}
+              className="text-red-600 hover:text-red-700 font-medium text-sm underline"
+            >
+              {showAdvancedFilters ? 'Hide' : 'Show'} Advanced Filters
+            </button>
+          </div>
+
+          {/* Advanced Filters */}
+          {showAdvancedFilters && (
+            <div className="mt-4 bg-white/50 rounded-lg p-4 border border-gray-200">
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                {/* Price Range */}
+                <div className="relative">
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Consultation Fee
+                  </label>
+                  <select
+                    value={priceRange}
+                    onChange={(e) => setPriceRange(e.target.value)}
+                    className="w-full py-2 px-3 text-gray-800 font-medium focus:outline-none border border-gray-300 rounded-md bg-white"
+                  >
+                    <option>All Ranges</option>
+                    <option>$50 - $200</option>
+                    <option>$200 - $500</option>
+                    <option>$500 - $1,000</option>
+                    <option>$1,000+</option>
+                  </select>
+                </div>
+
+                {/* Rating */}
+                <div className="relative">
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Minimum Rating
+                  </label>
+                  <select
+                    value={rating}
+                    onChange={(e) => setRating(e.target.value)}
+                    className="w-full py-2 px-3 text-gray-800 font-medium focus:outline-none border border-gray-300 rounded-md bg-white"
+                  >
+                    <option>All Ratings</option>
+                    <option>4.5+ Stars</option>
+                    <option>4.0+ Stars</option>
+                    <option>3.5+ Stars</option>
+                    <option>3.0+ Stars</option>
+                  </select>
+                </div>
+
+                {/* Experience */}
+                <div className="relative">
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Experience
+                  </label>
+                  <select
+                    value={experience}
+                    onChange={(e) => setExperience(e.target.value)}
+                    className="w-full py-2 px-3 text-gray-800 font-medium focus:outline-none border border-gray-300 rounded-md bg-white"
+                  >
+                    <option>All Experience</option>
+                    <option>5+ Years</option>
+                    <option>10+ Years</option>
+                    <option>15+ Years</option>
+                    <option>20+ Years</option>
+                  </select>
+                </div>
+
+                {/* Availability */}
+                <div className="relative">
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Availability
+                  </label>
+                  <select
+                    value={availability}
+                    onChange={(e) => setAvailability(e.target.value)}
+                    className="w-full py-2 px-3 text-gray-800 font-medium focus:outline-none border border-gray-300 rounded-md bg-white"
+                  >
+                    <option>All Availability</option>
+                    <option>Available Today</option>
+                    <option>Available This Week</option>
+                    <option>Morning Slots</option>
+                    <option>Evening Slots</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Description Text */}
+        <div className="mt-12 max-w-6xl">
+          <p className="text-gray-700 text-base leading-relaxed text-center">
+            Discover world-class doctors with advanced medical expertise and personalized care. Our comprehensive platform helps you find the perfect healthcare professional for your medical needs, from specialized treatments to general consultations.
+          </p>
         </div>
       </div>
     </div>

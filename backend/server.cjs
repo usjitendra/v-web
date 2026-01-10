@@ -177,6 +177,13 @@ try {
 }
 
 try {
+  const contactRoute = require('./routes/contact.cjs');
+  app.use('/api/contact', contactRoute);
+} catch (error) {
+  console.error('✗ Failed to load route contact:', error.message, error.stack);
+}
+
+try {
   const adminRoute = require('./routes/admin.cjs');
   app.use('/api/admin', adminRoute);
 } catch (error) {
@@ -202,6 +209,13 @@ try {
   app.use('/api/patients', patientsRoute);
 } catch (error) {
   console.error('✗ Failed to load route patients:', error.message, error.stack);
+}
+
+try {
+  const seoRoute = require('./routes/seo.cjs');
+  app.use('/api/seo', seoRoute);
+} catch (error) {
+  console.error('✗ Failed to load route seo:', error.message, error.stack);
 }
 
 // Rest of server.cjs remains the same

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Star, MapPin, Phone, Mail, Calendar, Award, Users, Building2, Stethoscope, ChevronDown, ChevronUp, Menu, X, MessageCircle } from 'lucide-react';
 import BreadCrumbs from '@/components/Breadcums';
+import SEOHead from '../../components/SEOHead';
 
 const HospitalDetailPage = () => {
   const [selectedDepartment, setSelectedDepartment] = useState('');
@@ -139,6 +140,12 @@ const HospitalDetailPage = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-lightSky to-white">
+      <SEOHead
+        pageType="hospital-detail"
+        pageIdentifier="shanya-scans-theranostics"
+        customTitle="Shanya Scans & Theranostics - Advanced Medical Imaging & Healthcare Services"
+        customDescription="Experience world-class medical imaging and healthcare services at Shanya Scans & Theranostics. Advanced diagnostic facilities with expert medical professionals."
+      />
 
       <BreadCrumbs headText={"About Shanya Scans & Theranostics"} items={breadcrumbItems} />
 

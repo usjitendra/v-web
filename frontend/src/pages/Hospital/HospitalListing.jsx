@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Link, useSearchParams } from "react-router-dom";
+import React, { useState, useMemo } from "react";
+import { Link, useSearchParams, useNavigate } from "react-router-dom";
 import {
   Star,
   MapPin,
@@ -9,27 +9,85 @@ import {
   MessageCircle,
   Calendar,
   Stethoscope,
+  Filter,
+  SortAsc,
+  SortDesc,
+  X,
 } from "lucide-react";
 import { useGetAllHospitalsQuery } from "@/rtk/slices/commanApiSlice";
+import { useCreateBookingMutation } from "@/rtk/slices/bookingApiSlice";
 
 export default function HospitalListingPage() {
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const navigate = useNavigate();
   const country = searchParams.get("country");
   const category = searchParams.get("category");
+  const city = searchParams.get("city");
+  const priceRange = searchParams.get("priceRange");
+  const rating = searchParams.get("rating");
+  const facilities = searchParams.get("facilities");
 
   const { data, isLoading, isError } = useGetAllHospitalsQuery(
     {
       country,
       category,
+      city,
+      priceRange,
+      rating,
+      facilities,
       page: 1,
       limit: 10,
     },
     {
-      skip: !country || !category,
+      skip: false, // Always fetch hospitals, apply filters on frontend if needed
     }
   );
 
   const hospitals = data?.data?.data || [];
+
+  // Sorting state
+  const [sortBy, setSortBy] = useState('name');
+  const [sortOrder, setSortOrder] = useState('asc');
+
+  // Sorted hospitals
+  const sortedHospitals = useMemo(() => {
+    if (!hospitals.length) return hospitals;
+
+    return [...hospitals].sort((a, b) => {
+      let aValue, bValue;
+
+      switch (sortBy) {
+        case 'name':
+          aValue = a.name?.toLowerCase() || '';
+          bValue = b.name?.toLowerCase() || '';
+          break;
+        case 'rating':
+          aValue = a.rating || 0;
+          bValue = b.rating || 0;
+          break;
+        case 'experience':
+          aValue = a.experience || 0;
+          bValue = b.experience || 0;
+          break;
+        case 'location':
+          aValue = a.location?.city?.toLowerCase() || '';
+          bValue = b.location?.city?.toLowerCase() || '';
+          break;
+        default:
+          return 0;
+      }
+
+      if (sortOrder === 'asc') {
+        return aValue < bValue ? -1 : aValue > bValue ? 1 : 0;
+      } else {
+        return aValue > bValue ? -1 : aValue < bValue ? 1 : 0;
+      }
+    });
+  }, [hospitals, sortBy, sortOrder]);
+
+  const clearFilters = () => {
+    navigate('/hospitals');
+  };
 
   /* ================= FORM ================= */
   const [formData, setFormData] = useState({
@@ -39,17 +97,101 @@ export default function HospitalListingPage() {
     problem: "",
   });
 
+  // Appointment booking state
+  const [showAppointmentModal, setShowAppointmentModal] = useState(false);
+  const [selectedHospital, setSelectedHospital] = useState(null);
+  const [appointmentForm, setAppointmentForm] = useState({
+    patientName: "",
+    phone: "",
+    email: "",
+    date: "",
+    time: "",
+    message: "",
+    treatment: "",
+  });
+
+  const [createBooking, { isLoading: isBookingLoading }] = useCreateBookingMutation();
+  const [createContactBooking, { isLoading: isContactBookingLoading }] = useCreateBookingMutation();
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!formData.patientName || !formData.city || !formData.phone || !formData.problem) {
       alert("Please fill all fields");
       return;
     }
-    alert("Form submitted! We will contact you soon.");
+
+    try {
+      const bookingData = {
+        name: formData.patientName,
+        email: formData.email || `${formData.patientName.toLowerCase().replace(/\s+/g, '')}@example.com`, // Generate email if not provided
+        phone: formData.phone,
+        message: `City: ${formData.city}\nProblem: ${formData.problem}`,
+        type: 'query'
+      };
+
+      const result = await createContactBooking(bookingData).unwrap();
+      alert("Your inquiry has been submitted successfully! We will contact you soon.");
+    } catch (error) {
+      console.error('Contact booking error:', error);
+      alert("Failed to submit your inquiry. Please try again.");
+    }
+  };
+
+  // Appointment booking functions
+  const openAppointmentModal = (hospital) => {
+    setSelectedHospital(hospital);
+    setShowAppointmentModal(true);
+    setAppointmentForm({
+      patientName: "",
+      phone: "",
+      email: "",
+      date: "",
+      time: "",
+      message: "",
+      treatment: "",
+    });
+  };
+
+  const closeAppointmentModal = () => {
+    setShowAppointmentModal(false);
+    setSelectedHospital(null);
+  };
+
+  const handleAppointmentFormChange = (e) => {
+    const { name, value } = e.target;
+    setAppointmentForm(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleAppointmentSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!appointmentForm.patientName || !appointmentForm.phone || !appointmentForm.email || !appointmentForm.treatment) {
+      alert("Please fill all required fields");
+      return;
+    }
+
+    try {
+      const bookingData = {
+        name: appointmentForm.patientName,
+        email: appointmentForm.email,
+        phone: appointmentForm.phone,
+        hospital: selectedHospital._id,
+        message: `${appointmentForm.treatment}\n\nAdditional Notes: ${appointmentForm.message}`,
+        type: 'query' // For hospital appointments, we'll use query type since hospitals don't have specific doctors
+      };
+
+      const result = await createBooking(bookingData).unwrap();
+
+      alert("Appointment request submitted successfully! We will contact you soon.");
+      closeAppointmentModal();
+    } catch (error) {
+      console.error('Booking error:', error);
+      alert("Failed to submit appointment request. Please try again.");
+    }
   };
 
   return (
@@ -68,6 +210,93 @@ export default function HospitalListingPage() {
               </p>
             </div>
           </div>
+
+          {/* ================= SORTING AND FILTERS ================= */}
+          {!isLoading && sortedHospitals.length > 0 && (
+            <div className="lg:col-span-3 mb-6">
+              <div className="bg-white rounded-xl shadow-lg p-4">
+                <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+                  <div className="flex items-center gap-2 text-gray-600">
+                    <Filter className="w-5 h-5" />
+                    <span className="font-medium">
+                      {sortedHospitals.length} hospital{sortedHospitals.length !== 1 ? 's' : ''} found
+                    </span>
+                  </div>
+
+                  <div className="flex items-center gap-4">
+                    <label className="text-sm font-medium text-gray-600">Sort by:</label>
+                    <select
+                      value={sortBy}
+                      onChange={(e) => setSortBy(e.target.value)}
+                      className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-main focus:border-transparent"
+                    >
+                      <option value="name">Name</option>
+                      <option value="rating">Rating</option>
+                      <option value="experience">Experience</option>
+                      <option value="location">Location</option>
+                    </select>
+
+                    <button
+                      onClick={() => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')}
+                      className="flex items-center gap-2 px-3 py-2 border border-gray-300 rounded-md hover:bg-gray-50 transition-colors"
+                    >
+                      {sortOrder === 'asc' ? (
+                        <SortAsc className="w-4 h-4" />
+                      ) : (
+                        <SortDesc className="w-4 h-4" />
+                      )}
+                      <span className="text-sm font-medium">
+                        {sortOrder === 'asc' ? 'A-Z' : 'Z-A'}
+                      </span>
+                    </button>
+                  </div>
+                </div>
+
+                {/* Active Filters Display */}
+                <div className="mt-4 flex flex-wrap gap-2 items-center">
+                  {(country || city || category || priceRange || rating || facilities) && (
+                    <button
+                      onClick={clearFilters}
+                      className="text-red-600 hover:text-red-700 font-medium text-sm underline"
+                    >
+                      Clear all filters
+                    </button>
+                  )}
+
+                  {country && (
+                    <span className="inline-flex items-center px-3 py-1 bg-main/10 text-main rounded-full text-sm font-medium">
+                      Country: {country}
+                    </span>
+                  )}
+                  {city && (
+                    <span className="inline-flex items-center px-3 py-1 bg-main/10 text-main rounded-full text-sm font-medium">
+                      City: {city}
+                    </span>
+                  )}
+                  {category && (
+                    <span className="inline-flex items-center px-3 py-1 bg-main/10 text-main rounded-full text-sm font-medium">
+                      Specialty: {category}
+                    </span>
+                  )}
+                  {priceRange && (
+                    <span className="inline-flex items-center px-3 py-1 bg-main/10 text-main rounded-full text-sm font-medium">
+                      Price: {priceRange}
+                    </span>
+                  )}
+                  {rating && (
+                    <span className="inline-flex items-center px-3 py-1 bg-main/10 text-main rounded-full text-sm font-medium">
+                      Rating: {rating}
+                    </span>
+                  )}
+                  {facilities && (
+                    <span className="inline-flex items-center px-3 py-1 bg-main/10 text-main rounded-full text-sm font-medium">
+                      Facilities: {facilities}
+                    </span>
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
 
           {/* ================= LEFT LIST ================= */}
           <div className="lg:col-span-2">
@@ -92,7 +321,7 @@ export default function HospitalListingPage() {
             )}
 
             {/* Empty */}
-            {!isLoading && hospitals.length === 0 && (
+            {!isLoading && sortedHospitals.length === 0 && (
               <div className="text-center bg-white rounded-xl shadow-lg p-12 mx-auto max-w-md">
                 <div className="text-gray-400 text-6xl mb-4">🏥</div>
                 <h3 className="text-xl font-semibold text-gray-700 mb-2">No Hospitals Found</h3>
@@ -102,7 +331,7 @@ export default function HospitalListingPage() {
 
             {/* Hospital Cards */}
             {!isLoading &&
-              hospitals.map((hospital, index) => (
+              sortedHospitals.map((hospital, index) => (
                 <div
                   key={hospital._id}
                   className="bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 overflow-hidden transform hover:-translate-y-1"
@@ -215,7 +444,10 @@ export default function HospitalListingPage() {
 
                       {/* Action Buttons */}
                       <div className="hidden lg:flex flex-col gap-4 flex-shrink-0">
-                        <button className="bg-gradient-to-r from-main to-primary hover:from-primary hover:to-main text-white px-8 py-4 rounded-2xl font-bold shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105 flex items-center justify-center gap-2">
+                        <button
+                          onClick={() => openAppointmentModal(hospital)}
+                          className="bg-gradient-to-r from-main to-primary hover:from-primary hover:to-main text-white px-8 py-4 rounded-2xl font-bold shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105 flex items-center justify-center gap-2"
+                        >
                           <Calendar className="w-6 h-6" />
                           Book Consultation
                         </button>
@@ -309,6 +541,151 @@ export default function HospitalListingPage() {
 
         </div>
       </div>
+
+      {/* Appointment Booking Modal */}
+      {showAppointmentModal && selectedHospital && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl max-w-md w-full max-h-[90vh] overflow-y-auto">
+            <div className="p-6">
+              {/* Header */}
+              <div className="flex items-center justify-between mb-6">
+                <h3 className="text-xl font-bold text-gray-900">Book Hospital Consultation</h3>
+                <button
+                  onClick={closeAppointmentModal}
+                  className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              {/* Hospital Info */}
+              <div className="bg-gray-50 rounded-xl p-4 mb-6">
+                <div className="flex items-center gap-3 mb-2">
+                  <div className="w-12 h-12 bg-main rounded-full flex items-center justify-center">
+                    <Building2 className="w-6 h-6 text-white" />
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-gray-900">{selectedHospital.name}</h4>
+                    <p className="text-sm text-gray-600">{selectedHospital.categoryData?.name}</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-2 text-sm text-gray-600">
+                  <MapPin className="w-4 h-4" />
+                  <span>{selectedHospital.location?.city}, {selectedHospital.location?.country}</span>
+                </div>
+              </div>
+
+              {/* Appointment Form */}
+              <form onSubmit={handleAppointmentSubmit} className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Full Name *
+                  </label>
+                  <input
+                    type="text"
+                    name="patientName"
+                    value={appointmentForm.patientName}
+                    onChange={handleAppointmentFormChange}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-main focus:border-transparent"
+                    placeholder="Enter your full name"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Phone Number *
+                  </label>
+                  <input
+                    type="tel"
+                    name="phone"
+                    value={appointmentForm.phone}
+                    onChange={handleAppointmentFormChange}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-main focus:border-transparent"
+                    placeholder="Enter your phone number"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Email Address *
+                  </label>
+                  <input
+                    type="email"
+                    name="email"
+                    value={appointmentForm.email}
+                    onChange={handleAppointmentFormChange}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-main focus:border-transparent"
+                    placeholder="Enter your email"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Treatment/Service Required *
+                  </label>
+                  <input
+                    type="text"
+                    name="treatment"
+                    value={appointmentForm.treatment}
+                    onChange={handleAppointmentFormChange}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-main focus:border-transparent"
+                    placeholder="e.g., Cardiology consultation, Surgery, etc."
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Preferred Date (Optional)
+                  </label>
+                  <input
+                    type="date"
+                    name="date"
+                    value={appointmentForm.date}
+                    onChange={handleAppointmentFormChange}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-main focus:border-transparent"
+                    min={new Date().toISOString().split('T')[0]}
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Additional Notes (Optional)
+                  </label>
+                  <textarea
+                    name="message"
+                    value={appointmentForm.message}
+                    onChange={handleAppointmentFormChange}
+                    rows="3"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-main focus:border-transparent resize-none"
+                    placeholder="Describe your medical needs or any special requirements"
+                  />
+                </div>
+
+                <div className="flex gap-3 pt-4">
+                  <button
+                    type="button"
+                    onClick={closeAppointmentModal}
+                    className="flex-1 px-4 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={isBookingLoading}
+                    className="flex-1 px-4 py-3 bg-main text-white rounded-lg hover:bg-primary transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {isBookingLoading ? 'Submitting...' : 'Submit Request'}
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

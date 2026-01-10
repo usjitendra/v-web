@@ -6,6 +6,10 @@ import { doctorApi } from "./slices/doctorApi";
 import { hospitalApi } from "./slices/hospitalApiSlice";
 import { commanApiSlice } from "./slices/commanApiSlice";
 import { dropdownApi } from "./slices/dropdownApiSlice";
+import { bookingApi } from "./slices/bookingApiSlice";
+import { contactApi } from "./slices/contactApiSlice";
+import { blogApi } from "./slices/blogApiSlice";
+import { seoApi } from "./slices/seoApiSlice";
 
 export const store = configureStore({
   reducer: {
@@ -16,6 +20,10 @@ export const store = configureStore({
     [hospitalApi.reducerPath]: hospitalApi.reducer,
     [commanApiSlice.reducerPath]: commanApiSlice.reducer,
     [dropdownApi.reducerPath]: dropdownApi.reducer,
+    [bookingApi.reducerPath]: bookingApi.reducer,
+    [contactApi.reducerPath]: contactApi.reducer,
+    [blogApi.reducerPath]: blogApi.reducer,
+    [seoApi.reducerPath]: seoApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(
@@ -25,6 +33,10 @@ export const store = configureStore({
       doctorApi.middleware,
       hospitalApi.middleware,
       commanApiSlice.middleware,
-      dropdownApi.middleware
+      dropdownApi.middleware,
+      bookingApi.middleware,
+      contactApi.middleware,
+      blogApi.middleware,
+      seoApi.middleware
     ),
 });

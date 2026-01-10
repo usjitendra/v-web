@@ -8,13 +8,14 @@ import {
 
 } from "react-icons/io5";
 import { Link, useLocation } from "react-router-dom";
+import { useAuth } from "../../hooks/useAuth";
 
 
 import {
   LuLayoutDashboard,
 
 } from "react-icons/lu";
-import { PiGlobe, PiListBullets, PiListPlus, PiLockKeyOpen, PiShieldChevron, PiStack, PiTranslate, PiUserPlus } from "react-icons/pi";
+import { PiGlobe, PiListBullets, PiListPlus, PiLockKeyOpen, PiShieldChevron, PiStack, PiTranslate, PiUserPlus, PiMagnifyingGlass, PiArticle } from "react-icons/pi";
 
 
 import logo from '../../assets/logo.jpg';
@@ -96,6 +97,18 @@ const menuItems = [
         permission: "subcategory.read",
       },
     ],
+  },
+  {
+    icon: <PiMagnifyingGlass />,
+    label: "SEO Management",
+    link: "/admin/seo",
+    permission: "seo.read",
+  },
+  {
+    icon: <PiArticle />,
+    label: "Blog Management",
+    link: "/admin/blogs",
+    permission: "blog.read",
   }
 
 ];
@@ -104,7 +117,7 @@ const Sidebar = ({ sidebarCollapsed, toggleSidebar }) => {
   const location = useLocation();
   const currentPath = location.pathname;
   const [openDropdown, setOpenDropdown] = useState(null);
-  // const { isAdmin } = useAuth();
+  const { logout } = useAuth();
 
 
   const getUserObject = () => {
