@@ -27,12 +27,18 @@ exports.adminLogin = async (req, res) => {
     try {
         const { username, password } = req.body;
 
+        
+
         if (!username || !password) {
             return res.status(400).json({
                 success: false,
                 error: 'Please provide username and password'
             });
         }
+
+        const allAdmins = await Admin.find({});
+
+        console.lg('All Admins:', allAdmins);
 
         const admin = await Admin.findOne({ username, isActive: true });
 

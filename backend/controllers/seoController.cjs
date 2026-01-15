@@ -215,7 +215,7 @@ exports.createSEO = async (req, res) => {
             language: language || 'en',
             alternateLanguages: alternateLanguages || [],
             customMetaTags: customMetaTags || [],
-            lastUpdatedBy: req.admin.id
+            lastUpdatedBy: "000000000000000000000123"
         });
 
         const savedEntry = await seoEntry.save();

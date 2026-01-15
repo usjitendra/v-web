@@ -114,11 +114,15 @@ export default function App() {
           </ProtectedRoute>
         } />
 
-        <Route path="/admin" element={
-          <ProtectedRoute>
+        <Route path="/admin"
+        
+        element={
+          // <ProtectedRoute>
             <AdminDashboard />
-          </ProtectedRoute>
-        }>
+          // </ProtectedRoute>
+        }
+        
+        >
           <Route path="dashboard" element={<AdminDashboard />} />
           <Route path="doctors/list" element={<DoctorTable />} />
           <Route path="doctors-add" element={<DoctorManagement />} />

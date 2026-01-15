@@ -84,7 +84,7 @@ const WhyWe = () => {
               Why Choose Us?
             </h3>
             <p className="text-base sm:text-lg opacity-80 leading-7 my-4 sm:my-6 text-justify">
-              Shanya Scans & Theranostics aims at achieving the highest level of excellence with quality results. Our labs operate 24x7 and are equipped with fully automated state-of-the-art technology and infrastructure.
+              aims at achieving the highest level of excellence with quality results. Our labs operate 24x7 and are equipped with fully automated state-of-the-art technology and infrastructure.
             </p>
 
             {/* Feature Cards */}

@@ -90,7 +90,7 @@ export default function DoctorSearch() {
                 disabled={countriesLoading}
               >
                 <option>All Countries</option>
-                {countries.map((countryItem) => (
+                {countries && Array.isArray(countries) && countries.map((countryItem) => (
                   <option key={countryItem._id} value={countryItem.name}>
                     {countryItem.name}
                   </option>
@@ -128,7 +128,7 @@ export default function DoctorSearch() {
                 disabled={categoriesLoading}
               >
                 <option>All Specialties</option>
-                {categories.map((category) => (
+                {categories && Array.isArray(categories) && categories.length>0 && categories.map((category) => (
                   <option key={category._id} value={category.name}>
                     {category.name}
                   </option>

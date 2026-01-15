@@ -1,10 +1,10 @@
 // slices/seoApiSlice.js
 import { createApi } from '@reduxjs/toolkit/query/react';
-import axiosBaseQuery from '../api/axiosInstance';
+import axiosBaseQuery from '../api/baseQuery';
 
 export const seoApi = createApi({
   reducerPath: 'seoApi',
-  baseQuery: axiosBaseQuery(),
+  baseQuery: axiosBaseQuery,
   tagTypes: ['SEO', 'SEOStats'],
 
   endpoints: (builder) => ({

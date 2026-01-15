@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { Eye, EyeOff, Shield, User } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
 import logo from '../../assets/logo.jpg';
+import axios from 'axios';
 
 const AdminLogin = () => {
     const { login, isAuthenticated, loading: authLoading } = useAuth();
@@ -28,7 +29,7 @@ const AdminLogin = () => {
         setError('');
 
         try {
-            const response = await fetch('/api/admin/login', {
+            const response = await axios.get('localhost:500/api/v1/admin/login', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(formData)

@@ -192,7 +192,7 @@ try {
 
 try {
   const blogRoute = require('./routes/blog.cjs');
-  app.use('/api/blogs', blogRoute);
+  app.use('/api/v1/blogs', blogRoute);
 } catch (error) {
   console.error('✗ Failed to load route blogs:', error.message, error.stack);
 }
@@ -213,7 +213,7 @@ try {
 
 try {
   const seoRoute = require('./routes/seo.cjs');
-  app.use('/api/seo', seoRoute);
+  app.use('/api/v1/seo', seoRoute);
 } catch (error) {
   console.error('✗ Failed to load route seo:', error.message, error.stack);
 }
