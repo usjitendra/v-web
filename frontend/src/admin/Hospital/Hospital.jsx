@@ -526,6 +526,7 @@ const HospitalManagement = () => {
                 // ADD MODE
                 await addHospital(formData).unwrap();
                 message.success("Hospital added successfully!");
+                navigate('/admin/hospitals/list');
                 form.resetFields();
                 setCurrent(0);
                 setMainPhotoFileList([]);

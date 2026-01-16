@@ -49,7 +49,7 @@ const HospitalList = () => {
 
     };
 
-    cons
+
 
     const handleEdit = (hospital) => {
         navigate('/admin/hospitals-add', { state: { hospital } });

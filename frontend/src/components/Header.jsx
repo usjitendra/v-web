@@ -3,7 +3,7 @@ import { Menu, X, Search, ChevronDown, Globe } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useGetCountryCategoryDropdownQuery, useGetLanguageDropdownQuery } from '@/rtk/slices/dropdownApiSlice';
 
-const Header = () => {
+const Header2 = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState(null);
   const [hoverCountry, setHoverCountry] = useState(null);
@@ -170,4 +170,4 @@ const Header = () => {
   );
 };
 
-export default Header;
+export default Header2;
