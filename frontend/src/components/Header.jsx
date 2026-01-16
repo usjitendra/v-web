@@ -95,7 +95,7 @@ const Header2 = () => {
                         key={country.countryId}
                         onMouseEnter={() => {
                           setHoverCountry(country);
-                          setActiveCountry(null);;
+                          setActiveCountry(null);
                         }}
                         onClick={() => setActiveCountry(country)}
                         className="px-4 py-2 cursor-pointer hover:bg-blue-50 flex justify-between"

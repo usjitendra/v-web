@@ -356,41 +356,41 @@ class hospitalController {
     };
 
     /* ---------------- COUNTRY NAME -> ObjectId ---------------- */
-    // if (country) {
-    //   const countryDoc = await CountryModel.findOne({
-    //     country_name: { $regex: country, $options: "i" },
-    //   }).select("_id");
+    if (country) {
+      const countryDoc = await CountryModel.findOne({
+        country_name: { $regex: country, $options: "i" },
+      }).select("_id");
 
-    //   if (!countryDoc) {
-    //     return responseHandler.successResponse(res, 200, "Hospital fetched successfully", {
-    //       data: [],
-    //       total: 0,
-    //       page: Number(page),
-    //       limit: Number(limit),
-    //     });
-    //   }
+      if (!countryDoc) {
+        return responseHandler.successResponse(res, 200, "Hospital fetched successfully", {
+          data: [],
+          total: 0,
+          page: Number(page),
+          limit: Number(limit),
+        });
+      }
 
-    //   matchStage.countryId = countryDoc._id;
-    // }
+      matchStage.countryId = countryDoc._id;
+    }
 
     /* ---------------- CATEGORY SLUG -> ObjectId ---------------- */
-    // if (category) {
-    //   const categoryDoc = await CategoryModel.findOne({
-    //     slug: category,
-    //   }).select("_id");
+    if (category) {
+      const categoryDoc = await CategoryModel.findOne({
+        slug: category,
+      }).select("_id");
 
-    //   if (!categoryDoc) {
-    //     return responseHandler.successResponse(res, 200, "Hospital fetched successfully", {
-    //       data: [],
-    //       total: 0,
-    //       page: Number(page),
-    //       limit: Number(limit),
-    //     });
-    //   }
+      if (!categoryDoc) {
+        return responseHandler.successResponse(res, 200, "Hospital fetched successfully", {
+          data: [],
+          total: 0,
+          page: Number(page),
+          limit: Number(limit),
+        });
+      }
 
-    //   // categoryIds is ARRAY
-    //   matchStage.categoryIds = categoryDoc._id;
-    // }
+      // categoryIds is ARRAY
+      matchStage.categoryIds = categoryDoc._id;
+    }
 
     /* ---------------- LOCATION FILTERS ---------------- */
     if (city) {
