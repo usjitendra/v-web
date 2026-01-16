@@ -37,9 +37,8 @@ const Sidebar = ({ handleSideBar }) => {
       {/* Sidebar */}
       <div
         id="sidebar"
-        className={`transition-all transform fixed top-0 left-0 z-60 w-64 h-full text-white pt-1 pb-2 overflow-y-auto bg-gradient-to-r block lg:hidden from-blue-600 to-blue-800 dark:border-neutral-700 ${
-          isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
-        }`}
+        className={`transition-all transform fixed top-0 left-0 z-60 w-64 h-full text-white pt-1 pb-2 overflow-y-auto bg-gradient-to-r block lg:hidden from-blue-600 to-blue-800 dark:border-neutral-700 ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
+          }`}
         role="dialog"
         tabIndex="-1"
         aria-label="Sidebar"
@@ -69,9 +68,8 @@ const Sidebar = ({ handleSideBar }) => {
                 <FaUserAlt className="text-lg" />
                 About Us
                 <svg
-                  className={`ms-auto transform ${
-                    isAboutOpen ? 'rotate-180' : ''
-                  } transition-transform duration-300`}
+                  className={`ms-auto transform ${isAboutOpen ? 'rotate-180' : ''
+                    } transition-transform duration-300`}
                   xmlns="http://www.w3.org/2000/svg"
                   width="24"
                   height="24"
