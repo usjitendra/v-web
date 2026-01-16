@@ -12,17 +12,25 @@ const Header2 = () => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [hoverCountry, setHoverCountry] = useState(null);
+  const [activeCountry, setActiveCountry] = useState(null);
+
 
   /* ================= API ================= */
   const { data } = useGetCountryCategoryDropdownQuery();
   const { data: languageData } = useGetLanguageDropdownQuery();
 
   const countries = data?.data?.result || [];
+
+  console.log("Countries Data:", countries);
   const languages = languageData?.data || [];
 
   useEffect(() => {
-    if (countries.length) setHoverCountry(countries[0]);
+    if (countries.length) {
+      setHoverCountry(countries[0]);
+      setActiveCountry(null);
+    }
   }, [countries]);
+
 
   /* ================= Scroll Effect ================= */
   useEffect(() => {
@@ -85,7 +93,11 @@ const Header2 = () => {
                     {countries.map((country) => (
                       <div
                         key={country.countryId}
-                        onMouseEnter={() => setHoverCountry(country)}
+                        onMouseEnter={() => {
+                          setHoverCountry(country);
+                          setActiveCountry(null);;
+                        }}
+                        onClick={() => setActiveCountry(country)}
                         className="px-4 py-2 cursor-pointer hover:bg-blue-50 flex justify-between"
                       >
                         <span>{country.countryName}</span>
@@ -95,15 +107,15 @@ const Header2 = () => {
                   </div>
 
                   {/* Categories */}
-                  {hoverCountry && (
+                  {activeCountry && (
                     <div className="min-w-[240px] bg-gray-50">
-                      {hoverCountry.categories.map((cat) => (
+                      {activeCountry.categories.map((cat) => (
                         <Link
                           key={cat.categoryId}
                           to={
                             item.label === "Doctors"
-                              ? `/doctors?country=${hoverCountry.slugName}&category=${cat.slugName}`
-                              : `/hospitals?country=${hoverCountry.slugName}&category=${cat.slugName}`
+                              ? `/doctors?country=${activeCountry.slugName}&category=${cat.slugName}`
+                              : `/hospitals?country=${activeCountry.slugName}&category=${cat.slugName}`
                           }
                           className="block px-4 py-2 hover:bg-blue-100 text-gray-700"
                         >
@@ -112,6 +124,7 @@ const Header2 = () => {
                       ))}
                     </div>
                   )}
+
                 </div>
               )}
             </div>
