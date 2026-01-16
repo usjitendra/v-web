@@ -28,7 +28,7 @@ const AdminDashboard = () => {
 
   return (
     <>
-      {/* <WindowHeader /> */}
+      <WindowHeader />
 
       <div className="flex  min-h-screen  font-Poppins w-full montserrat ">
         <div

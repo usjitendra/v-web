@@ -2,6 +2,7 @@ import React from 'react'
 import DoctorSearch from './Search'
 import DoctorListingPage from './DoctorListing'
 import BreadCrumbs from '@/components/Breadcums';
+import SEOHead from '../../components/SEOHead';
 
 const DoctorHome = () => {
 
@@ -14,6 +15,7 @@ const DoctorHome = () => {
 
   return (
     <div>
+      <SEOHead pageType="doctor-listing" />
       <BreadCrumbs headText={"About Shanya Scans & Theranostics"} items={breadcrumbItems} />
       <DoctorSearch />
       <DoctorListingPage />

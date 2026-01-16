@@ -9,13 +9,15 @@ import ProcedureCost from "../components/ProcedureCost";
 import Services from "../components/Services";
 import Stats from "../components/Stats";
 import WhatsAppButton from "../components/WhatsAppButton";
+import SEOHead from "../components/SEOHead";
 import { useLanguage } from "../hooks/useLanguage";
-import UpdatesAndBlogs from "./Home/Blog";
+import BlogSection from "./Home/BlogSection";
 import Feature from "./Home/Feature";
 import HeroSection from "./Home/HeroSection";
 import HomeAbout from "./Home/HomeAbout";
 import HowWeWork from "./Home/HowWeWork";
 import MultiSpecialtyFocus from "./Home/MutiSpecality";
+import MultiSpecialtyFocusApi from "./Home/MultiSpecialtyFocusApi";
 import ServicesSection from "./Home/OurService";
 import WhyWe from "./Home/WhyWe";
 
@@ -25,17 +27,20 @@ export default function Home() {
 
   return (
     <div>
+      <SEOHead pageType="home" />
       {/* <Hero /> */}
       <HeroSection/>
       <HomeAbout/>
 
       {/* Services */}
-{/* 
+{/*
       <Stats /> */}
 
       {/* <Services /> */}
 
       <MultiSpecialtyFocus/>
+
+      {/* <MultiSpecialtyFocusApi/> */}
 
       <Feature/>
 
@@ -56,7 +61,7 @@ export default function Home() {
       <PatientOpinions />
 
       {/* <Blog /> */}
-      <UpdatesAndBlogs/>
+      <BlogSection/>
 
       <FAQ />
     </div>

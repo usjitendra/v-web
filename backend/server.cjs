@@ -177,6 +177,13 @@ try {
 }
 
 try {
+  const contactRoute = require('./routes/contact.cjs');
+  app.use('/api/contact', contactRoute);
+} catch (error) {
+  console.error('✗ Failed to load route contact:', error.message, error.stack);
+}
+
+try {
   const adminRoute = require('./routes/admin.cjs');
   app.use('/api/admin', adminRoute);
 } catch (error) {
@@ -185,7 +192,7 @@ try {
 
 try {
   const blogRoute = require('./routes/blog.cjs');
-  app.use('/api/blogs', blogRoute);
+  app.use('/api/v1/blogs', blogRoute);
 } catch (error) {
   console.error('✗ Failed to load route blogs:', error.message, error.stack);
 }
@@ -204,6 +211,13 @@ try {
   console.error('✗ Failed to load route patients:', error.message, error.stack);
 }
 
+try {
+  const seoRoute = require('./routes/seo.cjs');
+  app.use('/api/v1/seo', seoRoute);
+} catch (error) {
+  console.error('✗ Failed to load route seo:', error.message, error.stack);
+}
+
 // Rest of server.cjs remains the same
 app.use(express.static('public'));
 app.use('/uploads', express.static(path.join(__dirname, 'Uploads')));
@@ -211,7 +225,7 @@ app.use('/uploads', express.static(path.join(__dirname, 'Uploads')));
 app.get('/', (req, res) => {
   const dbStatus = mongoose.connection.readyState;
   res.json({
-    status: 'Server running successfully 111',
+    status: 'Server running successfully',
     dbStatus: dbStatus === 1 ? 'Connected' : 'Disconnected',
     environment: NODE_ENV
   });
