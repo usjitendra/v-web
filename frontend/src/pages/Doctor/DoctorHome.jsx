@@ -17,7 +17,7 @@ const DoctorHome = () => {
     <div>
       <SEOHead pageType="doctor-listing" />
       <BreadCrumbs headText={"About Shanya Scans & Theranostics"} items={breadcrumbItems} />
-      <DoctorSearch />
+      {/* <DoctorSearch /> */}
       <DoctorListingPage />
 
     </div>

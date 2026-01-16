@@ -30,6 +30,76 @@ const iconComponents = {
   FaUserNurse,
 };
 
+
+
+
+const STATIC_SERVICES = [
+  {
+    _id: "1",
+    title: "Doctor Consultation",
+    description:
+      "Get expert medical opinions and consultations from highly qualified doctors across specialties.",
+    icon: "FaUserMd",
+  },
+  {
+    _id: "2",
+    title: "Medical Visa Assistance",
+    description:
+      "Complete support with medical visa documentation and approvals for international patients.",
+    icon: "FaPassport",
+  },
+  {
+    _id: "3",
+    title: "Travel & Flight Booking",
+    description:
+      "Hassle-free flight bookings with flexible options for patients and attendants.",
+    icon: "FaPlane",
+  },
+  {
+    _id: "4",
+    title: "Accommodation Arrangement",
+    description:
+      "Comfortable and affordable stay arrangements near hospitals during treatment.",
+    icon: "FaBed",
+  },
+  {
+    _id: "5",
+    title: "Local Transportation",
+    description:
+      "Airport pickup, drop, and local travel assistance throughout your treatment journey.",
+    icon: "FaCar",
+  },
+  {
+    _id: "6",
+    title: "Dedicated Case Manager",
+    description:
+      "A single point of contact to assist you with appointments, coordination, and support.",
+    icon: "FaHeadset",
+  },
+  {
+    _id: "7",
+    title: "Nursing & Post Care",
+    description:
+      "Professional nursing support and post-treatment care to ensure smooth recovery.",
+    icon: "FaUserNurse",
+  },
+  {
+    _id: "8",
+    title: "Appointment Scheduling",
+    description:
+      "Priority appointment scheduling with hospitals and doctors to avoid delays.",
+    icon: "FaCalendarCheck",
+  },
+  {
+    _id: "9",
+    title: "Language Interpretation",
+    description:
+      "Multilingual support to bridge communication gaps during consultations and treatment.",
+    icon: "FaLanguage",
+  },
+];
+
+
 const OurServices = () => {
   const [language] = useLanguage();
   const [headings, setHeadings] = useState({
@@ -38,110 +108,112 @@ const OurServices = () => {
     'desc': ''
   });
 
-  const [services, setServices] = useState([]);
+  // const [services, setServices] = useState([]);
+
+   const [services] = useState(STATIC_SERVICES);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   // Fetch assistance services from API
-  useEffect(() => {
-    if (!language) {
-      console.log('Language not yet available, skipping fetch');
-      return;
-    }
+  // useEffect(() => {
+  //   if (!language) {
+  //     console.log('Language not yet available, skipping fetch');
+  //     return;
+  //   }
 
-    const fetchAssistance = async () => {
-      try {
-        const response = await fetch(url_prefix + "/api/assistance");
+  //   const fetchAssistance = async () => {
+  //     try {
+  //       const response = await fetch(url_prefix + "/api/assistance");
 
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
+  //       if (!response.ok) {
+  //         throw new Error(`HTTP error! Status: ${response.status}`);
+  //       }
 
-        const result = await response.json();
+  //       const result = await response.json();
 
-        if (!result.success || !Array.isArray(result.data)) {
-          throw new Error("Invalid API response structure");
-        }
-        if (result.success) {
-          let dataToSet;
-          if (Array.isArray(result.data)) {
-            dataToSet = result.data.filter(
-              item => item.language?.toLowerCase() === language?.toLowerCase()
-            );
-          } else {
-            dataToSet =
-              result.data.language?.toLowerCase() === language?.toLowerCase()
-                ? [result.data]
-                : [];
-          }
+  //       if (!result.success || !Array.isArray(result.data)) {
+  //         throw new Error("Invalid API response structure");
+  //       }
+  //       if (result.success) {
+  //         let dataToSet;
+  //         if (Array.isArray(result.data)) {
+  //           dataToSet = result.data.filter(
+  //             item => item.language?.toLowerCase() === language?.toLowerCase()
+  //           );
+  //         } else {
+  //           dataToSet =
+  //             result.data.language?.toLowerCase() === language?.toLowerCase()
+  //               ? [result.data]
+  //               : [];
+  //         }
 
-          if (dataToSet.length > 0) {
-            console.log('Setting aboutData:', dataToSet);
-            setServices(dataToSet);
-            setError(null);
-            setHeadings({
-              title: dataToSet[0].htitle,
-              sub: dataToSet[0].hsubtitle,
-              desc: dataToSet[0].hdesc
-            })
-          }
-        }
+  //         if (dataToSet.length > 0) {
+  //           console.log('Setting aboutData:', dataToSet);
+  //           setServices(dataToSet);
+  //           setError(null);
+  //           setHeadings({
+  //             title: dataToSet[0].htitle,
+  //             sub: dataToSet[0].hsubtitle,
+  //             desc: dataToSet[0].hdesc
+  //           })
+  //         }
+  //       }
 
-      } catch (err) {
-        console.error("Fetch error:", err);
-        setError(err.message);
-        setServices([]);
-      } finally {
-        setLoading(false);
-      }
-    };
+  //     } catch (err) {
+  //       console.error("Fetch error:", err);
+  //       setError(err.message);
+  //       setServices([]);
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
 
-    fetchAssistance();
-  }, [language]);
+  //   fetchAssistance();
+  // }, [language]);
 
   // Loading state
-  if (loading) {
-    return (
-      <section className="py-16">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-darktext mb-4">
-              Our Services Cover{" "}
-              <span className="text-primary">Every Need</span>
-            </h2>
-            <div className="flex justify-center items-center h-64">
-              <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-teal-600"></div>
-            </div>
-          </div>
-        </div>
-      </section>
-    );
-  }
+  // if (loading) {
+  //   return (
+  //     <section className="py-16">
+  //       <div className="container mx-auto px-4">
+  //         <div className="text-center mb-12">
+  //           <h2 className="text-3xl md:text-4xl font-bold text-darktext mb-4">
+  //             Our Services Cover{" "}
+  //             <span className="text-primary">Every Need</span>
+  //           </h2>
+  //           <div className="flex justify-center items-center h-64">
+  //             <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-teal-600"></div>
+  //           </div>
+  //         </div>
+  //       </div>
+  //     </section>
+  //   );
+  // }
 
   // Error state
-  if (error) {
-    return (
-      <section className="py-16">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-darktext mb-4">
-              Our Services Cover{" "}
-              <span className="text-primary">Every Need</span>
-            </h2>
-          </div>
-          <div className="text-center text-red-600 py-8">
-            <p>Error loading services: {error}</p>
-            <button
-              onClick={() => window.location.reload()}
-              className="mt-4 px-4 py-2 bg-teal-600 text-white rounded-md"
-            >
-              Try Again
-            </button>
-          </div>
-        </div>
-      </section>
-    );
-  }
+  // if (error) {
+  //   return (
+  //     <section className="py-16">
+  //       <div className="container mx-auto px-4">
+  //         <div className="text-center mb-12">
+  //           <h2 className="text-3xl md:text-4xl font-bold text-darktext mb-4">
+  //             Our Services Cover{" "}
+  //             <span className="text-primary">Every Need</span>
+  //           </h2>
+  //         </div>
+  //         <div className="text-center text-red-600 py-8">
+  //           <p>Error loading services: {error}</p>
+  //           <button
+  //             onClick={() => window.location.reload()}
+  //             className="mt-4 px-4 py-2 bg-teal-600 text-white rounded-md"
+  //           >
+  //             Try Again
+  //           </button>
+  //         </div>
+  //       </div>
+  //     </section>
+  //   );
+  // }
 
   // No services found
   if (services.length === 0) {

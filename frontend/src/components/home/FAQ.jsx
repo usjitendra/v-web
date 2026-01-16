@@ -6,10 +6,44 @@ import url_prefix from "../../data/variable";
 import { useLanguage } from '../../hooks/useLanguage';
 import "./FAQ.css";
 
+// Static FAQ Data
+const staticFaqData = [
+  {
+    _id: "1",
+    question: "What services do you offer?",
+    answer: "We offer comprehensive medical treatment services including consultations, diagnostics, treatment planning, and post-treatment care coordination."
+  },
+  {
+    _id: "2",
+    question: "How do I book an appointment?",
+    answer: "You can book an appointment through our website by clicking the 'Book Now' button, or by contacting our care coordinators directly via phone or email."
+  },
+  {
+    _id: "3",
+    question: "What are your operating hours?",
+    answer: "Our care coordinators are available 24/7 to assist you with any questions or concerns you may have about your medical journey."
+  },
+  {
+    _id: "4",
+    question: "Do you accept insurance?",
+    answer: "Yes, we accept most major insurance providers. Please contact us with your insurance details for verification and coverage information."
+  },
+  {
+    _id: "5",
+    question: "How long does the treatment process take?",
+    answer: "Treatment duration varies depending on the specific procedure and individual circumstances. Our team will provide you with a detailed timeline during your consultation."
+  },
+  {
+    _id: "6",
+    question: "What should I bring to my first appointment?",
+    answer: "Please bring a valid ID, insurance information, list of current medications, and any relevant medical records or test results from previous treatments."
+  }
+];
+
 const FAQ = () => {
 
   const [activeIndex, setActiveIndex] = useState(null);
-  const [faqData, setFaqData] = useState([]);
+  const [faqData, setFaqData] = useState(staticFaqData);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
@@ -20,14 +54,14 @@ const FAQ = () => {
   const [headings, setHeadings] = useState({
     heading: "Frequently Asked Questions",
     subheading: "Find answers to common questions about our medical treatment process",
-    h1: '',
-    h2: '',
-    h3: '',
-    h4: ''
+    h1: 'Still have questions?',
+    h2: 'Our care coordinators are available 24/7 to answer any questions you may have about your medical journey.',
+    h3: 'Contact Us Now',
+    h4: 'Request a Call Back'
   });
 
 
-  // Fetch FAQs from API
+  // Fetch headings from API (keeping this dynamic as per your code)
   useEffect(() => {
 
     if (!language) {
@@ -60,56 +94,12 @@ const FAQ = () => {
       }
     };
 
-    const fetchFAQs = async () => {
-      try {
-        const response = await fetch(url_prefix + "/api/faqs");
-
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-
-        const result = await response.json();
-
-        if (!result.success || !Array.isArray(result.data)) {
-          throw new Error("Invalid API response structure");
-        }
-        if (result.success) {
-          let dataToSet;
-          if (Array.isArray(result.data)) {
-            dataToSet = result.data.filter(
-              item => item.language?.toLowerCase() === language?.toLowerCase()
-            );
-          } else {
-            dataToSet =
-              result.data.language?.toLowerCase() === language?.toLowerCase()
-                ? [result.data]
-                : [];
-          }
-
-          if (dataToSet.length > 0) {
-            console.log('Setting aboutData:', dataToSet);
-            setFaqData(dataToSet);
-            setError(null);
-            // setHeadings({
-            //   title: dataToSet[0].htitle,
-            //   sub: dataToSet[0].hsubtitle,
-            //   desc: dataToSet[0].hdesc
-            // })
-          }
-        }
-
-
-      } catch (err) {
-        console.error("Fetch error:", err);
-        setError(err.message);
-        setFaqData([]);
-      } finally {
-        setLoading(false);
-      }
-    };
     fetchHeadings();
     console.log('heading', headings)
-    fetchFAQs();
+    
+    // Set static FAQ data and loading to false
+    setFaqData(staticFaqData);
+    setLoading(false);
   }, [language]);
 
 
@@ -199,7 +189,7 @@ const FAQ = () => {
           <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-100 rounded-full mb-4">
             <FaQuestionCircle className="text-teal-600 text-2xl" />
           </div>
-          <h2 className="text-3xl md:text-4xl font-bold mb-4 text-main">
+          <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-800">
             {/* Frequently Asked <span className="text-teal-600">Questions</span> */}
             {headings.heading}
           </h2>
@@ -294,7 +284,7 @@ const FAQItem = ({ faq, index, isActive, onClick }) => {
           transition={{ duration: 0.3 }}
           className="flex-shrink-0"
         >
-          <FaChevronDown className="text-green-500" />
+          <FaChevronDown className="text-blue-500" />
         </motion.div>
       </button>
 
