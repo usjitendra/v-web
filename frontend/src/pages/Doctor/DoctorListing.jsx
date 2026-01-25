@@ -49,6 +49,8 @@ export default function DoctorListingPage() {
 
   const doctors = data?.data?.data || [];
 
+  console.log("docts",doctors)
+
   /* ================= SORTING ================= */
   const [sortBy, setSortBy] = useState("name");
   const [sortOrder, setSortOrder] = useState("asc");

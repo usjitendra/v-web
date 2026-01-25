@@ -69,14 +69,14 @@ export default function DoctorCard({ doc }) {
         {/* Actions */}
         <div className="flex justify-between items-center mt-auto pt-4 border-t border-gray-100">
           <Link
-            to={`/doctors/${doc?.slug}`}
+            to={`/doctor/${doc?.slug}`}
             className="px-4 py-2 text-sm bg-gray-100 text-gray-800 rounded-lg hover:bg-gray-200 transition font-medium"
           >
             View Details
           </Link>
 
           <Link
-            to={`/book`}
+            to={`/book/${doc?.hospital?._id || ''}/${doc?._id || ''}`}
             className="px-4 py-2 text-sm bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition font-medium shadow-md"
           >
             Book Now

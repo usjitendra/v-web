@@ -239,7 +239,7 @@ const OurServices = () => {
       <div className="container mx-auto px-4">
         {/* Heading */}
         <div className="text-center mb-12">
-          {/* <h2 className="text-3xl md:text-4xl font-bold text-darktext mb-4">
+          <h2 className="text-3xl md:text-4xl font-bold text-darktext mb-4">
             Our Services Cover <span className="text-primary">Every Need</span>
           </h2>
           <p className="text-lg text-lighttext max-w-3xl mx-auto mb-6">
@@ -252,13 +252,13 @@ const OurServices = () => {
             <span className="font-semibold">
               Dedicated Case Manager Included
             </span>
-          </div> */}
-          <SectionHeading
+          </div>
+          {/* <SectionHeading
             // title={headings.title}
             // subtitle={headings.sub}
             // description={headings.desc}
             title='service'
-          />
+          /> */}
         </div>
 
 

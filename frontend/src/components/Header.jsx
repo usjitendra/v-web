@@ -42,11 +42,12 @@ const Header2 = () => {
   /* ================= Nav ================= */
   const navItems = [
     { label: "Home", path: "/" },
+    { label: "About", path: "/about" },
     { label: "Hospitals", path: "/hospitals", mega: true },
     { label: "Doctors", path: "/doctors", mega: true },
-    { label: "Cost", path: "/cost" },
-    { label: "Knowledge", path: "/knowledge" },
-    { label: "Patient Stories", path: "/patient-stories" },
+    // { label: "Cost", path: "/cost" },
+    // { label: "Knowledge", path: "/knowledge" },
+    // { label: "Patient Stories", path: "/patient-stories" },
   ];
 
   /* ================= UI ================= */

@@ -43,16 +43,16 @@ export default function Home() {
 
       {/* <MultiSpecialtyFocusApi/> */}
 
-      <Feature/>
+      {/* <Feature/>
 
-      <HospitalCarousel />
+      <HospitalCarousel /> */}
 
       {/* <ServicesSection/> */}
 
-      <HowWeWork/>
-      <WhyWe/>
+      {/* <HowWeWork/>
+      <WhyWe/> */}
 
-      <ProcedureCost />
+      {/* <ProcedureCost /> */}
       <WhatsAppButton />
 
       <ProcessFlow />

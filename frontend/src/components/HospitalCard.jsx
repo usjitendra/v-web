@@ -74,7 +74,7 @@ export default function HospitalCard({ hospital }) {
 
           {/* Book Now Button */}
           <Link
-            to={`/hospitals/${hospital.id}/book`}
+            to={`/book/${hospital._id}`}
             className="px-4 py-2 text-sm bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors duration-200 font-medium shadow-md hover:shadow-lg"
           >
             Book Now

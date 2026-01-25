@@ -92,6 +92,7 @@ export default function HospitalCard({ hospital, onBook }) {
           <div className="grid grid-cols-2 gap-2">
             <Link
               to={`/hospital/${hospital.slug}`}
+                // to={`/hospitals/detail`}
               className="text-center bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-2 rounded-lg font-medium transition-colors text-sm"
             >
               View Details

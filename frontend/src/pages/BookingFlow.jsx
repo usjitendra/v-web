@@ -66,7 +66,7 @@ export default function BookingFlow() {
   }, []);
 
   useEffect(() => {
-    if (hospitalId) {
+    if (hospitalId && hospitals.length > 0) {
       // Fetch doctors for the pre-filled hospital
       fetchDoctors(hospitalId);
 
@@ -77,8 +77,10 @@ export default function BookingFlow() {
         hospital: selectedHospital ? selectedHospital.name : prev.hospital,
       }));
     }
+  }, [hospitalId, hospitals]);
 
-    if (doctorId) {
+  useEffect(() => {
+    if (doctorId && doctors.length > 0) {
       const selectedDoctor = doctors.find(d => d._id === doctorId);
       setFormData(prev => ({
         ...prev,
@@ -88,7 +90,7 @@ export default function BookingFlow() {
           : prev.doctor,
       }));
     }
-  }, [hospitalId, doctorId, hospitals, doctors]);
+  }, [doctorId, doctors]);
 
   const fetchDoctors = async (hId) => {
     try {
@@ -233,7 +235,8 @@ export default function BookingFlow() {
   }, []);
 
   return (
-    <div className="max-w-xl mx-auto p-6 bg-white shadow-lg rounded-xl mt-10">
+    <div className="py-20">
+    <div className="max-w-xl mx-auto p-6 bg-white shadow-lg rounded-xl mt-10 py-10 ">
       {/* Progress Steps */}
       <div className="flex justify-between mb-6">
         {["Booking Type", "Details", "Confirm"].map((label, i) => (
@@ -538,6 +541,7 @@ export default function BookingFlow() {
           </div>
         </div>
       )}
+    </div>
     </div>
   );
 }

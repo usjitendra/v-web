@@ -1,13 +1,69 @@
 // components/BlogSection.jsx
 import { Link } from "react-router-dom";
 import SectionHeading from "@/components/home/SectionHeading";
-import { useGetFeaturedBlogsQuery } from "../../rtk/slices/blogApiSlice";
+// import { useGetFeaturedBlogsQuery } from "../../rtk/slices/blogApiSlice";
 
 const BlogSection = () => {
-  // 🔹 Simple fetch — no language, no extra params
-  const { data, isLoading, isError } = useGetFeaturedBlogsQuery({ limit: 3 });
+  /* ===========================
+      STATIC BLOG DATA
+  ============================ */
+  const blogs = [
+    {
+      _id: "1",
+      title: "Understanding Mental Health in Modern Life",
+      slug: "understanding-mental-health",
+      excerpt:
+        "Mental health is just as important as physical health. Learn how to maintain balance in today’s fast-paced world.",
+      featuredImage:
+        "https://images.unsplash.com/photo-1526256262350-7da7584cf5eb",
+      categories: ["Mental Health"],
+      readTime: 5,
+      author: {
+        username: "Admin",
+      },
+      views: 120,
+      likeCount: 24,
+      publishedAt: "2024-10-10",
+    },
+    {
+      _id: "2",
+      title: "10 Daily Habits for a Healthier Lifestyle",
+      slug: "healthy-daily-habits",
+      excerpt:
+        "Small habits practiced daily can lead to a healthier and happier life. Here are 10 habits you should start today.",
+      featuredImage:
+        "https://images.unsplash.com/photo-1506126613408-eca07ce68773",
+      categories: ["Wellness"],
+      readTime: 4,
+      author: {
+        username: "Admin",
+      },
+      views: 98,
+      likeCount: 18,
+      publishedAt: "2024-10-05",
+    },
+    {
+      _id: "3",
+      title: "Why Preventive Healthcare Matters",
+      slug: "preventive-healthcare-matters",
+      excerpt:
+        "Preventive healthcare helps detect diseases early and improves long-term outcomes. Learn why it matters.",
+      featuredImage:
+        "https://images.unsplash.com/photo-1580281658629-63a51a34b7b6",
+      categories: ["Healthcare"],
+      readTime: 6,
+      author: {
+        username: "Admin",
+      },
+      views: 150,
+      likeCount: 30,
+      publishedAt: "2024-09-28",
+    },
+  ];
 
-  const blogs = data?.data || [];
+  // 🔹 Previously dynamic states (now fixed)
+  const isLoading = false;
+  const isError = false;
 
   const formatDate = (dateString) =>
     new Date(dateString).toLocaleDateString("en-US", {
@@ -71,9 +127,14 @@ const BlogSection = () => {
   return (
     <section className="py-16 bg-gray-50">
       <div className="container mx-auto px-4">
-        <div className="text-center mb-12">
+        {/* <div className="text-center mb-12">
           <SectionHeading title="blog" />
-        </div>
+        </div> */}
+
+
+             <h2 className="text-3xl font-bold text-gray-800 mb-4 text-center" >
+              Latest Blog Posts
+            </h2>
 
         {blogs.length === 0 ? (
           <div className="text-center py-12">

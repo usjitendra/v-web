@@ -4,7 +4,7 @@ import './ProcessFlow.css';
 import SectionHeading from './SectionHeading';
 
 export default function ProcessFlow() {
-  
+
   // Animation variants
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -43,24 +43,32 @@ export default function ProcessFlow() {
   return (
     <section className="bg-sectiondiv py-16">
       <div className="container mx-auto px-6 md:px-12">
-        <SectionHeading
+        {/* <SectionHeading
             center={true}
-            // title="Our Process"
-            // subtitle="Simple & Transparent"
-            // description="From initial consultation to post-treatment care, we guide you through every step of your medical journey"
+  
             title='process'
-          />
+          /> */}
+
+        <div className="text-center mb-12">
+          <h2 className="text-3xl md:text-4xl font-bold text-darktext mb-4">
+            Our WorkFlow
+          </h2>
+          <p className="text-lg text-lighttext max-w-3xl mx-auto">
+            Comprehensive care across advanced medical specialties with
+            world-class expertise.
+          </p>
+        </div>
 
         <div className="max-w-4xl mx-auto">
           <div className="relative">
             {/* Vertical timeline */}
-            <motion.div 
+            <motion.div
               className="absolute left-6 top-0 bottom-0 w-1 bg-blue-200 md:left-1/2 md:-ml-0.5"
               initial={{ scaleY: 0 }}
               animate={{ scaleY: 1 }}
               transition={{ duration: 1, delay: 0.3 }}
             />
-            
+
             <motion.div
               variants={containerVariants}
               initial="hidden"
@@ -68,30 +76,30 @@ export default function ProcessFlow() {
               viewport={{ once: true, margin: "-100px" }}
             >
               {processflow.map((item, index) => (
-                <motion.div 
-                  key={index} 
+                <motion.div
+                  key={index}
                   className={`flex items-center mb-8 ${index % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'}`}
                   variants={itemVariants}
                 >
                   {/* Timeline dot */}
-                  <motion.div 
+                  <motion.div
                     className="absolute left-4 md:left-1/2 md:-ml-3 w-6 h-6 rounded-full bg-blue-500 border-4 border-white z-10"
                     variants={dotVariants}
                     whileHover={{ scale: 1.2, backgroundColor: "#3b82f6" }}
                   />
-                  
+
                   {/* Content card */}
                   <div className={`ml-12 md:ml-0 md:w-5/12 ${index % 2 === 0 ? 'md:mr-auto md:pr-8' : 'md:ml-auto md:pl-8'}`}>
-                    <motion.div 
+                    <motion.div
                       className="bg-white rounded-xl shadow-md p-5 border-l-4 border-blue-500"
-                      whileHover={{ 
+                      whileHover={{
                         y: -5,
                         boxShadow: "0 10px 25px rgba(0, 0, 0, 0.1)",
                       }}
                       transition={{ type: "spring", stiffness: 300 }}
                     >
                       <div className="flex items-center mb-3">
-                        <motion.div 
+                        <motion.div
                           className="text-2xl mr-3"
                           whileHover={{ rotate: 10, scale: 1.2 }}
                           transition={{ type: "spring", stiffness: 200 }}

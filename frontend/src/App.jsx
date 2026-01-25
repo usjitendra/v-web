@@ -55,6 +55,8 @@ import HospitalListingPage from "./pages/Hospital/HospitalListing";
 import HospitalHome from "./pages/Hospital/HospitalHome";
 import DoctorDetailPage from "./pages/Doctor/DoctorDetailsPage/DoctorDetailPage";
 import HospitalDetailPage from "./pages/Hospital/HospitalDetailPage";
+import Host from "./pages/webrtc/Host";
+import Viewer from "./pages/webrtc/Viewer";
 
 /* ===== LAYOUTS ===== */
 const PublicLayout = () => (
@@ -97,14 +99,20 @@ export default function App() {
           <Route path="/treatments/:id" element={<TreatmentDetails />} />
           {/* <Route path="/hospitals" element={<Hospitals />} /> */}
           <Route path="/hospitals" element={<HospitalHome />} />
-          <Route path="/hospitals/detail" element={<HospitalDetailPage />} />
-          <Route path="/hospitals/:id" element={<HospitalDetails />} />
-          <Route path="/book" element={<BookingFlow />} />
+          <Route path="/hospital/:slug" element={<HospitalDetailPage />} />
+          {/* <Route path="/hospitals/:id" element={<HospitalDetails />} /> */}
+          <Route path="/book/:hospitalId?/:doctorId?" element={<BookingFlow />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/appointment" element={<Appointment />} />
           <Route path="/blog" element={<BlogListing />} />
           <Route path="/blog/:slug" element={<BlogDetail />} />
+          
+
+
+               <Route path="/host" element={<Host/>} />
+               <Route path="/view" element={<Viewer/>} />
+
         </Route>
 
         {/* ================= ADMIN ROUTES ================= */}

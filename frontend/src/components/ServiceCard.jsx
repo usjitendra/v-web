@@ -2,6 +2,7 @@
 import { motion } from "framer-motion";
 
 export default function ServiceCard({ service, index }) {
+    const Icon = service.icon; // 👈 IMPORTANT
   return (
     <div className="col " >
       <motion.div
@@ -35,12 +36,20 @@ export default function ServiceCard({ service, index }) {
             className="text-4xl text-emerald-600"
           >
             {/* {service.icon} */}
-            <img
+            {/* <img
               src={service.icon}
               // src="/uploads/treatments/treatments-1757530455157-82474118.svg"
               // alt={hospital.name}
               className="w-20 h-full object-cover  transition-transform duration-500 group-hover:scale-110"
-            />
+            /> */}
+                 <motion.div
+            whileHover={{ rotate: 10, scale: 1.2 }}
+            transition={{ type: "spring", stiffness: 200 }}
+            className={`flex items-center justify-center w-14 h-14 rounded-xl ${service.iconColor}`}
+          >
+            <Icon className="w-7 h-7 text-white" />
+          </motion.div>
+
           </motion.div>
           <div>
             <h3 className="text-md font-semibold text-gray-900">

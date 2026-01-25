@@ -19,76 +19,76 @@ const specialties = [
     icon: Heart,
     title: "Oncology",
     description: "Advanced cancer treatments with proven results.",
-    iconColor: "bg-blue-600",
+    iconColor: "bg-[#008080]",
   },
   {
     icon: Brain,
     title: "Neurosurgery",
     description:
       "The specialty of neurosurgical care includes both adult and pediatric patients.",
-    iconColor: "bg-blue-700",
+    iconColor: "bg-[#008080]",
   },
   {
     icon: Bone,
     title: "Spine Surgery",
     description: "Precision spine surgeries for better mobility.",
-    iconColor: "bg-blue-600",
+    iconColor: "bg-[#008080]",
   },
   {
     icon: Activity,
     title: "Cardiology",
     description: "World-class heart care for adults and children.",
-    iconColor: "bg-blue-700",
+    iconColor: "bg-[#008080]",
   },
   {
     icon: Bone,
     title: "Orthopedics",
     description:
       "Expert joint replacements and bone deformities solutions.",
-    iconColor: "bg-blue-600",
+    iconColor: "bg-[#008080]",
   },
   {
     icon: Baby,
     title: "IVF",
     description: "Leading fertility treatments with high success.",
-    iconColor: "bg-blue-700",
+    iconColor: "bg-[#008080]",
   },
   {
     icon: User,
     title: "Gynecology",
     description: "Specialized women's health services.",
-    iconColor: "bg-blue-600",
+    iconColor: "bg-[#008080]",
   },
   {
     icon: User,
     title: "Cosmetic",
     description: "Aesthetic procedures for a new you.",
-    iconColor: "bg-blue-700",
+    iconColor: "bg-[#008080]",
   },
   {
     icon: Scale,
     title: "Weight Loss",
     description: "Effective bariatric surgery options.",
-    iconColor: "bg-blue-600",
+    iconColor: "bg-[#008080]",
   },
   {
     icon: Hospital,
     title: "Liver Transplant",
     description: "Liver transplant procedures of varying complexity.",
-    iconColor: "bg-blue-700",
+    iconColor: "bg-[#008080]",
   },
   {
     icon: Droplet,
     title: "Kidney Transplant",
     description: "Expert renal care and transplants.",
-    iconColor: "bg-blue-600",
+    iconColor: "bg-[#008080]",
   },
   {
     icon: Bone,
     title: "Bone Marrow",
     description:
       "Bone marrow transplant options for matched and non-matched donors.",
-    iconColor: "bg-blue-700",
+    iconColor: "bg-[#008080]",
   },
 ];
 
