@@ -28,36 +28,37 @@ export default function Home() {
   return (
     <div>
       <SEOHead pageType="home" />
-      {/* <Hero /> */}
-      <HeroSection/>
-      <HomeAbout/>
+      <Hero />
+         <Stats />
+      {/* <HeroSection/> */}
+      {/* <HomeAbout/> */}
 
       {/* Services */}
 {/*
       <Stats /> */}
 
-      {/* <Services /> */}
+      <Services />
 
-      <MultiSpecialtyFocus/>
+      {/* <MultiSpecialtyFocus/> */}
 
       {/* <MultiSpecialtyFocusApi/> */}
 
       <Feature/>
 
-      {/* <HospitalCarousel /> */}
+      <HospitalCarousel />
 
-      <ServicesSection/>
+      {/* <ServicesSection/> */}
 
       <HowWeWork/>
       <WhyWe/>
 
-      {/* <ProcedureCost /> */}
-      {/* <WhatsAppButton /> */}
+      <ProcedureCost />
+      <WhatsAppButton />
 
-      {/* <ProcessFlow /> */}
-      {/* <WhatsAppButton /> */}
-      {/* <OurServices /> */}
-      {/* <WhatsAppButton /> */}
+      <ProcessFlow />
+      <WhatsAppButton />
+      <OurServices />
+      <WhatsAppButton/>
       <PatientOpinions />
 
       {/* <Blog /> */}

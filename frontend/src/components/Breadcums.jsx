@@ -6,7 +6,7 @@ const BreadCrumbs = ({ items, headText }) => {
 
   console.log("ssss")
   return (
-    <div className="bg-white py-4 px-6 rounded-lg border border-b-2  ">
+    <div className="bg-white py-4 px-6 pt-20 rounded-lg border border-b-2  ">
       {/* Heading */}
       <h1 className="text-xl font-semibold text-gray-800 mb-2">{headText}</h1>
 

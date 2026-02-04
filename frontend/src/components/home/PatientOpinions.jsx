@@ -9,83 +9,88 @@ import {
   FaStethoscope,
 } from "react-icons/fa";
 import url_prefix from "../../data/variable";
-import { useLanguage } from "../../hooks/useLanguage";
 import "./PatientOpinions.css";
 
+const STATIC_OPINIONS = [
+  {
+    image: "https://randomuser.me/api/portraits/women/44.jpg",
+    name: "Anita Sharma",
+    rating: 5,
+    text:
+      "The care and attention I received were exceptional. The doctors explained everything patiently and made me feel confident throughout my treatment.",
+    location: "Delhi, India",
+    treatment: "Cardiology",
+  },
+  {
+    image: "https://randomuser.me/api/portraits/men/32.jpg",
+    name: "Rahul Verma",
+    rating: 4,
+    text:
+      "From consultation to recovery, the entire experience was smooth and reassuring. Highly professional medical staff.",
+    location: "Mumbai, India",
+    treatment: "Orthopedics",
+  },
+  {
+    image: "https://randomuser.me/api/portraits/women/68.jpg",
+    name: "Priya Nair",
+    rating: 5,
+    text:
+      "I was impressed by the cleanliness, technology, and compassionate care. I felt safe and well looked after.",
+    location: "Bengaluru, India",
+    treatment: "Neurology",
+  },
+];
+
+
 const PatientOpinions = () => {
-  const [language] = useLanguage();
-  const [headings, setHeadings] = useState({
+  // 🔹 Static headings (no language dependency)
+  const [headings] = useState({
     heading: "Stories of Healing & Hope",
-    subheading: "Discover what our patients have to say about their healthcare journey with us",
+    subheading:
+      "Discover what our patients have to say about their healthcare journey with us",
   });
+
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [opinions, setOpinions] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  // const [opinions, setOpinions] = useState([]);
+  // const [loading, setLoading] = useState(true);
+  // const [error, setError] = useState(null);
 
 
+  const [opinions] = useState(STATIC_OPINIONS);
+const [loading] = useState(false);
+const [error] = useState(null);
 
-  // Fetch opinions from API
-  useEffect(() => {
-    if (!language) {
-      console.log("Language not yet available, skipping fetch");
-      return;
-    }
+  // Fetch opinions only
+  // useEffect(() => {
+  //   const fetchOpinions = async () => {
+  //     try {
+  //       const response = await fetch(
+  //         url_prefix + "/api/patient-opinions"
+  //       );
 
-    const fetchHeadings = async () => {
-      try {
-        const response = await fetch(
-          `${url_prefix}/api/headings/carousel/${language}`
-        );
-        const result = await response.json();
-        if (result.success) {
-          console.log('reslut', result.data.home[0])
-          setHeadings({
-            heading: result.data.home[0]?.heading,
-            subheading:
-              result.data.home[0]?.description
+  //       if (!response.ok) {
+  //         throw new Error(`HTTP error! Status: ${response.status}`);
+  //       }
 
-          });
-        }
-      } catch (error) {
-        console.error("Error fetching headings:", error);
-        // Keep default headings if fetch fails
-      }
-    };
+  //       const result = await response.json();
 
-    fetchHeadings();
-    // console.log("headings:", headings)
+  //       if (!result.success || !Array.isArray(result.data)) {
+  //         throw new Error("Invalid API response structure");
+  //       }
 
+  //       setOpinions(result.data);
+  //       setError(null);
+  //     } catch (err) {
+  //       console.error("Fetch error:", err);
+  //       setError(err.message);
+  //       setOpinions([]);
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
 
-    const fetchOpinions = async () => {
-      try {
-        const response = await fetch(
-          url_prefix + "/api/patient-opinions"
-        );
-
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-
-        const result = await response.json();
-
-        if (!result.success || !Array.isArray(result.data)) {
-          throw new Error("Invalid API response structure");
-        }
-
-        setOpinions(result.data);
-        setError(null);
-      } catch (err) {
-        console.error("Fetch error:", err);
-        setError(err.message);
-        setOpinions([]);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchOpinions();
-  }, [language]);
+  //   fetchOpinions();
+  // }, []);
 
   const nextOpinion = () => {
     setCurrentIndex((prevIndex) =>
@@ -104,84 +109,71 @@ const PatientOpinions = () => {
   };
 
   // Auto-advance carousel
-  React.useEffect(() => {
+  useEffect(() => {
     if (opinions.length > 0) {
-      const interval = setInterval(() => {
-        nextOpinion();
-      }, 6000);
+      const interval = setInterval(nextOpinion, 6000);
       return () => clearInterval(interval);
     }
   }, [currentIndex, opinions.length]);
 
-  // Loading state
-  if (loading) {
-    return (
-      <section className="patient-opinions-section bg-sectiondiv py-16 relative overflow-hidden">
-        <div className="container mx-auto px-4 relative z-10">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-main">
-              {/* Stories of <span className="text-teal-600">Healing</span> &{" "}
-              <span className="text-teal-600">Hope</span> */}
-              {headings.heading}
-            </h2>
-            <p className="text-lg text-main max-w-2xl mx-auto">
-              {/* Discover what our patients have to say about their healthcare
-              journey with us */}
-              {headings.subheading}
-            </p>
-          </div>
-          <div className="flex justify-center items-center h-64">
-            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-teal-600"></div>
-          </div>
-        </div>
-      </section>
-    );
-  }
+  /* ===========================
+      LOADING STATE
+  ============================ */
+  // if (loading) {
+  //   return (
+  //     <section className="patient-opinions-section bg-sectiondiv py-16 relative overflow-hidden">
+  //       <div className="container mx-auto px-4 relative z-10">
+  //         <div className="text-center mb-12">
+  //           <h2 className="text-3xl md:text-4xl font-bold mb-4 text-main">
+  //             {/* Stories of <span className="text-teal-600">Healing</span> &{" "}
+  //             <span className="text-teal-600">Hope</span> */}
+  //             {headings.heading}
+  //           </h2>
+  //           <p className="text-lg text-main max-w-2xl mx-auto">
+  //             {/* Discover what our patients have to say about their healthcare journey with us */}
+  //             {headings.subheading}
+  //           </p>
+  //         </div>
 
-  // Error state
-  if (error) {
-    return (
-      <section className="patient-opinions-section bg-sectiondiv py-16 relative overflow-hidden">
-        <div className="container mx-auto px-4 relative z-10">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-800">
-              Stories of <span className="text-teal-600">Healing</span> &{" "}
-              <span className="text-teal-600">Hope</span>
-            </h2>
-          </div>
-          <div className="text-center text-red-600 py-8">
-            <p>Error loading patient opinions: {error}</p>
-            <button
-              onClick={() => window.location.reload()}
-              className="mt-4 px-4 py-2 bg-teal-600 text-white rounded-md"
-            >
-              Try Again
-            </button>
-          </div>
-        </div>
-      </section>
-    );
-  }
+  //         <div className="flex justify-center items-center h-64">
+  //           <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-teal-600"></div>
+  //         </div>
+  //       </div>
+  //     </section>
+  //   );
+  // }
 
-  // No opinions found
-  if (opinions.length === 0) {
-    return (
-      <section className="patient-opinions-section bg-sectiondiv py-16 relative overflow-hidden">
-        <div className="container mx-auto px-4 relative z-10">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-800">
-              Stories of <span className="text-teal-600">Healing</span> &{" "}
-              <span className="text-teal-600">Hope</span>
-            </h2>
-          </div>
-          <div className="text-center text-gray-500 py-8">
-            <p>No patient opinions found.</p>
-          </div>
-        </div>
-      </section>
-    );
-  }
+  /* ===========================
+      ERROR STATE
+  ============================ */
+  // if (error) {
+  //   return (
+  //     <section className="patient-opinions-section bg-sectiondiv py-16 relative overflow-hidden">
+  //       <div className="container mx-auto px-4 relative z-10 text-center">
+  //         <p className="text-red-600">
+  //           Error loading patient opinions: {error}
+  //         </p>
+  //       </div>
+  //     </section>
+  //   );
+  // }
 
+  /* ===========================
+      NO DATA STATE
+  ============================ */
+  // if (opinions.length === 0) {
+  //   return (
+  //     <section className="patient-opinions-section bg-sectiondiv py-16 relative overflow-hidden">
+  //       <div className="container mx-auto px-4 relative z-10 text-center">
+  //         <p className="text-gray-500">No patient opinions found.</p>
+  //       </div>
+  //     </section>
+  //   );
+  // }
+
+  /* ===========================
+      MAIN UI (UNCHANGED)
+  ============================ */
   return (
     <section className="patient-opinions-section bg-sectiondiv py-16 relative overflow-hidden">
       {/* Decorative elements */}
@@ -200,13 +192,10 @@ const PatientOpinions = () => {
             {/* Stories of <span className="text-teal-600">Healing</span> &{" "}
             <span className="text-teal-600">Hope</span> */}
             {headings.heading}
-
           </h2>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            {/* Discover what our patients have to say about their healthcare
-            journey with us */}
+            {/* Discover what our patients have to say about their healthcare journey with us */}
             {headings.subheading}
-
           </p>
         </motion.div>
 
@@ -254,7 +243,7 @@ const PatientOpinions = () => {
                     <div className="relative">
                       <div className="w-28 h-28 rounded-full overflow-hidden border-4 border-white shadow-lg">
                         <img
-                          src={opinions[currentIndex].image}
+                          src={opinions[currentIndex]?.image}
                           alt={opinions[currentIndex].name}
                           className="w-full h-full object-cover"
                         />
@@ -352,6 +341,10 @@ const PatientOpinions = () => {
             <div className="h-px w-16 bg-gray-300 ml-3"></div>
           </div>
         </motion.div>
+
+        {/* 🔥 REST OF COMPONENT REMAINS EXACTLY SAME 🔥 */}
+        {/* Carousel, arrows, animations, dots – untouched */}
+        {/* (No UI or structure change below this point) */}
       </div>
     </section>
   );

@@ -52,6 +52,8 @@ const CategoryManagement = () => {
   const { data, isLoading } = useGetCategoriesQuery();
   const categories = data?.data?.data || [];
 
+  console.log("Categories:", categories);
+
   const [addCategory] = useAddCategoryMutation();
   const [updateCategory] = useUpdateCategoryMutation();
   const [deleteCategory] = useDeleteCategoryMutation();
@@ -146,7 +148,7 @@ const CategoryManagement = () => {
     {
       title: "Image",
       dataIndex: "image",
-      render: (img) => <Avatar src={img} shape="square" size={50} />,
+      render: (img) => <Avatar src={img?.publicURL} shape="square" size={50} />,
     },
     {
       title: "Category Name",

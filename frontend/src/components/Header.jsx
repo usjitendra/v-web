@@ -1,173 +1,199 @@
-import React, { useEffect, useState } from 'react';
-import { Menu, X, Search, ChevronDown, Globe } from 'lucide-react';
-import { Link } from 'react-router-dom';
-import { useGetCountryCategoryDropdownQuery, useGetLanguageDropdownQuery } from '@/rtk/slices/dropdownApiSlice';
+import React, { useEffect, useState } from "react";
+import { motion } from "framer-motion";
+import { Menu, X, ChevronDown, Globe } from "lucide-react";
+import { Link, NavLink } from "react-router-dom";
 
-const Header = () => {
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [activeDropdown, setActiveDropdown] = useState(null);
+import {
+  useGetCountryCategoryDropdownQuery,
+  useGetLanguageDropdownQuery,
+} from "@/rtk/slices/dropdownApiSlice";
+
+const Header2 = () => {
+  const [scrolled, setScrolled] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
   const [hoverCountry, setHoverCountry] = useState(null);
+  const [activeCountry, setActiveCountry] = useState(null);
 
+
+  /* ================= API ================= */
   const { data } = useGetCountryCategoryDropdownQuery();
   const { data: languageData } = useGetLanguageDropdownQuery();
 
   const countries = data?.data?.result || [];
+
+  console.log("Countries Data:", countries);
   const languages = languageData?.data || [];
 
   useEffect(() => {
     if (countries.length) {
       setHoverCountry(countries[0]);
+      setActiveCountry(null);
     }
   }, [countries]);
 
+
+  /* ================= Scroll Effect ================= */
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 40);
+    window.addEventListener("scroll", onScroll);
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  /* ================= Nav ================= */
   const navItems = [
-    { id: 1, label: 'Home', path: '/', hasDropdown: false },
-    { id: 2, label: 'Hospitals', path: '/hospitals', hasDropdown: true },
-    { id: 3, label: 'Doctors', path: '/doctors', hasDropdown: true },
-    { id: 4, label: 'Cost', path: '/cost', hasDropdown: true },
-    { id: 5, label: 'Knowledge', path: '/knowledge', hasDropdown: true },
-    { id: 6, label: 'Patient Stories', path: '/patient-stories', hasDropdown: false },
-    { id: 7, label: 'FREE Consult', path: '/free-consult', hasDropdown: false }
+    { label: "Home", path: "/" },
+    { label: "Hospitals", path: "/hospitals", mega: true },
+    { label: "Doctors", path: "/doctors", mega: true },
+    { label: "Cost", path: "/cost" },
+    { label: "Knowledge", path: "/knowledge" },
+    { label: "Patient Stories", path: "/patient-stories" },
   ];
 
-  const toggleDropdown = (id) => {
-    setActiveDropdown(activeDropdown === id ? null : id);
-  };
-
+  /* ================= UI ================= */
   return (
-    <header className="w-full shadow-md">
-      {/* Top Blue Bar */}
+    <motion.header
+      initial={false}
+      animate={{
+        backgroundColor: scrolled
+          ? "rgba(255,255,255,0.96)"
+          : "rgba(228,244,242,0.55)",
+        boxShadow: scrolled ? "0 4px 18px rgba(0,0,0,0.08)" : "none",
+      }}
+      transition={{ duration: 0.25 }}
+      className="fixed w-full z-[900]"
+    >
+      <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
+        {/* ================= Logo ================= */}
+        <Link to="/" className="flex items-center gap-3">
+          <div className="w-10 h-10 bg-teal-600 text-white rounded-md flex items-center justify-center font-bold">
+            V
+          </div>
+          <div className="hidden sm:block font-semibold">
+            Vaidam <span className="text-gray-500 font-normal">Medical</span>
+          </div>
+        </Link>
 
-      <div className="bg-gradient-to-r from-teal-600 to-teal-700 text-white">
-        <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
+        {/* ================= Desktop Menu ================= */}
+        <nav className="hidden md:flex items-center gap-6">
+          {navItems.map((item) => (
+            <div key={item.label} className="relative group">
+              <NavLink
+                to={item.path}
+                className="flex items-center gap-1 text-gray-800 font-medium hover:text-teal-600"
+              >
+                {item.label}
+                {item.mega && <ChevronDown size={14} />}
+              </NavLink>
 
-          {/* Logo Section */}
-          <Link to="/" className="flex items-center space-x-3">
-            <div className="flex items-center">
-              <div className="bg-white rounded-full p-2 w-12 h-12 flex items-center justify-center">
-                <div className="w-8 h-8 bg-teal-600 rounded-full flex items-center justify-center">
-                  <div className="w-4 h-4 bg-white rounded-full"></div>
+              {/* ===== Mega Menu ===== */}
+              {item.mega && (
+                <div className="hidden group-hover:flex absolute top-full left-0 bg-white shadow-xl border rounded-md z-50">
+                  {/* Countries */}
+                  <div className="min-w-[220px] border-r">
+                    {countries.map((country) => (
+                      <div
+                        key={country.countryId}
+                        onMouseEnter={() => {
+                          setHoverCountry(country);
+                          setActiveCountry(null);
+                        }}
+                        onClick={() => setActiveCountry(country)}
+                        className="px-4 py-2 cursor-pointer hover:bg-blue-50 flex justify-between"
+                      >
+                        <span>{country.countryName}</span>
+                        <ChevronDown className="-rotate-90 w-4 h-4" />
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Categories */}
+                  {activeCountry && (
+                    <div className="min-w-[240px] bg-gray-50">
+                      {activeCountry.categories.map((cat) => (
+                        <Link
+                          key={cat.categoryId}
+                          to={
+                            item.label === "Doctors"
+                              ? `/doctors?country=${activeCountry.slugName}&category=${cat.slugName}`
+                              : `/hospitals?country=${activeCountry.slugName}&category=${cat.slugName}`
+                          }
+                          className="block px-4 py-2 hover:bg-blue-100 text-gray-700"
+                        >
+                          {cat.categoryName}
+                        </Link>
+                      ))}
+                    </div>
+                  )}
+
                 </div>
-              </div>
+              )}
             </div>
-            <div className="text-left">
-              <h1 className="text-xl font-bold tracking-wide text-white">Vaidam.com</h1>
-              <p className="text-xs tracking-wider uppercase text-white">For Medical Procedures</p>
-            </div>
-          </Link>
+          ))}
+        </nav>
 
-          {/* Search Bar */}
-          <div className="hidden md:flex flex-1 max-w-xl mx-8">
-            <div className="relative w-full">
-              <input
-                type="text"
-                placeholder="Search doctors, hospitals, treatments..."
-                className="w-full px-4 py-2 pr-12 rounded-full text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-400"
-              />
-              <button className="absolute right-2 top-[10%] -translate-y-1/2 bg-teal-600 p-2 rounded-full hover:bg-blue-700 transition">
-                <Search className="w-4 h-4 text-white" />
-              </button>
+        {/* ================= Right Section ================= */}
+        <div className="hidden md:flex items-center gap-4">
+          {/* Language */}
+          <div className="relative group">
+            <button className="flex items-center gap-1 text-gray-700">
+              <Globe size={16} />
+              Language
+              <ChevronDown size={14} />
+            </button>
+
+            <div className="hidden group-hover:block absolute right-0 top-full bg-white shadow-md rounded-md min-w-[150px] z-50">
+              {languages.map((lang, idx) => (
+                <div
+                  key={idx}
+                  className="px-4 py-2 hover:bg-blue-50 cursor-pointer"
+                >
+                  {lang.language_name}
+                </div>
+              ))}
             </div>
           </div>
 
-          <button className="hidden lg:block bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded font-semibold transition whitespace-nowrap">
-            Get a FREE quote
-          </button>
-
-          <button
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="md:hidden text-white p-2"
+          {/* CTA */}
+          <Link
+            to="/free-consult"
+            className="px-5 py-2 rounded-full bg-gradient-to-r from-teal-600 to-teal-500 text-white font-semibold shadow hover:scale-105 transition"
           >
-            {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-          </button>
+            Get Free Quote
+          </Link>
         </div>
+
+        {/* ================= Mobile Button ================= */}
+        <button
+          onClick={() => setMobileOpen(!mobileOpen)}
+          className="md:hidden"
+        >
+          {mobileOpen ? <X /> : <Menu />}
+        </button>
       </div>
 
-      {/* Navigation */}
-      <nav className="bg-blue-200">
-        <div className="hidden md:block max-w-7xl mx-auto px-4">
-          <ul className="flex items-center space-x-1">
-
-            {navItems.map((item) => (
-              <li key={item.id} className="relative group">
-                <Link
-                  to={item.path}
-                  className="flex items-center space-x-1 px-4 py-3 text-gray-800 hover:bg-blue-300 transition font-medium text-sm"
-                >
-                  <span>{item.label}</span>
-                  {item.hasDropdown && <ChevronDown className="w-4 h-4" />}
-                </Link>
-
-                {(item.label === "Hospitals" || item.label === "Doctors") && (
-                  <div className="hidden group-hover:block absolute top-full left-0 bg-white shadow-lg rounded-b z-50">
-
-                    <div className="relative flex">
-
-                      {/* Countries */}
-                      <div className="min-w-52 border-r bg-white">
-                        {countries.map((country) => (
-                          <div
-                            key={country.countryId}
-                            onMouseEnter={() => setHoverCountry(country)}
-                            className="flex items-center justify-between px-4 py-2 cursor-pointer hover:bg-blue-50"
-                          >
-                            <span className="text-gray-800">{country.countryName}</span>
-                            <ChevronDown className="w-4 h-4 -rotate-90" />
-                          </div>
-                        ))}
-                      </div>
-
-                      {/* Categories */}
-                      {hoverCountry && (
-                        <div className="absolute top-0 left-full min-w-60 bg-gray-50">
-                          {hoverCountry.categories.map((cat) => (
-                            <Link
-                              key={cat.categoryId}
-                              to={
-                                item.label === "Doctors"
-                                  ? `/doctors?country=${hoverCountry.slugName}&category=${cat.slugName}`
-                                  : `/hospitals?country=${hoverCountry.slugName}&category=${cat.slugName}`
-                              }
-                              className="block px-4 py-2 text-gray-700 hover:bg-blue-100 whitespace-nowrap"
-                            >
-                              {cat.categoryName}
-                            </Link>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                )}
-              </li>
-            ))}
-
-            {/* Language */}
-            <li className="ml-auto relative group">
-              <button className="flex items-center space-x-2 px-4 py-3 text-gray-800 hover:bg-blue-300 transition">
-                <Globe className="w-4 h-4" />
-                <span className="text-sm font-medium">Select Language</span>
-                <ChevronDown className="w-4 h-4" />
-              </button>
-
-              <div className="hidden group-hover:block absolute top-full right-0 bg-white shadow-lg rounded-b min-w-40 z-50">
-                {languages.map((lang, idx) => (
-                  <a
-                    key={idx}
-                    href="#"
-                    className="block px-4 py-2 text-gray-700 hover:bg-blue-50 transition"
-                  >
-                    {lang?.language_name}
-                  </a>
-                ))}
-              </div>
-            </li>
-
-          </ul>
+      {/* ================= Mobile Menu ================= */}
+      {mobileOpen && (
+        <div className="md:hidden bg-white border-t px-4 py-4 space-y-3">
+          {navItems.map((item) => (
+            <NavLink
+              key={item.label}
+              to={item.path}
+              onClick={() => setMobileOpen(false)}
+              className="block text-gray-800 font-medium"
+            >
+              {item.label}
+            </NavLink>
+          ))}
+          <Link
+            to="/free-consult"
+            className="block text-center bg-teal-600 text-white py-2 rounded"
+          >
+            Get Free Quote
+          </Link>
         </div>
-      </nav>
-
-    </header>
+      )}
+    </motion.header>
   );
 };
 
-export default Header;
+export default Header2;

@@ -132,7 +132,7 @@ const HospitalDetailPage = () => {
   };
 
 
-    const breadcrumbItems = [
+  const breadcrumbItems = [
     { label: 'Home', href: '/' },
     // { label: 'About ASTITVA CLINIC ' },
     { label: 'About Us' }
@@ -174,7 +174,7 @@ const HospitalDetailPage = () => {
 
               <div className="flex items-center gap-6">
                 <div className="flex items-center gap-2">
-                  {[1,2,3,4].map(i => <Star key={i} className="w-6 h-6 fill-yellow-400 text-yellow-400" />)}
+                  {[1, 2, 3, 4].map(i => <Star key={i} className="w-6 h-6 fill-yellow-400 text-yellow-400" />)}
                   <Star className="w-6 h-6 text-yellow-400" />
                 </div>
                 <span className="text-xl font-bold">4.8 (69 Ratings)</span>
@@ -398,7 +398,7 @@ const HospitalDetailPage = () => {
                     type="text"
                     placeholder="Patient Name"
                     value={formData.name}
-                    onChange={(e) => setFormData({...formData, name: e.target.value})}
+                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                     className="w-full px-4 py-4 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-white/50 focus:bg-white/20 transition-all duration-300"
                     required
                   />
@@ -407,7 +407,7 @@ const HospitalDetailPage = () => {
                 <div className="relative">
                   <select
                     value={formData.country}
-                    onChange={(e) => setFormData({...formData, country: e.target.value})}
+                    onChange={(e) => setFormData({ ...formData, country: e.target.value })}
                     className="w-full px-4 py-4 bg-white/10 border border-white/20 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-white/50 focus:bg-white/20 transition-all duration-300"
                   >
                     <option className="text-darktext">India</option>
@@ -423,7 +423,7 @@ const HospitalDetailPage = () => {
                     type="text"
                     placeholder="Select City"
                     value={formData.city}
-                    onChange={(e) => setFormData({...formData, city: e.target.value})}
+                    onChange={(e) => setFormData({ ...formData, city: e.target.value })}
                     className="w-full px-4 py-4 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-white/50 focus:bg-white/20 transition-all duration-300"
                     required
                   />
@@ -443,7 +443,7 @@ const HospitalDetailPage = () => {
                       type="tel"
                       placeholder="Your Phone number"
                       value={formData.phone}
-                      onChange={(e) => setFormData({...formData, phone: e.target.value})}
+                      onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                       className="w-full px-4 py-4 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-white/50 focus:bg-white/20 transition-all duration-300"
                       required
                     />
@@ -454,7 +454,7 @@ const HospitalDetailPage = () => {
                   <textarea
                     placeholder="Describe The Current Medical Problem"
                     value={formData.problem}
-                    onChange={(e) => setFormData({...formData, problem: e.target.value})}
+                    onChange={(e) => setFormData({ ...formData, problem: e.target.value })}
                     rows="4"
                     className="w-full px-4 py-4 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-white/50 focus:bg-white/20 transition-all duration-300 resize-none"
                     required
@@ -466,7 +466,7 @@ const HospitalDetailPage = () => {
                     type="text"
                     placeholder="Example: 30 Yrs or 29-05-1985"
                     value={formData.age}
-                    onChange={(e) => setFormData({...formData, age: e.target.value})}
+                    onChange={(e) => setFormData({ ...formData, age: e.target.value })}
                     className="w-full px-4 py-4 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-white/50 focus:bg-white/20 transition-all duration-300"
                     required
                   />

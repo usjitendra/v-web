@@ -22,7 +22,7 @@ const PORT = process.env.PORT || 6003;
 app.use(cors({
   origin: [
     "http://localhost:3000",
-    "http://localhost:5173",
+    "http://localhost:5174",
 
     // Active frontend domains
     "https://v-web-five.vercel.app",
