@@ -8,7 +8,9 @@ import { Loader } from 'lucide-react';
 const HospitalList = () => {
     const [page, setPage] = useState(1);
     const [limit, setLimit] = useState(10);
-    const { data, isLoading, error } = useGetHospitalsQuery({ page, limit });
+    const { data, isLoading, error, refetch } = useGetHospitalsQuery({ page, limit }, {
+        refetchOnMountOrArgChange: true,
+    });
     const [updateHospital, { isLoading: isUpdating }] = useUpdateHospitalMutation();
     const [deleteHospital, { isLoading: isDeleting }] = useDeleteHospitalMutation();
     const navigate = useNavigate();
