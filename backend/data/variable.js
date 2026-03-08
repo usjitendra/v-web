@@ -2,4 +2,4 @@
 const url_prefix = 'https://v-web-frontend-s8pe.vercel.app';
 
 
-export default url_prefix
+module.exports = url_prefix;

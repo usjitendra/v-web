@@ -14,7 +14,7 @@ const axiosBaseQuery = async ({
       data,
       params,
       headers: {
-        "x-system-key": "your_system_key_here",
+        // Use the system key from axiosInstance, don't override
         ...headers,
       },
       withCredentials: true,

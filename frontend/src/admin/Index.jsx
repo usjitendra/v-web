@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { Outlet } from "react-router-dom";
 import Sidebar from "./components/SideBar";
 import DashboardHeader from "./components/DashboardNavBar";
-import WindowHeader from "./components/WindowHeader";
 
 const AdminDashboard = () => {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(true);
@@ -27,33 +26,29 @@ const AdminDashboard = () => {
   }, []);
 
   return (
-    <>
-      <WindowHeader />
+    <div className="flex min-h-screen font-Poppins w-full montserrat">
+      <div
+        className={`fixed inset-y-0 z-50 w-64 md:w-56 xl:w-64 transform bg-white shadow-lg transition-transform duration-300 ease-in-out 
+        ${sidebarCollapsed ? "-translate-x-full" : "translate-x-0"} 
+        md:translate-x-0 md:relative`}
+      >
+        <Sidebar
+          sidebarCollapsed={sidebarCollapsed}
+          toggleSidebar={toggleSidebar}
+        />
+      </div>
 
-      <div className="flex  min-h-screen  font-Poppins w-full montserrat ">
-        <div
-          className={`fixed inset-y-0  z-50 w-64 md:w-56 xl:w-64  transform bg-white shadow-lg transition-transform duration-300 ease-in-out 
-          ${sidebarCollapsed ? "-translate-x-full" : "translate-x-0"} 
-          md:translate-x-0 md:relative`}
-        >
-          <Sidebar
-            sidebarCollapsed={sidebarCollapsed}
-            toggleSidebar={toggleSidebar}
-          />
-        </div>
+      {!sidebarCollapsed && (
+        <div className="fixed inset-0 md:hidden" onClick={toggleSidebar} />
+      )}
 
-        {!sidebarCollapsed && (
-          <div className="fixed inset-0  md:hidden" onClick={toggleSidebar} />
-        )}
-
-        <div className="flex flex-col flex-1 ml-0 transition-all duration-300 ease-in-out overflow-hidden">
-          <DashboardHeader toggleSidebar={toggleSidebar} />
-          <div className="  h-full overflow-y-auto min-h-screen bg-lightBlue ">
-            <Outlet />
-          </div>
+      <div className="flex flex-col flex-1 ml-0 transition-all duration-300 ease-in-out overflow-hidden">
+        <DashboardHeader toggleSidebar={toggleSidebar} />
+        <div className="h-full overflow-y-auto min-h-screen bg-lightBlue">
+          <Outlet />
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

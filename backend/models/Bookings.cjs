@@ -97,6 +97,24 @@ const bookingSchema = new mongoose.Schema({
         respondedAt: Date
     },
 
+    // Cancellation details
+    cancelledAt: {
+        type: Date
+    },
+    cancelReason: {
+        type: String,
+        trim: true
+    },
+
+    // Rescheduling details
+    rescheduledAt: {
+        type: Date
+    },
+    rescheduleReason: {
+        type: String,
+        trim: true
+    },
+
     // Timestamps
     createdAt: {
         type: Date,

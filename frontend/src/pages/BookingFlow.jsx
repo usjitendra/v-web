@@ -1,17 +1,33 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import url_prefix from "../data/variable";
+import { useGetHospitalsQuery } from "../rtk/slices/hospitalApiSlice";
+import { useGetDoctorsQuery } from "../rtk/slices/doctorApi";
+import { useCreateBookingMutation } from "../rtk/slices/bookingApiSlice";
 
 export default function BookingFlow() {
   const { hospitalId, doctorId } = useParams();
   const navigate = useNavigate();
+
+  // RTK Query hooks for fetching data
+  const { data: hospitalsData, isLoading: hospitalsLoading, error: hospitalsError } = useGetHospitalsQuery({ limit: 10000 });
+  const { data: doctorsData, isLoading: doctorsLoading, error: doctorsError } = useGetDoctorsQuery({
+    limit: 10000,
+    hospital: hospitalId || undefined
+  });
+  const [createBooking, { isLoading: bookingLoading, error: bookingError }] = useCreateBookingMutation();
+
+
+  console.log("hosr",hospitalsData);
+  console.log("doct",doctorsData);
+  
   
   const [step, setStep] = useState(1);
-  const [loading, setLoading] = useState(false);
-  const [hospitals, setHospitals] = useState([]);
-  const [doctors, setDoctors] = useState([]);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [patientData, setPatientData] = useState(null);
+
+  // Get data from RTK Query
+  const hospitals = hospitalsData?.data?.data || [];
+  const doctors = doctorsData?.data?.data || [];
   const [bookingType, setBookingType] = useState(""); // "appointment" or "query"
   const [formData, setFormData] = useState({
     name: "",
@@ -47,29 +63,10 @@ export default function BookingFlow() {
     }
   }, []);
 
-  // Fetch hospitals and doctors
-  useEffect(() => {
-    const fetchHospitalsAndDoctors = async () => {
-      try {
-        // Fetch hospitals
-        const hospitalsResponse = await fetch(url_prefix + '/api/hospitals/all?limit=10000');
-        const hospitalsResult = await hospitalsResponse.json();
-        if (hospitalsResult.success) {
-          setHospitals(hospitalsResult.data);
-        }
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
-
-    fetchHospitalsAndDoctors();
-  }, []);
+  // RTK Query automatically fetches hospitals and doctors
 
   useEffect(() => {
     if (hospitalId && hospitals.length > 0) {
-      // Fetch doctors for the pre-filled hospital
-      fetchDoctors(hospitalId);
-
       const selectedHospital = hospitals.find(h => h._id === hospitalId);
       setFormData(prev => ({
         ...prev,
@@ -85,25 +82,11 @@ export default function BookingFlow() {
       setFormData(prev => ({
         ...prev,
         doctorId,
-        doctor: selectedDoctor
-          ? `${selectedDoctor.firstName} ${selectedDoctor.lastName}`
-          : prev.doctor,
+        doctor: selectedDoctor ? selectedDoctor.name : prev.doctor,
       }));
     }
   }, [doctorId, doctors]);
 
-  const fetchDoctors = async (hId) => {
-    try {
-      const doctorsResponse = await fetch(`${url_prefix}/api/doctors/hospital/${hId}`);
-      const doctorsResult = await doctorsResponse.json();
-      if (doctorsResult.success) {
-        setDoctors(doctorsResult.data);
-      }
-      setLoading(false);
-    } catch (error) {
-      console.error('Error fetching data:', error);
-    }
-  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -114,12 +97,12 @@ export default function BookingFlow() {
   const handleHospitalChange = (e) => {
     const hospitalId = e.target.value;
     const selectedHospital = hospitals.find(h => h._id === hospitalId);
-    setLoading(true);
-    fetchDoctors(hospitalId);
     setFormData({
       ...formData,
       hospitalId: hospitalId,
-      hospital: selectedHospital ? selectedHospital.name : ""
+      hospital: selectedHospital ? selectedHospital.name : "",
+      doctorId: "", // Reset doctor selection when hospital changes
+      doctor: ""
     });
   };
 
@@ -130,26 +113,13 @@ export default function BookingFlow() {
     setFormData({
       ...formData,
       doctorId: doctorId,
-      doctor: selectedDoctor ? `${selectedDoctor.firstName} ${selectedDoctor.lastName}` : ""
+      doctor: selectedDoctor ? selectedDoctor.name : ""
     });
   };
 
   const nextStep = () => setStep((prev) => prev + 1);
   const prevStep = () => setStep((prev) => prev - 1);
 
-  const handleLoginRedirect = () => {
-    // Store current booking data to restore after login
-    sessionStorage.setItem('bookingData', JSON.stringify(formData));
-    sessionStorage.setItem('bookingStep', step.toString());
-    navigate('/patient/login');
-  };
-
-  const handleSignupRedirect = () => {
-    // Store current booking data to restore after signup
-    sessionStorage.setItem('bookingData', JSON.stringify(formData));
-    sessionStorage.setItem('bookingStep', step.toString());
-    navigate('/patient/register');
-  };
 
   const handleBookingTypeSelect = (type) => {
     setBookingType(type);
@@ -158,7 +128,6 @@ export default function BookingFlow() {
   };
 
   const handleConfirmBooking = async () => {
-    setLoading(true);
     try {
       // Prepare data for backend
       const bookingData = {
@@ -175,19 +144,8 @@ export default function BookingFlow() {
         patientId: isLoggedIn ? patientData.id : null
       };
 
-      const response = await fetch(url_prefix + '/api/booking/', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(bookingData),
-      });
-
-      const result = await response.json();
-
-      if (!response.ok) {
-        throw new Error(result.message || 'Failed to create booking');
-      }
+      // Use RTK Query mutation instead of fetch
+      await createBooking(bookingData).unwrap();
 
       // Show appropriate success message
       if (formData.type === 'appointment') {
@@ -216,8 +174,6 @@ export default function BookingFlow() {
     } catch (error) {
       console.error("Booking error:", error);
       alert("There was an issue processing your request. Please try again.");
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -269,9 +225,7 @@ export default function BookingFlow() {
               <div className="text-3xl mb-2">📅</div>
               <h3 className="font-semibold mb-2">Book Appointment</h3>
               <p className="text-sm text-gray-600">Schedule a medical consultation</p>
-              {!isLoggedIn && (
-                <div className="mt-2 text-xs text-orange-600">Login required</div>
-              )}
+              <div className="mt-2 text-xs text-green-600">No login required</div>
             </div>
             
             <div 
@@ -285,27 +239,6 @@ export default function BookingFlow() {
             </div>
           </div>
 
-          {!isLoggedIn && (
-            <div className="bg-gray-50 p-4 rounded-lg mb-4">
-              <p className="text-sm text-gray-600 mb-2">
-                <strong>Already have an account?</strong> Login to access your medical history and faster booking.
-              </p>
-              <div className="flex space-x-2">
-                <button
-                  onClick={handleLoginRedirect}
-                  className="flex-1 bg-teal-600 text-white py-2 rounded hover:bg-teal-700 transition"
-                >
-                  Login
-                </button>
-                <button
-                  onClick={handleSignupRedirect}
-                  className="flex-1 bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition"
-                >
-                  Sign Up
-                </button>
-              </div>
-            </div>
-          )}
         </div>
       )}
 
@@ -353,20 +286,31 @@ export default function BookingFlow() {
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Select Hospital *
             </label>
-            <select
-              name="hospitalId"
-              className="w-full border p-2 rounded"
-              value={formData.hospitalId}
-              onChange={handleHospitalChange}
-              required
-            >
-              <option value="">Choose a hospital</option>
+            {hospitalsLoading ? (
+              <div className="flex items-center gap-2 p-2 border rounded">
+                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-gray-600"></div>
+                <span>Loading hospitals...</span>
+              </div>
+            ) : hospitalsError ? (
+              <div className="p-2 border rounded text-red-600 bg-red-50">
+                Error loading hospitals: {hospitalsError?.data?.message || 'Unknown error'}
+              </div>
+            ) : (
+              <select
+                name="hospitalId"
+                className="w-full border p-2 rounded"
+                value={formData.hospitalId}
+                onChange={handleHospitalChange}
+                required
+              >
+                <option value="">Choose a hospital</option>
               {hospitals.map((hospital) => (
                 <option key={hospital._id} value={hospital._id}>
-                  {hospital.name} - {hospital.city}, {hospital.country}
+                  {hospital.name} - {hospital.address?.city}{hospital.address?.country ? `, ${hospital.address.country}` : ''}
                 </option>
               ))}
-            </select>
+              </select>
+            )}
           </div>
 
           <div className="mb-3">
@@ -374,10 +318,14 @@ export default function BookingFlow() {
               Select Doctor *
             </label>
 
-            {loading ? (
+            {doctorsLoading ? (
               <div className="flex items-center gap-2">
                 <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-gray-600"></div>
                 <span>Loading doctors...</span>
+              </div>
+            ) : doctorsError ? (
+              <div className="p-2 border rounded text-red-600 bg-red-50">
+                Error loading doctors: {doctorsError?.data?.message || 'Unknown error'}
               </div>
             ) : (
               <select
@@ -386,12 +334,14 @@ export default function BookingFlow() {
                 value={formData.doctorId}
                 onChange={handleDoctorChange}
                 required
+                disabled={!formData.hospitalId}
               >
-                <option value="">Choose a doctor</option>
+                <option value="">
+                  {formData.hospitalId ? "Choose a doctor" : "Select a hospital first"}
+                </option>
                 {doctors.map((doctor) => (
                   <option key={doctor._id} value={doctor._id}>
-                    Dr. {doctor.firstName} {doctor.lastName} - {doctor.specialty}
-                    {doctor.hospital && ` (${doctor.hospital.name})`}
+                    Dr. {doctor.name} - {doctor.categoryId?.category_name || 'General'}
                   </option>
                 ))}
               </select>
@@ -430,14 +380,6 @@ export default function BookingFlow() {
             required={bookingType === "query"}
           />
 
-          {bookingType === "appointment" && !isLoggedIn && (
-            <div className="bg-yellow-50 border border-yellow-200 p-3 rounded-lg mb-3">
-              <p className="text-sm text-yellow-800">
-                <strong>Note:</strong> You'll need to login or create an account to confirm your appointment. 
-                This helps us keep your medical records secure.
-              </p>
-            </div>
-          )}
 
           <div className="flex justify-between">
             <button
@@ -492,27 +434,6 @@ export default function BookingFlow() {
             </ul>
           </div>
 
-          {bookingType === "appointment" && !isLoggedIn && (
-            <div className="bg-yellow-50 border border-yellow-200 p-3 rounded-lg mb-4">
-              <p className="text-sm text-yellow-800 mb-2">
-                <strong>Final step:</strong> Please login or create an account to confirm your appointment.
-              </p>
-              <div className="flex space-x-2">
-                <button
-                  onClick={handleLoginRedirect}
-                  className="flex-1 bg-teal-600 text-white py-2 rounded text-sm hover:bg-teal-700 transition"
-                >
-                  Login & Confirm
-                </button>
-                <button
-                  onClick={handleSignupRedirect}
-                  className="flex-1 bg-blue-600 text-white py-2 rounded text-sm hover:bg-blue-700 transition"
-                >
-                  Sign Up & Confirm
-                </button>
-              </div>
-            </div>
-          )}
 
           <div className="flex justify-between">
             <button
@@ -522,22 +443,21 @@ export default function BookingFlow() {
               ← Back
             </button>
             
-            {bookingType === "query" || (bookingType === "appointment" && isLoggedIn) ? (
-              <button
-                onClick={handleConfirmBooking}
-                disabled={loading}
-                className="bg-teal-600 text-white px-4 py-2 rounded hover:bg-teal-700 transition flex items-center justify-center disabled:bg-gray-400 disabled:cursor-not-allowed"
-              >
-                {loading ? (
-                  <>
-                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                    Processing...
-                  </>
-                ) : (
-                  `Confirm ${bookingType === "appointment" ? "Appointment" : "Query"} ✔`
-                )}
-              </button>
-            ) : null}
+            {/* Always show confirm button - login not required */}
+            <button
+              onClick={handleConfirmBooking}
+              disabled={bookingLoading}
+              className="bg-teal-600 text-white px-4 py-2 rounded hover:bg-teal-700 transition flex items-center justify-center disabled:bg-gray-400 disabled:cursor-not-allowed"
+            >
+              {bookingLoading ? (
+                <>
+                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                  Processing...
+                </>
+              ) : (
+                `Confirm ${bookingType === "appointment" ? "Appointment" : "Query"} ✔`
+              )}
+            </button>
           </div>
         </div>
       )}

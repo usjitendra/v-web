@@ -21,12 +21,12 @@ import { PiGlobe, PiListBullets, PiListPlus, PiLockKeyOpen, PiShieldChevron, PiS
 import logo from '../../assets/logo.jpg';
 
 const menuItems = [
-  {
-    icon: <LuLayoutDashboard />,
-    label: "Dashboard",
-    link: "/admin/dashboard",
-    permission: "dashboard",
-  },
+  // {
+  //   icon: <LuLayoutDashboard />,
+  //   label: "Dashboard",
+  //   link: "/admin/dashboard",
+  //   permission: "dashboard",
+  // },
   {
     icon: <PiLockKeyOpen />,
     label: "Doctor",
@@ -193,8 +193,7 @@ const Sidebar = ({ sidebarCollapsed, toggleSidebar }) => {
   });
 
   return (
-    <div className="top-0 sticky">
-      <div className="w-64 md:w-56  xl:w-64 min-h-full bg-white px-4 py-6 ">
+      <div className="w-64 md:w-56 xl:w-64 min-h-full bg-white px-4 py-6">
         <div className="flex items-center space-x-2 mb-8 md:mb-4 xl:mb-8 ml-5">
           <img
             src={logo}
@@ -293,7 +292,6 @@ const Sidebar = ({ sidebarCollapsed, toggleSidebar }) => {
           })}
         </ul>
       </div>
-    </div>
   );
 };
 

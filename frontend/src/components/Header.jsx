@@ -45,6 +45,7 @@ const Header2 = () => {
     { label: "About", path: "/about" },
     { label: "Hospitals", path: "/hospitals", mega: true },
     { label: "Doctors", path: "/doctors", mega: true },
+    { label: "Clinical Psychology", path: "/specialities/clinical-psychology" },
     // { label: "Cost", path: "/cost" },
     // { label: "Knowledge", path: "/knowledge" },
     // { label: "Patient Stories", path: "/patient-stories" },

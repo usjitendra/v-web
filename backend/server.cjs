@@ -22,6 +22,7 @@ const PORT = process.env.PORT || 6003;
 app.use(cors({
   origin: [
     "http://localhost:3000",
+        "http://localhost:5173",
     "http://localhost:5174",
 
     // Active frontend domains
@@ -169,9 +170,10 @@ try {
   console.error('✗ Failed to load route hospital-treatment:', error.message, error.stack);
 }
 
+// Booking route now included in main routes (/api/v1/booking)
 try {
-  const bookingRoute = require('./routes/bookings.cjs');
-  app.use('/api/booking', bookingRoute);
+  // const bookingRoute = require('./routes/bookings.cjs');
+  // app.use('/api/booking', bookingRoute);
 } catch (error) {
   console.error('✗ Failed to load route booking:', error.message, error.stack);
 }

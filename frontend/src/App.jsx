@@ -49,6 +49,7 @@ import HospitalList from "./admin/Hospital/HospitalList";
 import BlogManagement from "./admin/Blog/BlogManagement";
 import BlogForm from "./admin/Blog/BlogForm";
 import SEOManagement from "./admin/SEO/SEOManagement";
+import ClinicalPsychology from "./pages/ClinicalPsychology";
 // import AdminDashboard from "./admin/Dashbaord/AdminDashboard";
 import DoctorHome from "./pages/Doctor/DoctorHome";
 import HospitalListingPage from "./pages/Hospital/HospitalListing";
@@ -107,8 +108,7 @@ export default function App() {
           <Route path="/appointment" element={<Appointment />} />
           <Route path="/blog" element={<BlogListing />} />
           <Route path="/blog/:slug" element={<BlogDetail />} />
-          
-
+          <Route path="/specialities/clinical-psychology" element={<ClinicalPsychology />} />
 
                <Route path="/host" element={<Host/>} />
                <Route path="/view" element={<Viewer/>} />
