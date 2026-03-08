@@ -15,7 +15,7 @@ const HospitalList = () => {
 
     const hospitals = data?.data?.data || [];
     const hospitalCount = data?.data?.hospitalCount || 0;
-    const pagination = data?.message?.pagination || { total: 0, page: 1, limit: 10, totalPages: 1 };
+    const pagination = data?.data?.pagination || { total: 0, page: 1, limit: 10, totalPages: 1 };
 
     const activeHospitalsCount = hospitals.filter(h => h.is_active).length;
     const loading = isLoading || isUpdating || isDeleting;
