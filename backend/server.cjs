@@ -25,6 +25,8 @@ app.use(cors({
         "http://localhost:5173",
     "http://localhost:5174",
 
+     "http://72.62.187.221:5173",
+
     // Active frontend domains
     "https://v-web-five.vercel.app",
 
