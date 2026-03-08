@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import { MdKeyboardArrowRight } from 'react-icons/md';
 
 const BreadCrumbs = ({ items, headText }) => {
+
+  console.log("ssss")
   return (
     <div className="bg-white py-4 px-6 pt-20 rounded-lg border border-b-2  ">
       {/* Heading */}
