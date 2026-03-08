@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Table, Button, Space, Tag, Switch, Popconfirm, message, Avatar } from 'antd';
 import { PlusOutlined, EditOutlined, DeleteOutlined, EyeOutlined, PhoneOutlined, EnvironmentOutlined, BuildOutlined } from '@ant-design/icons';
 import { useDeleteHospitalMutation, useGetHospitalsQuery, useUpdateHospitalMutation } from '@/rtk/slices/hospitalApiSlice';
@@ -6,7 +6,9 @@ import { useNavigate } from 'react-router-dom';
 import { Loader } from 'lucide-react';
 
 const HospitalList = () => {
-    const { data, isLoading, error } = useGetHospitalsQuery();
+    const [page, setPage] = useState(1);
+    const [limit, setLimit] = useState(10);
+    const { data, isLoading, error } = useGetHospitalsQuery({ page, limit });
     const [updateHospital, { isLoading: isUpdating }] = useUpdateHospitalMutation();
     const [deleteHospital, { isLoading: isDeleting }] = useDeleteHospitalMutation();
     const navigate = useNavigate();
@@ -243,11 +245,15 @@ const HospitalList = () => {
                 dataSource={hospitals}
                 loading={loading}
                 pagination={{
-                    current: pagination.page,
-                    pageSize: pagination.limit,
+                    current: page,
+                    pageSize: limit,
                     total: pagination.total,
                     showSizeChanger: true,
                     showTotal: (total) => `Total ${total} hospitals`,
+                    onChange: (newPage, newPageSize) => {
+                        setPage(newPage);
+                        setLimit(newPageSize);
+                    },
                 }}
                 scroll={{ x: 1400 }}
                 bordered
