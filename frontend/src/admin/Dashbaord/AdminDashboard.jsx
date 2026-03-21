@@ -11,6 +11,7 @@ import { useGetBookingsQuery, useUpdateBookingStatusMutation } from '../../rtk/s
 import { useGetContactsQuery, useUpdateContactStatusMutation } from '../../rtk/slices/contactApiSlice';
 import { useGetDoctorsQuery } from '../../rtk/slices/doctorApi';
 import { useGetHospitalsQuery } from '../../rtk/slices/hospitalApiSlice';
+import { CountryFlag } from '../../helper/countryFlags';
 
 /* ── Helpers ── */
 const STATUS_COLORS = {
@@ -549,7 +550,12 @@ const AdminDashboard = () => {
                       {hospitalsData.data.map(hosp => (
                         <tr key={hosp._id} className="hover:bg-gray-50 transition">
                           <td className="px-4 py-3 font-medium text-gray-900">{hosp.name || 'N/A'}</td>
-                          <td className="px-4 py-3 text-gray-600 hidden sm:table-cell">{hosp.country?.name || hosp.country || 'N/A'}</td>
+                          <td className="px-4 py-3 text-gray-600 hidden sm:table-cell">
+                            <span className="flex items-center gap-1.5">
+                              <CountryFlag name={hosp.country?.name || hosp.country} width={18} className="shadow-sm flex-shrink-0" />
+                              {hosp.country?.name || hosp.country || 'N/A'}
+                            </span>
+                          </td>
                           <td className="px-4 py-3 text-gray-600 hidden md:table-cell">{hosp.city?.name || hosp.city || 'N/A'}</td>
                           <td className="px-4 py-3 text-gray-500 hidden lg:table-cell text-xs">{hosp.beds || '0'}</td>
                           <td className="px-4 py-3">

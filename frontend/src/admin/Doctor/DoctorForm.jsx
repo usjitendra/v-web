@@ -18,6 +18,7 @@ import {
   useGetDropDownQuery,
   useGetConteryDropDownQuery
 } from "../../rtk/slices/subcategoryApi";
+import { CountryFlag } from "../../helper/countryFlags";
 
 const { Step } = Steps;
 const { TextArea } = Input;
@@ -292,7 +293,10 @@ const DoctorForm = ({ open, onClose, onSubmit, initialValues }) => {
                   <Select loading={isCountery} placeholder="Select country">
                     {countery.map((country) => (
                       <Select.Option key={country._id} value={country._id}>
-                        {country.country_name}
+                        <span className="flex items-center gap-2">
+                          <CountryFlag name={country.country_name} width={20} />
+                          {country.country_name}
+                        </span>
                       </Select.Option>
                     ))}
                   </Select>

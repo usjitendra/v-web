@@ -10,6 +10,7 @@ import {
   // useUpdateDoctorStatusMutation
 } from "../../rtk/slices/doctorApi"; // Adjust path as needed
 import { Loader } from "lucide-react";
+import { CountryFlag } from "../../helper/countryFlags";
 
 const DoctorManagement = () => {
   const [isFormOpen, setIsFormOpen] = useState(false);
@@ -186,7 +187,12 @@ const DoctorManagement = () => {
         return (
           <div className="text-xs">
             {location.city && <div>{location.city}</div>}
-            {location.country && <div className="text-gray-500">{location.country}</div>}
+            {location.country && (
+              <div className="flex items-center gap-1.5 text-gray-500">
+                <CountryFlag name={location.country} width={16} className="shadow-sm" />
+                {location.country}
+              </div>
+            )}
           </div>
         );
       },

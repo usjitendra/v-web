@@ -6,6 +6,7 @@ import 'suneditor/dist/css/suneditor.min.css';
 import { useGetConteryDropDownQuery, useGetDropDownQuery } from '@/rtk/slices/subcategoryApi';
 import { useAddHospitalMutation, useUpdateHospitalMutation } from '@/rtk/slices/hospitalApiSlice';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { CountryFlag } from '@/helper/countryFlags';
 
 const { Step } = Steps;
 const { Option } = Select;
@@ -304,7 +305,12 @@ const HospitalManagement = () => {
                                     optionFilterProp="children"
                                 >
                                     {countries.map((item) => (
-                                        <Option key={item._id} value={item._id}>{item.country_name}</Option>
+                                        <Option key={item._id} value={item._id}>
+                                            <span className="flex items-center gap-2">
+                                                <CountryFlag name={item.country_name} width={20} />
+                                                {item.country_name}
+                                            </span>
+                                        </Option>
                                     ))}
                                 </Select>
                             </Form.Item>

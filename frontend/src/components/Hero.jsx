@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import url_prefix from "../data/variable";
 import { useLanguage } from "../hooks/useLanguage";
+import { CountryFlag } from "../helper/countryFlags";
 
 
 export default function Hero() {
@@ -14,16 +15,16 @@ export default function Hero() {
 
 
   const countries = [
-    { name: "India", flag: "🇮🇳" },
-    { name: "Germany", flag: "🇩🇪" },
-    { name: "USA", flag: "🇺🇸" },
-    { name: "UK", flag: "🇬🇧" },
-    { name: "Singapore", flag: "🇸🇬" },
-    { name: "UAE", flag: "🇦🇪" },
-    { name: "Turkey", flag: "🇹🇷" },
-    { name: "Thailand", flag: "🇹🇭" },
-    { name: "Spain", flag: "🇪🇸" },
-    { name: "France", flag: "🇫🇷" },
+    { name: "India", slug: "india" },
+    { name: "Germany", slug: "germany" },
+    { name: "USA", slug: "usa" },
+    { name: "UK", slug: "uk" },
+    { name: "Singapore", slug: "singapore" },
+    { name: "UAE", slug: "uae" },
+    { name: "Turkey", slug: "turkey" },
+    { name: "Thailand", slug: "thailand" },
+    { name: "Spain", slug: "spain" },
+    { name: "France", slug: "france" },
   ];
 
   const features = [
@@ -179,9 +180,7 @@ export default function Hero() {
                     className="bg-white/10 px-2 xs:px-3 py-1 rounded-lg inline-flex items-center gap-1 xs:gap-2 backdrop-blur-md cursor-pointer
                                text-[clamp(0.625rem,1.5vw,0.875rem)]"
                   >
-                    <span className="text-[clamp(0.875rem,2.5vw,1.25rem)]">
-                      {dest.flag}
-                    </span>
+                    <CountryFlag name={dest.name} slug={dest.slug} width={24} />
                     <span className="truncate max-w-[60px] xs:max-w-[80px] sm:max-w-[100px]">
                       {dest.name}
                     </span>

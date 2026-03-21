@@ -59,6 +59,7 @@ import DoctorDetailPage from "./pages/Doctor/DoctorDetailsPage/DoctorDetailPage"
 import HospitalDetailPage from "./pages/Hospital/HospitalDetailPage";
 import Host from "./pages/webrtc/Host";
 import Viewer from "./pages/webrtc/Viewer";
+import PsychiatricServicesDetails from "./pages/ClinicalPsychology";
 
 /* ===== LAYOUTS ===== */
 const PublicLayout = () => (
@@ -109,10 +110,13 @@ export default function App() {
           <Route path="/appointment" element={<Appointment />} />
           <Route path="/blog" element={<BlogListing />} />
           <Route path="/blog/:slug" element={<BlogDetail />} />
-          <Route path="/specialities/clinical-psychology" element={<ClinicalPsychology />} />
+          <Route path="/specialities/:name" element={<PsychiatricServicesDetails />} />
 
-               <Route path="/host" element={<Host/>} />
-               <Route path="/view" element={<Viewer/>} />
+
+          <Route path='/service/:name' element={<PsychiatricServicesDetails />} />
+
+          <Route path="/host" element={<Host />} />
+          <Route path="/view" element={<Viewer />} />
 
         </Route>
 

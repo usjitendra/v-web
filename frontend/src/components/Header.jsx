@@ -48,7 +48,7 @@ const Header = () => {
     { label: "About",               path: "/about" },
     { label: "Hospitals",           path: "/hospitals",  mega: true },
     { label: "Doctors",             path: "/doctors",    mega: true },
-    { label: "Clinical Psychology", path: "/specialities/clinical-psychology" },
+    { label: "Clinical Psychology", path: "/specialities/therapies" },
   ];
 
   const hoverCountry = countries[hoverIdx] ?? null;

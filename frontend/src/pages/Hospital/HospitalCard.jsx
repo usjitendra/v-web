@@ -92,7 +92,7 @@ export default function HospitalCard({ hospital, onBook }) {
         <div className="space-y-2">
           <button
             onClick={() => onBook(hospital)}
-            className="w-full bg-gradient-to-r from-main to-primary hover:from-primary hover:to-main text-white px-4 py-2.5 rounded-lg font-semibold shadow-md hover:shadow-lg transition-all duration-300 flex items-center justify-center gap-2"
+            className="w-full bg-gradient-to-r from-teal-600 to-teal-700 text-white px-4 py-2.5 rounded-lg font-semibold shadow-md hover:shadow-lg transition-all duration-300 flex items-center justify-center gap-2"
           >
             <Calendar className="w-4 h-4" />
             Book Consultation

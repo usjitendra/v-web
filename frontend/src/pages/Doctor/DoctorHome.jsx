@@ -12,7 +12,7 @@ const DoctorHome = () => {
   return (
     <div>
       <SEOHead pageType="doctor-listing" />
-      <BreadCrumbs headText="Find the Right Doctor" items={breadcrumbItems} />
+      {/* <BreadCrumbs headText="Find the Right Doctor" items={breadcrumbItems} /> */}
       <DoctorListingPage />
     </div>
   );

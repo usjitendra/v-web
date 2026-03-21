@@ -6,16 +6,15 @@ import SEOHead from '../../components/SEOHead';
 
 const HospitalHome = () => {
 
-
   const breadcrumbItems = [
     { label: 'Home', href: '/' },
-    // { label: 'About ASTITVA CLINIC ' },
-    { label: 'About Us' }
+    { label: 'Hospitals' }
   ];
+  
   return (
     <div>
       <SEOHead pageType="hospital-listing" />
-      <BreadCrumbs headText={"About Shanya Scans & Theranostics"} items={breadcrumbItems} />
+      {/* <BreadCrumbs headText="Find the Right Hospital" items={breadcrumbItems} /> */}
       {/* <HospitalSearch /> */}
       <HospitalListingPage />
     </div>

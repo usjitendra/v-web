@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { FaMapMarkerAlt, FaStar } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import { CountryFlag } from "../helper/countryFlags";
 
 export default function HospitalCard({ hospital }) {
   // console.log(hospital._id);
@@ -52,7 +53,12 @@ export default function HospitalCard({ hospital }) {
         <h3 className="text-lg font-semibold text-darktext mb-2">{hospital.name}</h3>
         <div className="mt-1 flex items-center gap-2 text-sm text-lighttext mb-4">
           <FaMapMarkerAlt className="text-teal-600" />
-          <span>{hospital.city}, {hospital.country}</span>
+          <span className="flex items-center gap-1.5">
+            {hospital.country && (
+              <CountryFlag name={hospital.country} width={16} className="shadow-sm flex-shrink-0" />
+            )}
+            {hospital.city}, {hospital.country}
+          </span>
         </div>
 
 

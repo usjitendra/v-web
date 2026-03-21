@@ -30,6 +30,7 @@ import {
   useDeleteCountryMutation,
 } from "../../rtk/slices/apiMaster";
 import { Loader } from "lucide-react";
+import { CountryFlag } from "../../helper/countryFlags";
 
 /* ---------------- Schema ---------------- */
 const countrySchema = z.object({
@@ -143,40 +144,53 @@ const CountryManagement = () => {
   /* ---------------- Table ---------------- */
   const columns = [
     {
-      title: "url",
-      dataIndex: "url",
-      render: (url) => <Avatar src={url} size={40} shape="square" />,
+      title: "Flag",
+      width: 80,
+      render: (_, record) => (
+        <div className="flex items-center justify-center">
+          <CountryFlag 
+            name={record.country_name} 
+            width={40}
+            className="rounded-sm shadow-sm"
+          />
+        </div>
+      ),
     },
     {
       title: "Code",
       dataIndex: "code",
+      width: 80,
       render: (code) => <Tag color="blue">{code}</Tag>,
     },
     {
       title: "Country Name",
       dataIndex: "country_name",
+      sorter: (a, b) => a.country_name.localeCompare(b.country_name),
     },
     {
       title: "Status",
       dataIndex: "is_active",
+      width: 100,
       render: (value, record) => (
         <Switch checked={value} onChange={() => handleToggleStatus(record)} />
       ),
     },
     {
       title: "Action",
+      width: 120,
       render: (_, record) => (
         <Space>
           <Button
             type="primary"
             icon={<EditOutlined />}
             onClick={() => openEditModal(record)}
+            size="small"
           />
           <Popconfirm
             title="Delete country?"
             onConfirm={() => handleDelete(record._id)}
           >
-            <Button danger icon={<DeleteOutlined />} />
+            <Button danger icon={<DeleteOutlined />} size="small" />
           </Popconfirm>
         </Space>
       ),
