@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Table, Button, Space, Tag, Switch, Popconfirm, message, Avatar } from 'antd';
 import { PlusOutlined, EditOutlined, DeleteOutlined, EyeOutlined, PhoneOutlined, EnvironmentOutlined, BuildOutlined } from '@ant-design/icons';
 import { useDeleteHospitalMutation, useGetHospitalsQuery, useUpdateHospitalMutation } from '@/rtk/slices/hospitalApiSlice';
@@ -8,9 +8,17 @@ import { Loader } from 'lucide-react';
 const HospitalList = () => {
     const [page, setPage] = useState(1);
     const [limit, setLimit] = useState(10);
+    const tableRef = useRef(null);
     const { data, isLoading, error, refetch } = useGetHospitalsQuery({ page, limit }, {
         refetchOnMountOrArgChange: true,
     });
+
+    // Auto scroll to table when page changes
+    useEffect(() => {
+        if (tableRef.current) {
+            tableRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    }, [page, limit]);
     const [updateHospital, { isLoading: isUpdating }] = useUpdateHospitalMutation();
     const [deleteHospital, { isLoading: isDeleting }] = useDeleteHospitalMutation();
     const navigate = useNavigate();
@@ -241,25 +249,27 @@ const HospitalList = () => {
             </div>
 
             {/* TABLE */}
-            <Table
-                rowKey="_id"
-                columns={columns}
-                dataSource={hospitals}
-                loading={loading}
-                pagination={{
-                    current: page,
-                    pageSize: limit,
-                    total: pagination.total,
-                    showSizeChanger: true,
-                    showTotal: (total) => `Total ${total} hospitals`,
-                    onChange: (newPage, newPageSize) => {
-                        setPage(newPage);
-                        setLimit(newPageSize);
-                    },
-                }}
-                scroll={{ x: 1400 }}
-                bordered
-            />
+            <div ref={tableRef}>
+                <Table
+                    rowKey="_id"
+                    columns={columns}
+                    dataSource={hospitals}
+                    loading={loading}
+                    pagination={{
+                        current: page,
+                        pageSize: limit,
+                        total: pagination.total,
+                        showSizeChanger: true,
+                        showTotal: (total) => `Total ${total} hospitals`,
+                        onChange: (current, size) => {
+                            setPage(current);
+                            setLimit(size);
+                        },
+                    }}
+                    scroll={{ x: 1400 }}
+                    bordered
+                />
+            </div>
         </div>
     );
 };

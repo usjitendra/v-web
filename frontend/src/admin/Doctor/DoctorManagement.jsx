@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Table, Button, Space, Tag, Switch, Popconfirm, message, Image, Avatar } from "antd";
 import { PlusOutlined, EditOutlined, DeleteOutlined, EyeOutlined } from "@ant-design/icons";
 import DoctorForm from "./DoctorForm";
@@ -14,9 +14,12 @@ import { Loader } from "lucide-react";
 const DoctorManagement = () => {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingDoctor, setEditingDoctor] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+  const tableRef = useRef(null);
 
   // API Hooks
-  const { data: doctorsData, isLoading: isFetchingDoctors, refetch } = useGetDoctorsQuery();
+  const { data: doctorsData, isLoading: isFetchingDoctors, refetch } = useGetDoctorsQuery({ page: currentPage, limit: pageSize });
   const [addDoctor, { isLoading: isAdding }] = useAddDoctorMutation();
   const [updateDoctor, { isLoading: isUpdating }] = useUpdateDoctorMutation();
   const [deleteDoctor, { isLoading: isDeleting }] = useDeleteDoctorMutation();
@@ -24,7 +27,21 @@ const DoctorManagement = () => {
 
   const doctors = doctorsData?.data?.data || [];
   const doctoreCount = doctorsData?.data?.doctoreCount || {};
+  const pagination = doctorsData?.data?.pagination || { total: 0, page: 1, limit: 10, totalPages: 1 };
   const loading = isFetchingDoctors || isAdding || isUpdating || isDeleting;
+
+  // Auto scroll to table when page changes
+  useEffect(() => {
+    if (tableRef.current) {
+      tableRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }, [currentPage, pageSize]);
+
+  // Handle pagination change
+  const handlePaginationChange = (page, pageSize) => {
+    setCurrentPage(page);
+    setPageSize(pageSize);
+  };
 
   // ---------------- OPEN ADD ----------------
   const handleAddDoctor = () => {
@@ -299,19 +316,25 @@ const DoctorManagement = () => {
       </div>
 
       {/* TABLE */}
-      <Table
-        rowKey="_id"
-        columns={columns}
-        dataSource={doctors}
-        loading={loading}
-        pagination={{
-          pageSize: 10,
-          showSizeChanger: true,
-          showTotal: (total) => `Total ${total} doctors`,
-        }}
-        scroll={{ x: 1500 }}
-        bordered
-      />
+      <div ref={tableRef}>
+        <Table
+          rowKey="_id"
+          columns={columns}
+          dataSource={doctors}
+          loading={loading}
+          pagination={{
+            current: currentPage,
+            pageSize: pageSize,
+            total: pagination.total,
+            showSizeChanger: true,
+            pageSizeOptions: ['10', '25', '50', '100'],
+            showTotal: (total) => `Total ${total} doctors`,
+            onChange: handlePaginationChange,
+          }}
+          scroll={{ x: 1500 }}
+          bordered
+        />
+      </div>
 
       {/* FORM MODAL */}
       <DoctorForm

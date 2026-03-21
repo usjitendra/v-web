@@ -3,11 +3,14 @@ import {
   Users, Building2, Stethoscope, Calendar,
   MessageSquare, TrendingUp,
   XCircle, BarChart3, Activity,
-  ArrowUpRight, RefreshCw, CheckCircle
+  ArrowUpRight, RefreshCw, CheckCircle,
+  Edit3, Trash2, Eye
 } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
 import { useGetBookingsQuery, useUpdateBookingStatusMutation } from '../../rtk/slices/bookingApiSlice';
 import { useGetContactsQuery, useUpdateContactStatusMutation } from '../../rtk/slices/contactApiSlice';
+import { useGetDoctorsQuery } from '../../rtk/slices/doctorApi';
+import { useGetHospitalsQuery } from '../../rtk/slices/hospitalApiSlice';
 
 /* ── Helpers ── */
 const STATUS_COLORS = {
@@ -28,6 +31,8 @@ const TABS = [
   { id: 'overview',  label: 'Overview',   icon: BarChart3 },
   { id: 'bookings',  label: 'Bookings',   icon: Calendar },
   { id: 'contacts',  label: 'Inquiries',  icon: MessageSquare },
+  { id: 'doctors',   label: 'Doctors',    icon: Users },
+  { id: 'hospitals', label: 'Hospitals',  icon: Building2 },
 ];
 
 /* ══════════════════════════════════════════════════════ */
@@ -54,6 +59,18 @@ const AdminDashboard = () => {
     isLoading: contactsLoading,
     refetch: refetchContacts,
   } = useGetContactsQuery({ page: 1, limit: 20, status: 'pending' });
+
+  const {
+    data: doctorsData,
+    isLoading: doctorsLoading,
+    refetch: refetchDoctors,
+  } = useGetDoctorsQuery({ page: 1, limit: 50 });
+
+  const {
+    data: hospitalsData,
+    isLoading: hospitalsLoading,
+    refetch: refetchHospitals,
+  } = useGetHospitalsQuery({ page: 1, limit: 50 });
 
   const [updateBookingStatus] = useUpdateBookingStatusMutation();
   const [updateContactStatus] = useUpdateContactStatusMutation();
@@ -294,15 +311,15 @@ const AdminDashboard = () => {
                     <tbody className="divide-y divide-gray-50">
                       {bookingsData.data.map(b => (
                         <tr key={b._id} className="hover:bg-gray-50 transition">
-                          <td className="px-4 py-3 font-medium text-gray-900">{b.patientName}</td>
-                          <td className="px-4 py-3 text-gray-600 hidden sm:table-cell">{b.serviceType}</td>
+                          <td className="px-4 py-3 font-medium text-gray-900">{b.name}</td>
+                          <td className="px-4 py-3 text-gray-600 hidden sm:table-cell">{b.hospital?.name || b.type}</td>
                           <td className="px-4 py-3 text-gray-600 hidden md:table-cell">{b.phone}</td>
                           <td className="px-4 py-3 text-gray-500 hidden md:table-cell text-xs">
-                            {new Date(b.createdAt).toLocaleDateString()}
+                            {new Date(b.date || b.createdAt).toLocaleDateString()}
                           </td>
-                          <td className="px-4 py-3"><Badge status={b.status} /></td>
+                          <td className="px-4 py-3"><Badge status={b.status?.mainStatus} /></td>
                           <td className="px-4 py-3">
-                            {b.status === 'pending' && (
+                            {b.status?.mainStatus === 'scheduled' && (
                               <div className="flex gap-1.5">
                                 <button
                                   onClick={() => handleBooking(b._id, 'confirmed')}
@@ -377,9 +394,9 @@ const AdminDashboard = () => {
                           </td>
                           <td className="px-4 py-3"><Badge status={c.status} /></td>
                           <td className="px-4 py-3">
-                            {c.status === 'pending' && (
+                            {c.status?.mainStatus === 'new' && (
                               <button
-                                onClick={() => handleContact(c._id, 'responded')}
+                                onClick={() => handleContact(c._id, 'replied')}
                                 className="flex items-center gap-1 px-2.5 py-1 bg-teal-600 text-white text-xs rounded-lg hover:bg-teal-700 transition"
                               >
                                 <CheckCircle className="w-3 h-3" /> Responded
@@ -398,6 +415,180 @@ const AdminDashboard = () => {
                   </div>
                   <p className="text-sm font-medium text-gray-700">No pending inquiries</p>
                   <p className="text-xs text-gray-400 mt-1">All caught up!</p>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* ═══ DOCTORS ═══ */}
+          {activeTab === 'doctors' && (
+            <div>
+              <div className="flex items-center justify-between mb-5">
+                <h3 className="text-sm font-semibold text-gray-700">Doctors List</h3>
+                <div className="flex gap-3">
+                  <button
+                    onClick={refetchDoctors}
+                    className="flex items-center gap-1.5 text-xs text-teal-600 hover:text-teal-700 font-medium"
+                  >
+                    <RefreshCw className="w-3.5 h-3.5" /> Refresh
+                  </button>
+                  <a
+                    href="/admin/doctors-add"
+                    className="flex items-center gap-1.5 text-xs bg-teal-600 text-white px-3 py-1.5 rounded-lg hover:bg-teal-700 font-medium transition"
+                  >
+                    + Add Doctor
+                  </a>
+                </div>
+              </div>
+
+              {doctorsLoading ? (
+                <div className="flex items-center justify-center py-12">
+                  <div className="w-7 h-7 border-2 border-teal-600 border-t-transparent rounded-full animate-spin" />
+                </div>
+              ) : doctorsData?.data?.length > 0 ? (
+                <div className="overflow-x-auto rounded-xl border border-gray-100">
+                  <table className="w-full text-sm">
+                    <thead>
+                      <tr className="bg-gray-50 text-left">
+                        <th className="px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">Name</th>
+                        <th className="px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide hidden sm:table-cell">Speciality</th>
+                        <th className="px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide hidden md:table-cell">Hospital</th>
+                        <th className="px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide hidden lg:table-cell">Experience</th>
+                        <th className="px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">Status</th>
+                        <th className="px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-gray-50">
+                      {doctorsData.data.map(doc => (
+                        <tr key={doc._id} className="hover:bg-gray-50 transition">
+                          <td className="px-4 py-3 font-medium text-gray-900">{doc.name || 'N/A'}</td>
+                          <td className="px-4 py-3 text-gray-600 hidden sm:table-cell">{doc.speciality || 'N/A'}</td>
+                          <td className="px-4 py-3 text-gray-600 hidden md:table-cell text-xs">{doc.hospital?.name || doc.hospitalId || 'N/A'}</td>
+                          <td className="px-4 py-3 text-gray-500 hidden lg:table-cell text-xs">{doc.experience || '0'} yrs</td>
+                          <td className="px-4 py-3">
+                            <span className={`px-2.5 py-0.5 rounded-full text-xs font-medium border ${doc.isActive ? 'bg-green-100 text-green-700 border-green-200' : 'bg-gray-100 text-gray-600 border-gray-200'}`}>
+                              {doc.isActive ? 'Active' : 'Inactive'}
+                            </span>
+                          </td>
+                          <td className="px-4 py-3">
+                            <div className="flex gap-1.5">
+                              <a
+                                href={`/admin/doctors-edit/${doc._id}`}
+                                className="p-1.5 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition"
+                                title="Edit"
+                              >
+                                <Edit3 className="w-3.5 h-3.5" />
+                              </a>
+                              <button
+                                className="p-1.5 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition"
+                                title="Delete"
+                                onClick={() => alert('Delete functionality coming soon')}
+                              >
+                                <Trash2 className="w-3.5 h-3.5" />
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              ) : (
+                <div className="flex flex-col items-center justify-center py-14 text-center">
+                  <div className="w-14 h-14 bg-blue-50 rounded-2xl flex items-center justify-center mb-3">
+                    <Users className="w-7 h-7 text-blue-400" />
+                  </div>
+                  <p className="text-sm font-medium text-gray-700">No doctors found</p>
+                  <a href="/admin/doctors-add" className="text-xs text-teal-600 hover:underline mt-2">
+                    Add your first doctor →
+                  </a>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* ═══ HOSPITALS ═══ */}
+          {activeTab === 'hospitals' && (
+            <div>
+              <div className="flex items-center justify-between mb-5">
+                <h3 className="text-sm font-semibold text-gray-700">Hospitals List</h3>
+                <div className="flex gap-3">
+                  <button
+                    onClick={refetchHospitals}
+                    className="flex items-center gap-1.5 text-xs text-teal-600 hover:text-teal-700 font-medium"
+                  >
+                    <RefreshCw className="w-3.5 h-3.5" /> Refresh
+                  </button>
+                  <a
+                    href="/admin/hospitals-add"
+                    className="flex items-center gap-1.5 text-xs bg-teal-600 text-white px-3 py-1.5 rounded-lg hover:bg-teal-700 font-medium transition"
+                  >
+                    + Add Hospital
+                  </a>
+                </div>
+              </div>
+
+              {hospitalsLoading ? (
+                <div className="flex items-center justify-center py-12">
+                  <div className="w-7 h-7 border-2 border-teal-600 border-t-transparent rounded-full animate-spin" />
+                </div>
+              ) : hospitalsData?.data?.length > 0 ? (
+                <div className="overflow-x-auto rounded-xl border border-gray-100">
+                  <table className="w-full text-sm">
+                    <thead>
+                      <tr className="bg-gray-50 text-left">
+                        <th className="px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">Name</th>
+                        <th className="px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide hidden sm:table-cell">Country</th>
+                        <th className="px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide hidden md:table-cell">City</th>
+                        <th className="px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide hidden lg:table-cell">Beds</th>
+                        <th className="px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">Status</th>
+                        <th className="px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-gray-50">
+                      {hospitalsData.data.map(hosp => (
+                        <tr key={hosp._id} className="hover:bg-gray-50 transition">
+                          <td className="px-4 py-3 font-medium text-gray-900">{hosp.name || 'N/A'}</td>
+                          <td className="px-4 py-3 text-gray-600 hidden sm:table-cell">{hosp.country?.name || hosp.country || 'N/A'}</td>
+                          <td className="px-4 py-3 text-gray-600 hidden md:table-cell">{hosp.city?.name || hosp.city || 'N/A'}</td>
+                          <td className="px-4 py-3 text-gray-500 hidden lg:table-cell text-xs">{hosp.beds || '0'}</td>
+                          <td className="px-4 py-3">
+                            <span className={`px-2.5 py-0.5 rounded-full text-xs font-medium border ${hosp.isActive ? 'bg-green-100 text-green-700 border-green-200' : 'bg-gray-100 text-gray-600 border-gray-200'}`}>
+                              {hosp.isActive ? 'Active' : 'Inactive'}
+                            </span>
+                          </td>
+                          <td className="px-4 py-3">
+                            <div className="flex gap-1.5">
+                              <a
+                                href={`/admin/hospitals-edit/${hosp._id}`}
+                                className="p-1.5 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition"
+                                title="Edit"
+                              >
+                                <Edit3 className="w-3.5 h-3.5" />
+                              </a>
+                              <button
+                                className="p-1.5 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition"
+                                title="Delete"
+                                onClick={() => alert('Delete functionality coming soon')}
+                              >
+                                <Trash2 className="w-3.5 h-3.5" />
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              ) : (
+                <div className="flex flex-col items-center justify-center py-14 text-center">
+                  <div className="w-14 h-14 bg-teal-50 rounded-2xl flex items-center justify-center mb-3">
+                    <Building2 className="w-7 h-7 text-teal-400" />
+                  </div>
+                  <p className="text-sm font-medium text-gray-700">No hospitals found</p>
+                  <a href="/admin/hospitals-add" className="text-xs text-teal-600 hover:underline mt-2">
+                    Add your first hospital →
+                  </a>
                 </div>
               )}
             </div>

@@ -34,9 +34,7 @@ app.use(cors({
     "https://v-web-frontend-flame.vercel.app",
     "https://v-web-frontend-s8pe.vercel.app",
     "https://v-web-frontend-gaci.vercel.app",
-    "https://v-web-frontend-beta.vercel.app",
-    "https://mediwaycare.in",
-    "https://www.medicwaycare.in"
+    "https://v-web-frontend-beta.vercel.app"
   ],
   // methods: "GET,POST,PUT,PATCH,DELETE,OPTIONS",
   // allowedHeaders: ["Content-Type", "Authorization"],

@@ -10,6 +10,8 @@ const PatientOpinion = require('../models/PatientOpinions.cjs');
 const HospitalDetail = require('../models/HospitalDetail.cjs');
 const About = require('../models/About.cjs');
 const Language = require('../models/Language.cjs');
+const Booking = require('../models/Bookings.cjs');
+const Contact = require('../models/Contact.cjs');
 
 
 
@@ -91,14 +93,22 @@ exports.getDashboardStats = async (req, res) => {
             totalTreatments,
             totalHospitalTreatments,
             activeHospitals,
-            activeDoctors
+            activeDoctors,
+            totalBookings,
+            pendingBookings,
+            totalContacts,
+            pendingContacts
         ] = await Promise.all([
             Hospital.countDocuments(),
             Doctor.countDocuments(),
             Treatment.countDocuments(),
             HospitalTreatment.countDocuments(),
             Hospital.countDocuments({ isActive: true }),
-            Doctor.countDocuments({ isActive: true })
+            Doctor.countDocuments({ isActive: true }),
+            Booking.countDocuments(),
+            Booking.countDocuments({ 'status.mainStatus': 'scheduled' }),
+            Contact.countDocuments(),
+            Contact.countDocuments({ 'status.mainStatus': 'new' })
         ]);
 
         res.json({
@@ -109,7 +119,11 @@ exports.getDashboardStats = async (req, res) => {
                 totalTreatments,
                 totalHospitalTreatments,
                 activeHospitals,
-                activeDoctors
+                activeDoctors,
+                totalBookings,
+                pendingBookings,
+                totalContacts,
+                pendingContacts
             }
         });
     } catch (err) {
