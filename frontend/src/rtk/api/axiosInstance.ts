@@ -4,10 +4,7 @@ const system_key = "medicway_system_key_2024"; // System key for API authenticat
 // const URL = "http://localhost:5000/api/v1/";
 
 
-const URL="http://72.62.187.221:5000/api/v1/";
-
-// const URL = "https://bc860d0bc571.ngrok-free.app/api/v1/";
-
+const URL="https://api.mediwaycare.in/api/v1/";
 const axiosInstance = axios.create({
   baseURL: URL,
   headers: {

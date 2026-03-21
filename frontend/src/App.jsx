@@ -1,7 +1,8 @@
 import { Route, Routes } from "react-router-dom";
 
 /* ===== ADMIN IMPORTS ===== */
-import AdminDashboard from "./admin/Index";
+import AdminLayout from "./admin/Index";
+import AdminDashboardPage from "./admin/Dashbaord/AdminDashboard";
 import AdminLogin from "./components/admin/AdminLogin";
 import DoctorTable from "./admin/Doctor/DoctoreList";
 import LanguageSetting from "./admin/adminSetting/LanguageSetting";
@@ -123,15 +124,14 @@ export default function App() {
         } />
 
         <Route path="/admin"
-        
-        element={
-          // <ProtectedRoute>
-            <AdminDashboard />
-          // </ProtectedRoute>
-        }
-        
+          element={
+            <ProtectedRoute>
+              <AdminLayout />
+            </ProtectedRoute>
+          }
         >
-          <Route path="dashboard" element={<AdminDashboard />} />
+          <Route index element={<AdminDashboardPage />} />
+          <Route path="dashboard" element={<AdminDashboardPage />} />
           <Route path="doctors/list" element={<DoctorTable />} />
           <Route path="doctors-add" element={<DoctorManagement />} />
           <Route path="hospitals-add" element={<HospitalManagement />} />

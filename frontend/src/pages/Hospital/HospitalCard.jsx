@@ -10,6 +10,7 @@ import {
   Stethoscope,
   Bed,
 } from "lucide-react";
+import { CountryFlag } from "@/helper/countryFlags";
 
 export default function HospitalCard({ hospital, onBook }) {
   return (
@@ -63,7 +64,15 @@ export default function HospitalCard({ hospital, onBook }) {
         {/* Location */}
         <div className="flex items-center gap-2 mb-3 text-sm text-gray-600">
           <MapPin className="w-4 h-4 text-blue-500 flex-shrink-0" />
-          <span className="line-clamp-1">
+          <span className="line-clamp-1 flex items-center gap-1.5">
+            {hospital.countryData?.name && (
+              <CountryFlag
+                name={hospital.countryData.name}
+                slug={hospital.countryData.slug}
+                width={18}
+                className="shadow-sm"
+              />
+            )}
             {hospital.address?.city && hospital.address?.state
               ? `${hospital.address.city}, ${hospital.address.state}`
               : hospital.countryData?.name || "Location not specified"}

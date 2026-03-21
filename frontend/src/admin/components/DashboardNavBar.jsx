@@ -1,9 +1,8 @@
-import React from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { RiMenu2Fill } from "react-icons/ri";
 import { GoDotFill } from "react-icons/go";
 import { FaUserLarge } from "react-icons/fa6";
 import { Link } from "react-router-dom";
-import { useState, useRef, useEffect } from "react";
 import { useAuth } from "../../hooks/useAuth";
 
 const DashboardHeader = ({ toggleSidebar }) => {
@@ -69,7 +68,7 @@ const DashboardHeader = ({ toggleSidebar }) => {
               strokeWidth="1.5"
             />
           </svg>
-          September 2025
+          {new Date().toLocaleString("default", { month: "long", year: "numeric" })}
         </div>
 
         {/* Profile Dropdown (Static UI) */}

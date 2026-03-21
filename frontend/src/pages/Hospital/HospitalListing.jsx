@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import {
   Filter,
@@ -7,6 +7,7 @@ import {
   X,
   MapPin,
   Building2,
+  SlidersHorizontal,
 } from "lucide-react";
 import { useGetAllHospitalsQuery } from "../../rtk/slices/commanApiSlice";
 import { useCreateBookingMutation } from "../../rtk/slices/bookingApiSlice";
@@ -25,6 +26,18 @@ export default function HospitalListingPage() {
   const facilities = searchParams.get("facilities");
   const search = searchParams.get("search");
 
+  /* ================= PAGINATION ================= */
+  const [page, setPage] = useState(1);
+  const limit = 9;
+
+  /* ================= MOBILE FILTER TOGGLE ================= */
+  const [showMobileFilter, setShowMobileFilter] = useState(false);
+
+  // Reset to page 1 whenever filters change
+  useEffect(() => {
+    setPage(1);
+  }, [country, category, city, priceRange, rating, facilities, search]);
+
   /* ================= API ================= */
   const { data, isLoading, isError } = useGetAllHospitalsQuery({
     country,
@@ -34,11 +47,14 @@ export default function HospitalListingPage() {
     rating,
     facilities,
     search,
-    page: 1,
-    limit: 10,
+    page,
+    limit,
   });
 
   const hospitals = data?.data?.data || [];
+  const pagination = data?.data?.pagination || {};
+  const totalPages = pagination.totalPages || 1;
+  const totalItems = pagination.total || hospitals.length;
 
   /* ================= SORTING ================= */
   const [sortBy, setSortBy] = useState("name");
@@ -141,21 +157,44 @@ export default function HospitalListingPage() {
 
   /* ================= RENDER ================= */
   return (
-    <div className="min-h-screen bg-gray-50 py-8 px-4">
-      <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-4 gap-8">
+    <div className="min-h-screen bg-gray-50 pt-24 pb-8 px-3 sm:px-4">
+      {/* Mobile Filter Toggle Button */}
+      <div className="lg:hidden mb-4 max-w-7xl mx-auto">
+        <button
+          onClick={() => setShowMobileFilter(!showMobileFilter)}
+          className="flex items-center gap-2 px-4 py-2.5 bg-white border border-gray-200 rounded-xl shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 transition w-full justify-between"
+        >
+          <span className="flex items-center gap-2">
+            <SlidersHorizontal className="w-4 h-4 text-main" />
+            {showMobileFilter ? "Hide Filters" : "Show Filters"}
+          </span>
+          <X className={`w-4 h-4 transition-transform ${showMobileFilter ? "rotate-0" : "rotate-45"}`} />
+        </button>
 
-        {/* ================= SIDEBAR ================= */}
-        <HospitalFilterSidebar hospitalsCount={sortedHospitals.length} />
+        {/* Mobile Filter Panel */}
+        {showMobileFilter && (
+          <div className="mt-3">
+            <HospitalFilterSidebar hospitalsCount={sortedHospitals.length} />
+          </div>
+        )}
+      </div>
+
+      <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-4 gap-6 lg:gap-8">
+
+        {/* ================= SIDEBAR (desktop only) ================= */}
+        <div className="hidden lg:block">
+          <HospitalFilterSidebar hospitalsCount={sortedHospitals.length} />
+        </div>
 
         {/* ================= MAIN CONTENT ================= */}
-        <div className="lg:col-span-3 space-y-6">
+        <div className="lg:col-span-3 space-y-5">
 
           {/* Header */}
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">
+            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">
               Find Your Perfect Hospital
             </h1>
-            <p className="text-gray-600">
+            <p className="text-gray-600 text-sm sm:text-base">
               Discover world-class healthcare facilities with expert care
             </p>
           </div>
@@ -166,7 +205,11 @@ export default function HospitalListingPage() {
               <div className="flex items-center gap-2">
                 <Filter className="w-5 h-5 text-main" />
                 <span className="font-medium text-gray-700">
-                  {sortedHospitals.length} hospital{sortedHospitals.length !== 1 ? "s" : ""} found
+                  {totalItems > 0 ? (
+                    <>{totalItems} hospital{totalItems !== 1 ? "s" : ""} found</>
+                  ) : (
+                    <>{sortedHospitals.length} hospital{sortedHospitals.length !== 1 ? "s" : ""} found</>
+                  )}
                 </span>
               </div>
 
@@ -229,6 +272,55 @@ export default function HospitalListingPage() {
                   onBook={openAppointmentModal}
                 />
               ))}
+            </div>
+          )}
+
+          {/* ================= PAGINATION ================= */}
+          {!isLoading && totalPages > 1 && (
+            <div className="flex items-center justify-center gap-2 pt-4 pb-2 flex-wrap">
+              {/* Prev */}
+              <button
+                onClick={() => { setPage((p) => Math.max(1, p - 1)); window.scrollTo({ top: 0, behavior: "smooth" }); }}
+                disabled={page === 1}
+                className="px-4 py-2 rounded-lg border border-gray-300 text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed transition"
+              >
+                ← Prev
+              </button>
+
+              {/* Page Numbers */}
+              {Array.from({ length: totalPages }, (_, i) => i + 1)
+                .filter((p) => p === 1 || p === totalPages || Math.abs(p - page) <= 2)
+                .reduce((acc, p, idx, arr) => {
+                  if (idx > 0 && p - arr[idx - 1] > 1) acc.push("...");
+                  acc.push(p);
+                  return acc;
+                }, [])
+                .map((p, idx) =>
+                  p === "..." ? (
+                    <span key={`ellipsis-${idx}`} className="px-2 text-gray-400 select-none">…</span>
+                  ) : (
+                    <button
+                      key={p}
+                      onClick={() => { setPage(p); window.scrollTo({ top: 0, behavior: "smooth" }); }}
+                      className={`w-9 h-9 rounded-lg text-sm font-medium transition ${
+                        page === p
+                          ? "bg-main text-white shadow"
+                          : "border border-gray-300 text-gray-700 hover:bg-gray-50"
+                      }`}
+                    >
+                      {p}
+                    </button>
+                  )
+                )}
+
+              {/* Next */}
+              <button
+                onClick={() => { setPage((p) => Math.min(totalPages, p + 1)); window.scrollTo({ top: 0, behavior: "smooth" }); }}
+                disabled={page === totalPages}
+                className="px-4 py-2 rounded-lg border border-gray-300 text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed transition"
+              >
+                Next →
+              </button>
             </div>
           )}
         </div>

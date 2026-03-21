@@ -13,6 +13,7 @@ import {
   useGetCategoryListQuery,
   useGetCountryListQuery,
 } from "@/rtk/slices/commanApiSlice";
+import CountrySelectDropdown from "@/components/CountrySelectDropdown";
 
 export default function HospitalFilterSidebar({ hospitalsCount }) {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -33,7 +34,7 @@ export default function HospitalFilterSidebar({ hospitalsCount }) {
   };
 
   return (
-    <div className="bg-white rounded-2xl shadow-md p-6 border border-gray-100 sticky top-6">
+    <div className="bg-white rounded-2xl shadow-md p-6 border border-gray-100 lg:sticky lg:top-20">
       <div className="flex items-center gap-2 mb-6">
         <FaFilter className="text-main text-lg" />
         <h2 className="text-xl font-semibold text-gray-800">Filter Hospitals</h2>
@@ -58,18 +59,11 @@ export default function HospitalFilterSidebar({ hospitalsCount }) {
         <label className="flex items-center gap-2 font-medium mb-2">
           <FaGlobeAsia className="text-main" /> Country
         </label>
-        <select
+        <CountrySelectDropdown
+          countries={countries}
           value={searchParams.get("country") || ""}
-          onChange={(e) => updateParam("country", e.target.value)}
-          className="w-full border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-main focus:border-transparent"
-        >
-          <option value="">All Countries</option>
-          {countries.map((c) => (
-            <option key={c._id} value={c.slug}>
-              {c.country_name}
-            </option>
-          ))}
-        </select>
+          onChange={(slug) => updateParam("country", slug)}
+        />
       </div>
 
       {/* ================= CITY ================= */}

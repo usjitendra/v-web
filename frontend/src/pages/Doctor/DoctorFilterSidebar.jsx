@@ -14,6 +14,7 @@ import {
   useGetHospitalListQuery,
   useGetCountryListQuery,
 } from "@/rtk/slices/commanApiSlice";
+import CountrySelectDropdown from "@/components/CountrySelectDropdown";
 
 export default function DoctorFilterSidebar({ doctorsCount }) {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -35,16 +36,19 @@ export default function DoctorFilterSidebar({ doctorsCount }) {
     setSearchParams(params);
   };
 
+  const inputCls =
+    "w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-teal-500 focus:border-transparent transition";
+
   return (
-    <div className="bg-white rounded-2xl shadow-md p-6 border border-gray-100 sticky top-6">
-      <div className="flex items-center gap-2 mb-6">
-        <FaFilter className="text-teal-600 text-lg" />
-        <h2 className="text-xl font-semibold text-gray-800">Filters</h2>
+    <div className="bg-white rounded-2xl shadow-md p-6 border border-gray-100 lg:sticky lg:top-20">
+      <div className="flex items-center gap-2 mb-5">
+        <FaFilter className="text-teal-600 text-base" />
+        <h2 className="text-lg font-semibold text-gray-800">Filters</h2>
       </div>
 
-      {/* ================= SEARCH ================= */}
-      <div className="mb-5">
-        <label className="flex items-center gap-2 font-medium mb-2">
+      {/* SEARCH */}
+      <div className="mb-4">
+        <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-1.5">
           <FaSearch className="text-teal-500" /> Search
         </label>
         <input
@@ -52,38 +56,31 @@ export default function DoctorFilterSidebar({ doctorsCount }) {
           placeholder="Doctor name"
           defaultValue={searchParams.get("search") || ""}
           onChange={(e) => updateParam("search", e.target.value)}
-          className="w-full border rounded-lg p-2"
+          className={inputCls}
         />
       </div>
 
-      {/* ================= COUNTRY ================= */}
-      <div className="mb-5">
-        <label className="flex items-center gap-2 font-medium mb-2">
+      {/* COUNTRY */}
+      <div className="mb-4">
+        <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-1.5">
           <FaGlobeAsia className="text-teal-500" /> Country
         </label>
-        <select
+        <CountrySelectDropdown
+          countries={countries}
           value={searchParams.get("country") || ""}
-          onChange={(e) => updateParam("country", e.target.value)}
-          className="w-full border rounded-lg p-2"
-        >
-          <option value="">All Countries</option>
-          {countries.map((c) => (
-            <option key={c._id} value={c.slug}>
-              {c.country_name}
-            </option>
-          ))}
-        </select>
+          onChange={(slug) => updateParam("country", slug)}
+        />
       </div>
 
-      {/* ================= SPECIALTY ================= */}
-      <div className="mb-5">
-        <label className="flex items-center gap-2 font-medium mb-2">
+      {/* SPECIALTY */}
+      <div className="mb-4">
+        <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-1.5">
           <FaUserMd className="text-teal-500" /> Specialty
         </label>
         <select
           value={searchParams.get("category") || ""}
           onChange={(e) => updateParam("category", e.target.value)}
-          className="w-full border rounded-lg p-2"
+          className={inputCls}
         >
           <option value="">All Specialties</option>
           {categories.map((cat) => (
@@ -94,15 +91,15 @@ export default function DoctorFilterSidebar({ doctorsCount }) {
         </select>
       </div>
 
-      {/* ================= HOSPITAL ================= */}
-      <div className="mb-5">
-        <label className="flex items-center gap-2 font-medium mb-2">
+      {/* HOSPITAL */}
+      <div className="mb-4">
+        <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-1.5">
           <FaHospital className="text-teal-500" /> Hospital
         </label>
         <select
           value={searchParams.get("hospital") || ""}
           onChange={(e) => updateParam("hospital", e.target.value)}
-          className="w-full border rounded-lg p-2"
+          className={inputCls}
         >
           <option value="">All Hospitals</option>
           {hospitals.map((h) => (
@@ -113,15 +110,15 @@ export default function DoctorFilterSidebar({ doctorsCount }) {
         </select>
       </div>
 
-      {/* ================= RATING (STATIC) ================= */}
-      <div className="mb-5">
-        <label className="flex items-center gap-2 font-medium mb-2">
+      {/* RATING */}
+      <div className="mb-4">
+        <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-1.5">
           <FaStar className="text-teal-500" /> Minimum Rating
         </label>
         <select
           value={searchParams.get("rating") || ""}
           onChange={(e) => updateParam("rating", e.target.value)}
-          className="w-full border rounded-lg p-2"
+          className={inputCls}
         >
           <option value="">Any Rating</option>
           <option value="4.5">4.5+</option>
@@ -130,15 +127,15 @@ export default function DoctorFilterSidebar({ doctorsCount }) {
         </select>
       </div>
 
-      {/* ================= EXPERIENCE (STATIC) ================= */}
-      <div className="mb-5">
-        <label className="flex items-center gap-2 font-medium mb-2">
-          <FaGraduationCap className="text-teal-500" /> Minimum Experience
+      {/* EXPERIENCE */}
+      <div className="mb-4">
+        <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-1.5">
+          <FaGraduationCap className="text-teal-500" /> Experience
         </label>
         <select
           value={searchParams.get("experience") || ""}
           onChange={(e) => updateParam("experience", e.target.value)}
-          className="w-full border rounded-lg p-2"
+          className={inputCls}
         >
           <option value="">Any</option>
           <option value="5">5+ years</option>
@@ -147,15 +144,15 @@ export default function DoctorFilterSidebar({ doctorsCount }) {
         </select>
       </div>
 
-      {/* ================= FEE (STATIC) ================= */}
-      <div className="mb-6">
-        <label className="flex items-center gap-2 font-medium mb-2">
-          <FaMoneyBill className="text-teal-500" /> Max Consultation Fee
+      {/* FEE */}
+      <div className="mb-5">
+        <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-1.5">
+          <FaMoneyBill className="text-teal-500" /> Consultation Fee
         </label>
         <select
           value={searchParams.get("priceRange") || ""}
           onChange={(e) => updateParam("priceRange", e.target.value)}
-          className="w-full border rounded-lg p-2"
+          className={inputCls}
         >
           <option value="">Any Fee</option>
           <option value="500">Under ₹500</option>
@@ -164,16 +161,16 @@ export default function DoctorFilterSidebar({ doctorsCount }) {
         </select>
       </div>
 
-      {/* ================= FOOTER ================= */}
-      <div className="text-sm text-gray-600 mb-4">
-        Showing {doctorsCount} doctors
-      </div>
+      {/* Footer */}
+      <p className="text-xs text-gray-500 mb-3">
+        Showing {doctorsCount} doctor{doctorsCount !== 1 ? "s" : ""}
+      </p>
 
       <button
         onClick={() => setSearchParams({})}
-        className="w-full bg-gray-200 py-2 rounded-lg hover:bg-gray-300 transition"
+        className="w-full bg-gray-100 text-gray-700 py-2 rounded-lg text-sm font-medium hover:bg-gray-200 transition"
       >
-        Reset Filters
+        Reset All Filters
       </button>
     </div>
   );
