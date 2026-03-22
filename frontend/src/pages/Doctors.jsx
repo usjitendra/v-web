@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { FaFilter, FaGraduationCap, FaHospital, FaMoneyBill, FaSearch, FaStar, FaUserMd } from "react-icons/fa";
+import { Helmet } from 'react-helmet';
 import DoctorCard from "../components/DoctorCard";
 import SectionHeading from "../components/home/SectionHeading";
 import url_prefix from "../data/variable";
@@ -149,7 +150,13 @@ const Doctors = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6">
+    <>
+      <Helmet>
+        <title>Find Best Doctors & Medical Specialists | MedicwayCare</title>
+        <meta name="description" content="Browse verified doctors and medical specialists on MedicwayCare. Connect with expert healthcare professionals for affordable treatment abroad.\" />
+        <meta name="keywords" content="doctors, specialists, find doctor, medical professionals, healthcare" />
+      </Helmet>
+      <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6">
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-4 gap-8">
         {/* Filter Sidebar */}
         <div className="lg:col-span-1 bg-white rounded-2xl shadow-md p-6 border border-gray-100  top-6 h-fit">
@@ -341,6 +348,7 @@ const Doctors = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 

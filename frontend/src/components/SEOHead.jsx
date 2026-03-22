@@ -4,20 +4,20 @@ import { useGetSEOByPageQuery } from '../rtk/slices/seoApiSlice';
 
 // Default SEO data for fallback
 const defaultSEO = {
-  title: 'Medical Tourism Platform - World-Class Healthcare Abroad',
-  description: 'Connect with top hospitals and doctors worldwide. Get personalized medical treatment with our comprehensive healthcare platform.',
-  keywords: ['medical tourism', 'healthcare abroad', 'international treatment', 'medical travel'],
+  title: 'MedicwayCare - Medical Tourism & Healthcare Solutions',
+  description: 'MedicwayCare connects you with world-class hospitals and doctors for affordable medical treatment abroad. Expert healthcare guidance globally.',
+  keywords: ['medical tourism', 'healthcare abroad', 'international treatment', 'affordable medical', 'best hospitals'],
   canonicalUrl: window.location.href,
-  ogTitle: 'Medical Tourism Platform - World-Class Healthcare Abroad',
-  ogDescription: 'Connect with top hospitals and doctors worldwide. Get personalized medical treatment with our comprehensive healthcare platform.',
+  ogTitle: 'MedicwayCare - Medical Tourism & Healthcare Solutions',
+  ogDescription: 'Get affordable, world-class medical treatment abroad with MedicwayCare. Connect with top hospitals and experienced doctors.',
   ogImage: '/default-og-image.jpg',
   ogType: 'website',
   ogUrl: window.location.href,
   twitterCard: 'summary_large_image',
-  twitterTitle: 'Medical Tourism Platform - World-Class Healthcare Abroad',
-  twitterDescription: 'Connect with top hospitals and doctors worldwide.',
+  twitterTitle: 'MedicwayCare - Medical Tourism Solutions',
+  twitterDescription: 'Affordable healthcare abroad with world-class doctors and hospitals.',
   twitterImage: '/default-twitter-image.jpg',
-  twitterSite: '@MedicalTravelCo',
+  twitterSite: '@MedicwayCare',
   googleAnalyticsId: '',
   facebookPixelId: ''
 };

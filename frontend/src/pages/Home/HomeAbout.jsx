@@ -48,9 +48,7 @@ export default function HomeAbout() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3, duration: 0.8 }}
           >
-            <span className="font-semibold text-yellow text-justify lg:text-center">Shanya Global Scanning and Research Pvt. Ltd</span> aims at achieving the highest level of excellence with quality results.
-            Our centres operate 24x7 and are equipped with AI-enabled & fully automated state-of-the-art technology and equipment. We ensure stringent quality
-            monitoring with standardized processes and protocols, trusted by customers across Uttar Pradesh and surrounding areas.
+            <span className="font-semibold text-yellow text-justify lg:text-center">MedicwayCare</span> is committed to connecting patients worldwide with world-class healthcare services. Our platform operates 24x7 and provides access to the best hospitals, doctors, and medical treatments across the globe. With transparent pricing, expert guidance, and comprehensive support, we ensure every patient gets the quality healthcare they deserve.
           </motion.p>
 
           {/* Features Section */}

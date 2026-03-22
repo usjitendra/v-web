@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { FaClock, FaFilter, FaProcedures, FaSearch, FaStar } from "react-icons/fa";
+import { Helmet } from 'react-helmet';
+import ServiceBreadCrumbs from "../components/ServiceBreadcums";
 import TreatmentCard from "../components/TreatmentCard";
 import url_prefix from "../data/variable";
 import { useLanguage } from '../hooks/useLanguage';
@@ -144,8 +146,28 @@ const Treatments = () => {
     );
   }
 
+  /* ================= BREADCRUMBS ================= */
+  const breadcrumbItems = [
+    { label: 'Home', path: '/' },
+    { label: 'Healthcare', path: '/treatments' },
+  ];
+
+  if (filters.category) {
+    breadcrumbItems.push({ label: `${filters.category} Treatments`, path: `/treatments?category=${filters.category}` });
+  }
+  if (!filters.category) {
+    breadcrumbItems.push({ label: 'Explore Treatments' });
+  }
+
   return (
-    <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6">
+    <>
+      <Helmet>
+        <title>Medical Treatments | Find Best Treatment Options | MedicwayCare</title>
+        <meta name="description" content="Explore comprehensive medical treatments available at top hospitals. Find and compare treatment options with expert guidance from MedicwayCare." />
+        <meta name="keywords" content="medical treatments, healthcare procedures, surgical treatments, treatment options" />
+      </Helmet>
+      <ServiceBreadCrumbs items={breadcrumbItems} headText="Medical Treatments & Procedures" />
+      <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6">
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-4 gap-8">
         {/* Filter Sidebar */}
         <div className="lg:col-span-1 bg-white rounded-2xl shadow-md p-6 border border-gray-100 top-6 h-fit">
@@ -316,6 +338,7 @@ const Treatments = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 

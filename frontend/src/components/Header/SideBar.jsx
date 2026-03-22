@@ -91,7 +91,7 @@ const Sidebar = ({ handleSideBar }) => {
                     className="block px-2 py-2 text-sm rounded-lg hover:bg-blue-500 border-b-2 border-white transition-all"
                     onClick={handleSideBar}
                   >
-                    About Shanya Global
+                    About MedicwayCare
                   </Link>
                   <Link
                     to="/about/team"

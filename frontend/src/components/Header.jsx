@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, ChevronDown, ChevronRight, Globe } from "lucide-react";
 import { Link, NavLink } from "react-router-dom";
-import  logo from  "../assets/logo_banne/m4.png"
+import logo from "../assets/logo1.jpg";
 
 import {
   useGetCountryCategoryDropdownQuery,
@@ -10,23 +10,23 @@ import {
 } from "@/rtk/slices/dropdownApiSlice";
 import { CountryFlag } from "@/helper/countryFlags";
 
-const ROW_H   = 46;   // country row height  (px)
+const ROW_H = 46;   // country row height  (px)
 const LABEL_H = 32;   // "COUNTRIES" header  (px)
 const MAX_LIST_H = 320; // max scrollable height for country list
 
 const Header = () => {
-  const [scrolled, setScrolled]             = useState(false);
-  const [mobileOpen, setMobileOpen]         = useState(false);
-  const [activeMega, setActiveMega]         = useState(null);
-  const [hoverIdx, setHoverIdx]             = useState(0);
+  const [scrolled, setScrolled] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [activeMega, setActiveMega] = useState(null);
+  const [hoverIdx, setHoverIdx] = useState(0);
   const [mobileExpanded, setMobileExpanded] = useState({});
 
   const closeTimer = useRef(null);
 
-  const { data }               = useGetCountryCategoryDropdownQuery();
+  const { data } = useGetCountryCategoryDropdownQuery();
   const { data: languageData } = useGetLanguageDropdownQuery();
   const countries = data?.data?.result ?? [];
-  const languages = languageData?.data  ?? [];
+  const languages = languageData?.data ?? [];
 
   useEffect(() => {
     const fn = () => setScrolled(window.scrollY > 10);
@@ -34,21 +34,21 @@ const Header = () => {
     return () => window.removeEventListener("scroll", fn);
   }, []);
 
-  const openMega    = useCallback((lbl) => {
+  const openMega = useCallback((lbl) => {
     clearTimeout(closeTimer.current);
     setActiveMega(lbl);
     setHoverIdx(0);
   }, []);
-  const closeMega   = useCallback(() => {
+  const closeMega = useCallback(() => {
     closeTimer.current = setTimeout(() => setActiveMega(null), 180);
   }, []);
   const cancelClose = useCallback(() => clearTimeout(closeTimer.current), []);
 
   const navItems = [
-    { label: "Home",                path: "/" },
-    { label: "About",               path: "/about" },
-    { label: "Hospitals",           path: "/hospitals",  mega: true },
-    { label: "Doctors",             path: "/doctors",    mega: true },
+    { label: "Home", path: "/" },
+    { label: "About", path: "/about" },
+    { label: "Hospitals", path: "/hospitals", mega: true },
+    { label: "Doctors", path: "/doctors", mega: true },
     { label: "Clinical Psychology", path: "/specialities/therapies" },
   ];
 
@@ -73,14 +73,15 @@ const Header = () => {
 
         {/* ── Logo ── */}
         <Link to="/" className="flex items-center gap-2.5 flex-shrink-0 mr-8">
-          <div className="w-9 h-9 bg-teal-500 text-white rounded-xl flex items-center justify-center font-bold text-[15px] shadow-sm">
-            V
-          </div>
+          <img
+            src={logo}
+            alt="MedicwayCare Logo"
+            className="w-9 h-9 object-cover rounded-xl shadow-sm"
+          />
           <span className="font-bold text-gray-900 text-[15px] tracking-tight">
-            Vaidam <span className="text-gray-400 font-normal">Medical</span>
+            Medicway<span className="text-gray-400 font-normal">Care</span>
           </span>
         </Link>
-
         {/* ── Desktop Nav ── */}
         <nav className="hidden lg:flex items-center flex-1">
           {navItems.map((item) => (
@@ -94,8 +95,7 @@ const Header = () => {
                 to={item.path}
                 style={{ height: 62 }}
                 className={({ isActive }) =>
-                  `relative flex items-center gap-1 px-4 text-[13.5px] font-medium transition-colors duration-150 ${
-                    isActive ? "text-teal-600" : "text-gray-700 hover:text-teal-600"
+                  `relative flex items-center gap-1 px-4 text-[13.5px] font-medium transition-colors duration-150 ${isActive ? "text-teal-600" : "text-gray-700 hover:text-teal-600"
                   }`
                 }
               >
@@ -167,9 +167,8 @@ const Header = () => {
                                 key={c.countryId}
                                 style={{ height: ROW_H }}
                                 onMouseEnter={() => setHoverIdx(idx)}
-                                className={`relative flex items-center gap-3 px-5 cursor-pointer select-none transition-colors duration-100 ${
-                                  active ? "bg-teal-50" : "hover:bg-gray-50"
-                                }`}
+                                className={`relative flex items-center gap-3 px-5 cursor-pointer select-none transition-colors duration-100 ${active ? "bg-teal-50" : "hover:bg-gray-50"
+                                  }`}
                               >
                                 {active && (
                                   <motion.span
@@ -300,10 +299,10 @@ const Header = () => {
                 >
                   {languages.length > 0
                     ? languages.map((lang, i) => (
-                        <div key={i} className="px-4 py-2.5 text-[13px] text-gray-700 hover:bg-teal-50 hover:text-teal-700 cursor-pointer transition-colors">
-                          {lang.language_name}
-                        </div>
-                      ))
+                      <div key={i} className="px-4 py-2.5 text-[13px] text-gray-700 hover:bg-teal-50 hover:text-teal-700 cursor-pointer transition-colors">
+                        {lang.language_name}
+                      </div>
+                    ))
                     : <div className="px-4 py-3 text-sm text-gray-400">No languages</div>
                   }
                 </motion.div>

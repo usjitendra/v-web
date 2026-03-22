@@ -21,6 +21,8 @@ import MultiSpecialtyFocusApi from "./Home/MultiSpecialtyFocusApi";
 import ServicesSection from "./Home/OurService";
 import WhyWe from "./Home/WhyWe";
 import CTA from "@/components/CTA";
+import HeroBanner from "@/components/Banner";
+import ScrollFlag from "@/components/ScrollFlag";
 
 export default function Home() {
   const [language] = useLanguage();
@@ -29,7 +31,9 @@ export default function Home() {
   return (
     <div>
       <SEOHead pageType="home" />
-      <Hero />
+      {/* <Hero /> */}
+      <HeroBanner/>
+      <ScrollFlag/>
          <Stats />
       {/* <HeroSection/> */}
       {/* <HomeAbout/> */}

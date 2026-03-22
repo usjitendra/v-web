@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
+import { Helmet } from 'react-helmet';
 import {
   Calendar,
   Clock,
@@ -224,7 +225,13 @@ const BlogListing = () => {
   };
 
   return (
-    <div className="min-h-screen bg-lightSky">
+    <>
+      <Helmet>
+        <title>Medical Blog Articles & Healthcare Insights | MedicwayCare</title>
+        <meta name="description" content="Discover comprehensive articles on medical treatments, wellness tips, and healthcare information from MedicwayCare experts." />
+        <meta name="keywords" content="blog, medical articles, health tips, healthcare, treatment information" />
+      </Helmet>
+      <div className="min-h-screen bg-lightSky">
       {/* Hero Section */}
       <section className="bg-gradient-to-br from-main/5 to-main/10 py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -458,6 +465,7 @@ const BlogListing = () => {
         </div>
       </section>
     </div>
+    </>
   );
 };
 

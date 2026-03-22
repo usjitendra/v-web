@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { FaFilter, FaHospital, FaMapMarkerAlt, FaSearch, FaStar } from "react-icons/fa";
+import { Helmet } from 'react-helmet';
 import SectionHeading from "../components/home/SectionHeading";
+import ServiceBreadCrumbs from "../components/ServiceBreadcums";
 import HospitalCard from "../components/HospitalCard";
 import url_prefix from "../data/variable";
 import { useLanguage } from '../hooks/useLanguage';
@@ -135,8 +137,34 @@ const Hospitals = () => {
     );
   }
 
+  /* ================= BREADCRUMBS ================= */
+  const breadcrumbItems = [
+    { label: 'Home', path: '/' },
+    { label: 'Healthcare', path: '/hospitals' },
+  ];
+
+  if (filters.country) {
+    breadcrumbItems.push({ label: `Hospitals in ${filters.country}`, path: `/hospitals?country=${filters.country}` });
+  }
+  if (filters.city) {
+    breadcrumbItems.push({ label: `Hospitals in ${filters.city}`, path: `/hospitals?city=${filters.city}` });
+  }
+  if (filters.specialty) {
+    breadcrumbItems.push({ label: `${filters.specialty} Hospitals`, path: `/hospitals?specialty=${filters.specialty}` });
+  }
+  if (!filters.country && !filters.city && !filters.specialty) {
+    breadcrumbItems.push({ label: 'Find Hospitals' });
+  }
+
   return (
-    <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6">
+    <>
+      <Helmet>
+        <title>Best Hospitals Worldwide | Top Medical Facilities | MedicwayCare</title>
+        <meta name="description" content="Find and compare the world's best hospitals. Access verified healthcare facilities with expert doctors and advanced medical treatments on MedicwayCare." />
+        <meta name="keywords" content="hospitals, medical facilities, best hospitals, healthcare centers, doctors" />
+      </Helmet>
+      <ServiceBreadCrumbs items={breadcrumbItems} headText="Find Healthcare Facilities" />
+      <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6">
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-4 gap-8">
         {/* Filter Sidebar */}
         <div className="lg:col-span-1 bg-white rounded-2xl shadow-md p-6 border border-gray-100  top-6 h-fit">
@@ -333,6 +361,7 @@ const Hospitals = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 

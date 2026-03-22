@@ -122,6 +122,28 @@ export default function DoctorListingPage() {
 
   const inputWithIconCls = "pl-9 " + inputCls;
 
+  /* ================= BREADCRUMBS ================= */
+  const breadcrumbItems = [
+    { label: 'Home', path: '/' },
+    { label: 'Healthcare', path: '/doctors' },
+  ];
+
+  if (category) {
+    breadcrumbItems.push({ label: `${category} Specialists`, path: `/doctors?category=${category}` });
+  }
+  if (country) {
+    breadcrumbItems.push({ label: `Doctors in ${country}`, path: `/doctors?country=${country}` });
+  }
+  if (city) {
+    breadcrumbItems.push({ label: `Doctors in ${city}`, path: `/doctors?city=${city}` });
+  }
+  if (hospital) {
+    breadcrumbItems.push({ label: 'Hospital Network', path: `/doctors?hospital=${hospital}` });
+  }
+  if (!category && !country && !city && !hospital) {
+    breadcrumbItems.push({ label: 'Find Doctors' });
+  }
+
   /* ================= RENDER ================= */
   return (
     <div className="min-h-screen bg-gray-50">
@@ -146,7 +168,8 @@ export default function DoctorListingPage() {
         </div>
       </div> 
 
-
+      {/* ─── BREADCRUMBS ─── */}
+      <ServiceBreadCrumbs items={breadcrumbItems} headText="Find Healthcare Professionals" />
 
       {/* ─── MAIN ─── */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8">

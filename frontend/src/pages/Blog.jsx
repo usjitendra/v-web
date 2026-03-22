@@ -1,6 +1,7 @@
 // /src/pages/Blog.jsx
 import { useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
+import { Helmet } from 'react-helmet';
 import SectionHeading from "../components/home/SectionHeading";
 import url_prefix from "../data/variable";
 
@@ -163,7 +164,13 @@ const Blog = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12">
+    <>
+      <Helmet>
+        <title>Health Blog & Medical Articles | MedicwayCare</title>
+        <meta name="description" content="Read expert articles on medical treatments, healthcare tips, and medical tourism insights. Stay informed with MedicwayCare's health blog." />
+        <meta name="keywords" content="health blog, medical articles, healthcare tips, treatment guides" />
+      </Helmet>
+      <div className="min-h-screen bg-gray-50 py-12">
       <div className="container mx-auto px-4">
         {/* <div className="text-center mb-12">
                     <h1 className="text-4xl font-bold text-gray-800 mb-4">Our Blog</h1>
@@ -390,7 +397,8 @@ const Blog = () => {
         )}
       </div>
     </div>
+    </>
   );
-};
+}
 
 export default Blog;

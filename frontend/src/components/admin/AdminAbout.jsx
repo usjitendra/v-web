@@ -24,10 +24,10 @@ const AboutManagement = () => {
         title: "About Us",
         subtitle: "We're committed to making healthcare accessible, transparent, and easy to navigate",
         missionTitle: "Our Mission",
-        missionDescription: "This platform was created as a learning project to replicate the experience of a modern healthcare directory and booking service.",
+        missionDescription: "MedicwayCare is a trusted medical tourism platform connecting patients worldwide with world-class hospitals and experienced doctors. We provide comprehensive healthcare solutions, expert guidance, and transparent services for affordable medical treatment abroad.",
         language: "",
         image: "/aboutpage.jpg",
-        whatsappNumber: "+1234567890",
+        whatsappNumber: "+919354799090",
         whatsappMessage: "Hello! I have a question about your healthcare services.",
         email: "",
         highlights: [

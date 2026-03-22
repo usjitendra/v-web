@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import { HeartPulse, Stethoscope, Users } from 'lucide-react';
+import { Helmet } from 'react-helmet';
 
 export default function About() {
   const data = {
@@ -7,7 +8,7 @@ export default function About() {
     subtitle: "We're committed to making healthcare accessible, transparent, and easy to navigate",
     missionTitle: 'Our Mission',
     missionDescription:
-      'This platform was created as a learning project to replicate the experience of a modern healthcare directory and booking service.',
+      'MedicwayCare is a trusted medical tourism platform connecting patients worldwide with world-class hospitals and experienced doctors. We provide comprehensive healthcare solutions, expert guidance, and transparent services for affordable medical treatment abroad.',
     image:
       'https://images.unsplash.com/photo-1532938911079-1b06ac7ceec7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
     highlights: [
@@ -15,8 +16,8 @@ export default function About() {
       { icon: 'Stethoscope', text: 'Intuitive tools for better patient experience' },
       { icon: 'Users', text: 'Building trust through transparency' },
     ],
-    email: 'contact@healthcare.com',
-    whatsappNumber: '1234567890',
+    email: 'contact@medicwaycare.com',
+    whatsappNumber: '9354799090',
     whatsappMessage: 'Hello! I have a question about your healthcare services.',
     isActive: true,
     updatedAt: null, // will show "Invalid Date" as requested
@@ -29,7 +30,13 @@ export default function About() {
   };
 
   return (
-    <section className="relative bg-white py-16 overflow-hidden">
+    <>
+      <Helmet>
+        <title>About MedicwayCare - Medical Tourism Experts</title>
+        <meta name="description" content="Learn about MedicwayCare, your trusted partner for affordable medical tourism. We connect patients with world-class hospitals and doctors globally." />
+        <meta name="keywords" content="about us, medical tourism, healthcare services, trusted doctors" />
+      </Helmet>
+      <section className="relative bg-white py-16 overflow-hidden">
       <div className="absolute top-0 left-0 w-64 h-64 bg-teal-50 rounded-full blur-xl opacity-50" />
       <div className="absolute bottom-0 right-0 w-80 h-80 bg-teal-50 rounded-full blur-xl opacity-50" />
 
@@ -161,5 +168,6 @@ export default function About() {
         </motion.div>
       </div>
     </section>
+    </>
   );
 }
