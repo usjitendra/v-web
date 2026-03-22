@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Mail, Phone, MessageSquare, Send, CheckCircle } from 'lucide-react';
 import { useCreateContactMutation } from '../rtk/slices/contactApiSlice';
+import { toast } from 'react-toastify';
 
 const ContactForm = ({ type = 'contact', serviceType, compact = false }) => {
   const [createContact, { isLoading }] = useCreateContactMutation();
@@ -23,14 +24,13 @@ const ContactForm = ({ type = 'contact', serviceType, compact = false }) => {
     e.preventDefault();
 
     if (!formData.name || !formData.email || !formData.phone || !formData.message) {
-      alert('Please fill all required fields');
+      toast.error('Please fill all required fields');
       return;
     }
 
-    // Email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(formData.email)) {
-      alert('Please enter a valid email address');
+      toast.error('Please enter a valid email address');
       return;
     }
 
@@ -41,23 +41,14 @@ const ContactForm = ({ type = 'contact', serviceType, compact = false }) => {
         serviceType: serviceType || (type === 'quote' ? 'general-inquiry' : undefined)
       };
 
-      const result = await createContact(contactData).unwrap();
+      await createContact(contactData).unwrap();
+      toast.success(type === 'quote' ? 'Quote request sent successfully!' : 'Message sent successfully! We\'ll get back to you within 24 hours.');
       setSubmitStatus('success');
-
-      // Reset form
-      setFormData({
-        name: '',
-        email: '',
-        phone: '',
-        subject: '',
-        message: '',
-        preferredContact: 'email'
-      });
-
-      // Reset status after 5 seconds
+      setFormData({ name: '', email: '', phone: '', subject: '', message: '', preferredContact: 'email' });
       setTimeout(() => setSubmitStatus(null), 5000);
     } catch (error) {
       console.error('Contact submission error:', error);
+      toast.error('Failed to send message. Please try again.');
       setSubmitStatus('error');
       setTimeout(() => setSubmitStatus(null), 5000);
     }
@@ -332,7 +323,7 @@ const ContactForm = ({ type = 'contact', serviceType, compact = false }) => {
             </div>
             <div className="flex items-center gap-2">
               <Phone className="w-4 h-4 text-main" />
-              <span>Call us: +1-800-MEDICAL</span>
+              <span>Call us: +91 93547 99090</span>
             </div>
           </div>
         </div>

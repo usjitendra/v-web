@@ -25,7 +25,7 @@ const HeroSection = () => {
   };
 
   const handleCallNow = () => {
-    window.location.href = 'tel:+911234567890';
+    window.location.href = 'tel:+919354799090';
   };
 
   return (
@@ -102,7 +102,7 @@ const HeroSection = () => {
                 className="bg-white hover:bg-gray-50 text-darktext px-8 py-4 rounded-xl font-bold text-lg transition-all duration-300 shadow-lg hover:shadow-xl border-2 border-main/20 flex items-center justify-center gap-3"
               >
                 <Phone className="w-6 h-6 text-main" />
-                Call Now: +91 12345 67890
+                Call Now: +91 93547 99090
               </button>
             </div>
 

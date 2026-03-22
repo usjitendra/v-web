@@ -7,6 +7,7 @@ import {
 } from "lucide-react";
 import { useGetAllDoctorsQuery } from "@/rtk/slices/commanApiSlice";
 import { useCreateBookingMutation } from "@/rtk/slices/bookingApiSlice";
+import { toast } from "react-toastify";
 import DoctorFilterSidebar from "./DoctorFilterSidebar";
 import DoctorCard from "@/components/DoctorCard";
 import ServiceBreadCrumbs from "@/components/ServiceBreadcums";
@@ -100,9 +101,10 @@ export default function DoctorListingPage() {
         hospital: selectedDoctor.hospital?._id,
         type: "appointment",
       }).unwrap();
+      toast.success("Appointment booked successfully! You'll receive a confirmation shortly.");
       setBookingSuccess(true);
     } catch {
-      alert("Failed to book appointment. Please try again.");
+      toast.error("Failed to book appointment. Please try again.");
     }
   };
 

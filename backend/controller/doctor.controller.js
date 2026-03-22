@@ -392,7 +392,7 @@ class DoctorController {
     }
 
     // ---------- OPTIONAL FIELDS ----------
-    if (conteryId) doctor.categoryId = conteryId
+    if (conteryId) doctor.conteryId = conteryId
     if (location) doctor.location = parseObject(location);
     if (experience) doctor.experience = experience;
     if (workAt) doctor.workAt = workAt;

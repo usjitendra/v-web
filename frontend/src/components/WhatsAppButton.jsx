@@ -33,15 +33,9 @@ import "./WhatsAppButton.css";
 
 const WhatsAppSectionButton = () => {
   // Replace with your actual WhatsApp number in international format (without +)
-  const phoneNumber = "1234567890";
-
-  // Message that will be pre-filled (optional)
+  const phoneNumber = "919354799090";
   const message = "Hello! I have a question about your services.";
-
-  // Create the WhatsApp URL
-  const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(
-    message
-  )}`;
+  const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
 
   return (
     <div className="whatsapp-section-button-container">

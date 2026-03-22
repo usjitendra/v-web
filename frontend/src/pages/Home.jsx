@@ -20,6 +20,7 @@ import MultiSpecialtyFocus from "./Home/MutiSpecality";
 import MultiSpecialtyFocusApi from "./Home/MultiSpecialtyFocusApi";
 import ServicesSection from "./Home/OurService";
 import WhyWe from "./Home/WhyWe";
+import CTA from "@/components/CTA";
 
 export default function Home() {
   const [language] = useLanguage();
@@ -54,6 +55,8 @@ export default function Home() {
 
       {/* <ProcedureCost /> */}
       <WhatsAppButton />
+
+      <CTA/>
 
       <ProcessFlow />
       <WhatsAppButton />

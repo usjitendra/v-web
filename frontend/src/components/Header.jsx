@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, ChevronDown, ChevronRight, Globe } from "lucide-react";
 import { Link, NavLink } from "react-router-dom";
+import  logo from  "../assets/logo_banne/m4.png"
 
 import {
   useGetCountryCategoryDropdownQuery,

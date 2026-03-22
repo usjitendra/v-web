@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { toast } from "react-toastify";
 
 export default function AppointmentForm() {
   const [form, setForm] = useState({
@@ -15,7 +16,7 @@ export default function AppointmentForm() {
   }
   function handleSubmit(e) {
     e.preventDefault();
-    console.log("appointment", form);
+    toast.success("Appointment requested — we will contact you shortly.");
     setSuccess(true);
   }
 

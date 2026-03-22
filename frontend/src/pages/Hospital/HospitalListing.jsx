@@ -7,6 +7,7 @@ import {
 } from "lucide-react";
 import { useGetAllHospitalsQuery } from "../../rtk/slices/commanApiSlice";
 import { useCreateBookingMutation } from "../../rtk/slices/bookingApiSlice";
+import { toast } from "react-toastify";
 import HospitalFilterSidebar from "./HospitalFilterSidebar";
 import HospitalCard from "./HospitalCard";
 
@@ -90,7 +91,7 @@ export default function HospitalListingPage() {
   const handleAppointmentSubmit = async (e) => {
     e.preventDefault();
     if (!appointmentForm.patientName || !appointmentForm.phone || !appointmentForm.email || !appointmentForm.treatment) {
-      alert("Please fill all required fields");
+      toast.error("Please fill all required fields");
       return;
     }
     try {
@@ -102,10 +103,11 @@ export default function HospitalListingPage() {
         message: `Treatment: ${appointmentForm.treatment}\n\nAdditional Notes: ${appointmentForm.message}`,
         type: "query",
       }).unwrap();
+      toast.success("Appointment request submitted! Our team will contact you shortly.");
       setBookingSuccess(true);
     } catch (error) {
       console.error("Booking error:", error);
-      alert("Failed to submit appointment. Please try again.");
+      toast.error("Failed to submit appointment. Please try again.");
     }
   };
 
