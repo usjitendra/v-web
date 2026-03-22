@@ -156,7 +156,7 @@ const therapyTypes = [
 const TABS = [
   { id: "treatments", label: "Psychiatry Treatment" },
   { id: "counselling", label: "Counselling Services" },
-  { id: "therapies",   label: "Therapies" },
+  { id: "therapies", label: "Therapies" },
 ];
 
 /* ─── Reusable card ─── */
@@ -207,9 +207,9 @@ const FeaturedBanner = ({ title, body, img, imgAlt, reverse = false }) => (
 ═══════════════════════════════════════ */
 export default function PsychiatricServicesDetails() {
   const [activeTab, setActiveTab] = useState('treatments');
-  const location  = useLocation();
-  const { name }  = useParams();
-  const navigate  = useNavigate();
+  const location = useLocation();
+  const { name } = useParams();
+  const navigate = useNavigate();
 
   const handleTabClick = (tab) => {
     setActiveTab(tab);
@@ -277,10 +277,10 @@ export default function PsychiatricServicesDetails() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="grid grid-cols-2 sm:grid-cols-4 divide-x divide-gray-100">
             {[
-              { icon: <Shield className="w-4 h-4 text-teal-600" />, label: "Accredited",    value: "NABH Certified"  },
-              { icon: <Brain  className="w-4 h-4 text-teal-600" />, label: "Conditions",    value: "12+ Treated"     },
-              { icon: <Users  className="w-4 h-4 text-teal-600" />, label: "Patients",      value: "500+ Helped"     },
-              { icon: <Clock  className="w-4 h-4 text-teal-600" />, label: "Availability",  value: "Mon – Sun"       },
+              { icon: <Shield className="w-4 h-4 text-teal-600" />, label: "Accredited", value: "NABH Certified" },
+              { icon: <Brain className="w-4 h-4 text-teal-600" />, label: "Conditions", value: "12+ Treated" },
+              { icon: <Users className="w-4 h-4 text-teal-600" />, label: "Patients", value: "500+ Helped" },
+              { icon: <Clock className="w-4 h-4 text-teal-600" />, label: "Availability", value: "Mon – Sun" },
             ].map(({ icon, label, value }) => (
               <div key={label} className="flex items-center gap-3 px-4 py-4 sm:py-5">
                 <div className="w-9 h-9 bg-teal-50 rounded-xl flex items-center justify-center flex-shrink-0">
@@ -308,11 +308,10 @@ export default function PsychiatricServicesDetails() {
               <button
                 key={id}
                 onClick={() => handleTabClick(id)}
-                className={`flex-shrink-0 px-6 py-4 text-sm font-semibold whitespace-nowrap border-b-2 transition-all ${
-                  activeTab === id
+                className={`flex-shrink-0 px-6 py-4 text-sm font-semibold whitespace-nowrap border-b-2 transition-all ${activeTab === id
                     ? "border-teal-600 text-teal-700 bg-teal-50/60"
                     : "border-transparent text-gray-500 hover:text-gray-800 hover:bg-gray-50"
-                }`}
+                  }`}
               >
                 {label}
               </button>
@@ -477,44 +476,55 @@ export default function PsychiatricServicesDetails() {
                 <Phone className="w-5 h-5 text-teal-600" />
               </div>
               <div>
-                <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">Call Us</p>
-                <a href="tel:9838346118" className="block text-sm font-semibold text-gray-800 hover:text-teal-600 transition">
-                  +91 98383 46118
+                <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">Phone</p>
+
+                <a href="tel:9354799090" className="block text-sm font-semibold text-gray-800 hover:text-teal-600">
+                  +91 93547 99090
                 </a>
-                <a href="tel:9277163686" className="block text-sm font-semibold text-gray-800 hover:text-teal-600 transition mt-0.5">
-                  +91 92771 63686
+                <a href="tel:9354799090" className="block text-sm font-semibold text-gray-800 hover:text-teal-600 mt-0.5">
+                  +91 93547 99090
                 </a>
               </div>
             </div>
 
             {/* Email */}
-            <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-5 flex items-start gap-4 hover:border-teal-300 hover:shadow-md transition">
-              <div className="w-11 h-11 bg-teal-50 rounded-xl flex items-center justify-center flex-shrink-0">
-                <Mail className="w-5 h-5 text-teal-600" />
-              </div>
-              <div>
-                <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">Email Us</p>
-                <a
-                  href="mailto:Sadbhawanaclinic98@gmail.com"
-                  className="text-sm font-semibold text-gray-800 hover:text-teal-600 transition break-all"
-                >
-                  Sadbhawanaclinic98@gmail.com
-                </a>
-              </div>
-            </div>
+<div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-5 flex items-start gap-4 hover:border-teal-300 hover:shadow-md transition">
+  <div className="w-11 h-11 bg-teal-50 rounded-xl flex items-center justify-center flex-shrink-0">
+    <Mail className="w-5 h-5 text-teal-600" />
+  </div>
+  <div>
+    <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">Email</p>
 
+    <a href="mailto:info@medicwaycare.in" className="block text-sm font-semibold text-gray-800 hover:text-teal-600">
+      info@medicwaycare.in
+    </a>
+    <a href="mailto:support@medicwaycare.in" className="block text-sm font-semibold text-gray-800 hover:text-teal-600 mt-0.5">
+      support@medicwaycare.in
+    </a>
+  </div>
+</div>
             {/* Hours */}
-            <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-5 flex items-start gap-4 hover:border-teal-300 hover:shadow-md transition">
-              <div className="w-11 h-11 bg-teal-50 rounded-xl flex items-center justify-center flex-shrink-0">
-                <Clock className="w-5 h-5 text-teal-600" />
-              </div>
-              <div>
-                <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">Opening Hours</p>
-                <p className="text-xs text-gray-400 mb-1">Monday – Sunday</p>
-                <p className="text-sm font-medium text-gray-700">Morning: 10:00 AM – 1:30 PM</p>
-                <p className="text-sm font-medium text-gray-700">Evening: 06:00 PM – 8:30 PM</p>
-              </div>
-            </div>
+<div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-5 flex items-start gap-4 hover:border-teal-300 hover:shadow-md transition">
+  <div className="w-11 h-11 bg-teal-50 rounded-xl flex items-center justify-center flex-shrink-0">
+    <Clock className="w-5 h-5 text-teal-600" />
+  </div>
+  <div>
+    <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">Address</p>
+
+    <p className="text-sm font-medium text-gray-700 leading-relaxed">
+      MR-1, 5th Floor, Wing-A, Statesman House <br />
+      148 Barakhamba Road, New Delhi 110001
+    </p>
+
+    <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider mt-3 mb-1">
+      Business Hours
+    </p>
+
+    <p className="text-sm text-gray-700">Mon–Fri: 9:00 AM – 6:00 PM</p>
+    <p className="text-sm text-gray-700">Sat: 9:00 AM – 2:00 PM</p>
+    <p className="text-sm text-gray-700">Sun: Emergency Only</p>
+  </div>
+</div>
           </div>
         </div>
       </div>

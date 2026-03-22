@@ -101,15 +101,24 @@ export default function HospitalCard({ hospital, onBook }) {
           <div className="grid grid-cols-2 gap-2">
             <Link
               to={`/hospital/${hospital.slug}`}
-                // to={`/hospitals/detail`}
+              // to={`/hospitals/detail`}
               className="text-center bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-2 rounded-lg font-medium transition-colors text-sm"
             >
               View Details
             </Link>
-            <button className="bg-green-500 hover:bg-green-600 text-white px-3 py-2 rounded-lg font-medium transition-colors flex items-center justify-center gap-1.5 text-sm">
+            {/* <button className="bg-green-500 hover:bg-green-600 text-white px-3 py-2 rounded-lg font-medium transition-colors flex items-center justify-center gap-1.5 text-sm">
               <MessageCircle className="w-4 h-4" />
               WhatsApp
-            </button>
+            </button> */}
+            <a
+              href="https://wa.me/919354799090"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-green-500 hover:bg-green-600 text-white px-3 py-2 rounded-lg font-medium transition-colors flex items-center justify-center gap-1.5 text-sm"
+            >
+              <MessageCircle className="w-4 h-4" />
+              WhatsApp
+            </a>
           </div>
         </div>
       </div>
